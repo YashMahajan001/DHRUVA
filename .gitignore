@@ -1,9 +1,50 @@
+# Python
 __pycache__/
 *.py[cod]
-.venv/
+*$py.class
+*.so
+.Python
+env/
 venv/
+.venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Databases & local state
+*.db
+*.sqlite3
+*.sqlite
+digital_twin_uav.db
+
+# Environment variables
+.env
+.env.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing & Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Node / Frontend
 node_modules/
 dist/
-.env
-*.pkl
-.ipynb_checkpoints/
+.npm
