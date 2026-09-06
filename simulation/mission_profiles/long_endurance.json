@@ -1,1 +1,12 @@
-{}
+{
+  "name": "Long-Endurance Patrol",
+  "description": "Low-throttle cruise at moderate altitude for maximum loiter time.",
+  "phases": [
+    {"name": "takeoff",  "duration": 90,   "altitude": [0, 200],     "throttle": [0.90, 0.85], "ambient_temp": [25, 22]},
+    {"name": "climb",    "duration": 400,  "altitude": [200, 4500],  "throttle": [0.80, 0.75], "ambient_temp": [22, -5]},
+    {"name": "cruise",   "duration": 600,  "altitude": [4500, 4500], "throttle": [0.55, 0.55], "ambient_temp": [-5, -5]},
+    {"name": "loiter",   "duration": 7200, "altitude": [4500, 4500], "throttle": [0.45, 0.45], "ambient_temp": [-5, -5]},
+    {"name": "descent",  "duration": 400,  "altitude": [4500, 200],  "throttle": [0.25, 0.20], "ambient_temp": [-5, 22]},
+    {"name": "landing",  "duration": 90,   "altitude": [200, 0],     "throttle": [0.20, 0.08], "ambient_temp": [22, 25]}
+  ]
+}
