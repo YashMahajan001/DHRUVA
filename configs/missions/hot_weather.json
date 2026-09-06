@@ -1,0 +1,13 @@
+{
+  "mission_id": "HOT_WEATHER",
+  "name": "Hot-weather operations (representative)",
+  "sea_level_temp_c": 42.0,
+  "phases": [
+    {"phase": "TAKEOFF", "duration_frac": 0.1, "altitude_m": [0, 250], "throttle": [0.9, 0.95]},
+    {"phase": "CLIMB", "duration_frac": 0.2, "altitude_m": [250, 2200], "throttle": [0.88, 0.82]},
+    {"phase": "CRUISE", "duration_frac": 0.35, "altitude_m": [2200, 2400], "throttle": [0.7, 0.68]},
+    {"phase": "LOITER", "duration_frac": 0.15, "altitude_m": [2400, 2300], "throttle": [0.6, 0.58]},
+    {"phase": "DESCENT", "duration_frac": 0.12, "altitude_m": [2300, 200], "throttle": [0.4, 0.32]},
+    {"phase": "LANDING", "duration_frac": 0.08, "altitude_m": [200, 0], "throttle": [0.28, 0.18]}
+  ]
+}

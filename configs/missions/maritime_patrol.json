@@ -1,0 +1,13 @@
+{
+  "mission_id": "MARITIME_PATROL",
+  "name": "Maritime patrol (representative)",
+  "sea_level_temp_c": 22.0,
+  "phases": [
+    {"phase": "TAKEOFF", "duration_frac": 0.08, "altitude_m": [0, 200], "throttle": [0.82, 0.9]},
+    {"phase": "CLIMB", "duration_frac": 0.14, "altitude_m": [200, 1800], "throttle": [0.8, 0.75]},
+    {"phase": "CRUISE", "duration_frac": 0.28, "altitude_m": [1800, 1500], "throttle": [0.65, 0.62]},
+    {"phase": "LOITER", "duration_frac": 0.3, "altitude_m": [1500, 800], "throttle": [0.55, 0.52]},
+    {"phase": "DESCENT", "duration_frac": 0.12, "altitude_m": [800, 150], "throttle": [0.38, 0.3]},
+    {"phase": "LANDING", "duration_frac": 0.08, "altitude_m": [150, 0], "throttle": [0.26, 0.16]}
+  ]
+}

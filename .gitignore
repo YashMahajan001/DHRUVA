@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+dist/
+.env
+*.pkl
+.ipynb_checkpoints/
+.pytest_cache/
+data/synthetic/**/*.csv
+data/synthetic/**/*.json
+!data/synthetic/**/.gitkeep
+!data/synthetic/missions/sample_cooling_o320_60s.csv
+!data/synthetic/missions/sample_cooling_o320_60s.json

@@ -1,0 +1,1 @@
+{"type": "SENSOR_DROPOUT", "start": 400, "duration": 30, "severity": 1.0, "progression": "sudden", "affected_sensor": "oil_pressure"}

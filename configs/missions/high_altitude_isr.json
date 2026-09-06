@@ -1,0 +1,13 @@
+{
+  "mission_id": "HIGH_ALTITUDE_ISR",
+  "name": "High-altitude ISR (representative)",
+  "sea_level_temp_c": 10.0,
+  "phases": [
+    {"phase": "TAKEOFF", "duration_frac": 0.08, "altitude_m": [0, 400], "throttle": [0.85, 0.95]},
+    {"phase": "CLIMB", "duration_frac": 0.18, "altitude_m": [400, 5500], "throttle": [0.9, 0.88]},
+    {"phase": "CRUISE", "duration_frac": 0.28, "altitude_m": [5500, 6000], "throttle": [0.72, 0.7]},
+    {"phase": "LOITER", "duration_frac": 0.26, "altitude_m": [6000, 5800], "throttle": [0.62, 0.6]},
+    {"phase": "DESCENT", "duration_frac": 0.14, "altitude_m": [5800, 400], "throttle": [0.4, 0.35]},
+    {"phase": "LANDING", "duration_frac": 0.06, "altitude_m": [400, 0], "throttle": [0.3, 0.2]}
+  ]
+}
