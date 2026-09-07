@@ -26,6 +26,31 @@ TELEMETRY_COLUMNS: list[str] = [
     "battery_voltage",
     "alternator_current",
     "injection_timing",
+    # --- new frontend-required channels ---
+    "manifold_pressure",
+    "coolant_temp",
+    "fuel_pressure",
+    "knock_index",
+    "harmonic_freq",
+    "vibration_kurtosis",
+    "vibration_peak_hz",
+    "compression_ratio",
+    "valve_clearance",
+    "radiator_airflow",
+    "coolant_delta",
+    "cht_cyl_1",
+    "cht_cyl_2",
+    "cht_cyl_3",
+    "cht_cyl_4",
+    "egt_cyl_1",
+    "egt_cyl_2",
+    "egt_cyl_3",
+    "egt_cyl_4",
+    "cyl_pressure_1",
+    "cyl_pressure_2",
+    "cyl_pressure_3",
+    "cyl_pressure_4",
+    # --- metadata & labels ---
     "mission_phase",
     "fault_label",
     "fault_active",
@@ -71,6 +96,31 @@ class TelemetryRecord(BaseModel):
     battery_voltage: float
     alternator_current: float
     injection_timing: float
+    # --- new frontend-required channels ---
+    manifold_pressure: float = 0.0
+    coolant_temp: float = 0.0
+    fuel_pressure: float = 0.0
+    knock_index: float = 0.0
+    harmonic_freq: float = 0.0
+    vibration_kurtosis: float = 0.0
+    vibration_peak_hz: float = 0.0
+    compression_ratio: float = 0.0
+    valve_clearance: float = 0.0
+    radiator_airflow: float = 0.0
+    coolant_delta: float = 0.0
+    cht_cyl_1: float = 0.0
+    cht_cyl_2: float = 0.0
+    cht_cyl_3: float = 0.0
+    cht_cyl_4: float = 0.0
+    egt_cyl_1: float = 0.0
+    egt_cyl_2: float = 0.0
+    egt_cyl_3: float = 0.0
+    egt_cyl_4: float = 0.0
+    cyl_pressure_1: float = 0.0
+    cyl_pressure_2: float = 0.0
+    cyl_pressure_3: float = 0.0
+    cyl_pressure_4: float = 0.0
+    # --- metadata & labels ---
     mission_phase: str
     fault_label: str = "HEALTHY"
     fault_active: bool = False

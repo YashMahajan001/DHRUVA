@@ -24,6 +24,19 @@ class EngineNoiseParams(BaseModel):
     injection_timing: float = 0.15
     altitude: float = 1.5
     ambient_temp: float = 0.15
+    manifold_pressure: float = 0.15
+    coolant_temp: float = 0.8
+    fuel_pressure: float = 0.05
+    knock_index: float = 0.3
+    harmonic_freq: float = 0.5
+    vibration_kurtosis: float = 0.1
+    vibration_peak_hz: float = 0.8
+    compression_ratio: float = 0.02
+    valve_clearance: float = 0.005
+    radiator_airflow: float = 0.5
+    cht_cylinder: float = 1.5
+    egt_cylinder: float = 3.0
+    cylinder_pressure: float = 0.08
 
 
 class EngineParams(BaseModel):
@@ -57,6 +70,11 @@ class EngineParams(BaseModel):
     alternator_current_gain: float = 18.0
     injection_timing_baseline: float = 20.0
     injection_timing_rpm_gain: float = 8.0
+    manifold_pressure_base: float = 29.92
+    compression_ratio_nominal: float = 7.0
+    valve_clearance_nominal: float = 0.15
+    fuel_pressure_nominal: float = 4.5
+    cylinder_count: int = 4
     noise: EngineNoiseParams = Field(default_factory=EngineNoiseParams)
 
 

@@ -27,6 +27,11 @@
   "alternator_current_gain": 17.0,
   "injection_timing_baseline": 18.0,
   "injection_timing_rpm_gain": 9.0,
+  "manifold_pressure_base": 29.92,
+  "compression_ratio_nominal": 9.0,
+  "valve_clearance_nominal": 0.10,
+  "fuel_pressure_nominal": 3.8,
+  "cylinder_count": 4,
   "noise": {
     "rpm": 12.0,
     "throttle": 0.002,
@@ -40,6 +45,19 @@
     "alternator_current": 0.22,
     "injection_timing": 0.12,
     "altitude": 1.5,
-    "ambient_temp": 0.15
+    "ambient_temp": 0.15,
+    "manifold_pressure": 0.12,
+    "coolant_temp": 0.7,
+    "fuel_pressure": 0.04,
+    "knock_index": 0.25,
+    "harmonic_freq": 0.6,
+    "vibration_kurtosis": 0.08,
+    "vibration_peak_hz": 0.7,
+    "compression_ratio": 0.02,
+    "valve_clearance": 0.004,
+    "radiator_airflow": 0.5,
+    "cht_cylinder": 1.4,
+    "egt_cylinder": 2.8,
+    "cylinder_pressure": 0.07
   }
 }
