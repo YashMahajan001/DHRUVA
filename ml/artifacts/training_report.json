@@ -1,0 +1,9 @@
+{
+  "source": "data/ synthetic CSVs",
+  "rows": 25000,
+  "models": {
+    "anomaly": "C:\\Users\\niran\\OneDrive\\Desktop\\DHRUVA\\ml\\artifacts\\anomaly_isolation_forest.joblib",
+    "fault": "C:\\Users\\niran\\OneDrive\\Desktop\\DHRUVA\\ml\\artifacts\\fault_classifier.joblib",
+    "rul": "C:\\Users\\niran\\OneDrive\\Desktop\\DHRUVA\\ml\\artifacts\\rul_model.joblib"
+  }
+}

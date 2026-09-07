@@ -5,7 +5,17 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from ml.config import MIN_ROLLING_PERIODS, ROLLING_WINDOW, SENSOR_COLUMNS
+from ml.config import (
+    ELECTRICAL_FEATURES,
+    ENGINE_FEATURES,
+    MECHANICAL_FEATURES,
+    MISSION_FEATURES,
+    MIN_ROLLING_PERIODS,
+    RESIDUAL_FEATURES,
+    ROLLING_WINDOW,
+    SENSOR_COLUMNS,
+    THERMAL_FEATURES,
+)
 
 RATE_SOURCES = {
     "rpm": "rpm_rate_change",
@@ -18,7 +28,15 @@ RATE_SOURCES = {
     "health_index": "health_index_rate_change",
 }
 
-FEATURE_OUTPUT_COLUMNS = [
+# Secondary rate-change sources (new CSV columns).
+ADDITIONAL_RATE_SOURCES = {
+    "coolant_temp": "coolant_temp_rate_change",
+    "manifold_pressure": "manifold_pressure_rate_change",
+    "knock_index": "knock_index_rate_change",
+    "vibration_kurtosis": "vibration_kurtosis_rate_change",
+}
+
+BASE_FEATURE_COLUMNS = [
     "rpm_rolling_mean",
     "cht_rolling_mean",
     "egt_rolling_mean",
@@ -46,6 +64,24 @@ FEATURE_OUTPUT_COLUMNS = [
     "load_response",
     "temperature_response",
 ]
+
+# Engineered columns from the new CSV parameters.
+NEW_FEATURE_COLUMNS = [
+    "coolant_temp_rate_change",
+    "manifold_pressure_rate_change",
+    "knock_index_rate_change",
+    "vibration_kurtosis_rate_change",
+    "coolant_delta_rate_change",
+    "vibration_peak_hz_rate_change",
+    "mean_cyl_cht",
+    "mean_cyl_egt",
+    "mean_cyl_pressure",
+    "cht_spread",
+    "egt_spread",
+    "coolant_thermal_load",
+]
+
+FEATURE_OUTPUT_COLUMNS = BASE_FEATURE_COLUMNS + NEW_FEATURE_COLUMNS
 
 
 def _sorted_groups(df: pd.DataFrame) -> pd.DataFrame:
@@ -83,6 +119,30 @@ def _slope(series: pd.Series, window: int) -> pd.Series:
     return series.rolling(window=window, min_periods=MIN_ROLLING_PERIODS).apply(_fit, raw=True)
 
 
+def _add_cylinder_features(featured: pd.DataFrame) -> pd.DataFrame:
+    """Mean / spread across cylinder CHT, EGT, and pressure arrays."""
+    cht_cols = [f"cht_cyl_{i}" for i in range(1, 5) if f"cht_cyl_{i}" in featured.columns]
+    if cht_cols:
+        cyl = featured[cht_cols]
+        featured["mean_cyl_cht"] = cyl.mean(axis=1)
+        featured["cht_spread"] = cyl.max(axis=1) - cyl.min(axis=1)
+
+    egt_cols = [f"egt_cyl_{i}" for i in range(1, 5) if f"egt_cyl_{i}" in featured.columns]
+    if egt_cols:
+        cyl = featured[egt_cols]
+        featured["mean_cyl_egt"] = cyl.mean(axis=1)
+        featured["egt_spread"] = cyl.max(axis=1) - cyl.min(axis=1)
+
+    press_cols = [f"cyl_pressure_{i}" for i in range(1, 5) if f"cyl_pressure_{i}" in featured.columns]
+    if press_cols:
+        featured["mean_cyl_pressure"] = featured[press_cols].mean(axis=1)
+
+    if "coolant_temp" in featured.columns and "coolant_delta" in featured.columns:
+        featured["coolant_thermal_load"] = featured["coolant_delta"] * featured.get("radiator_airflow", 1.0).replace(0, np.nan)
+
+    return featured
+
+
 def engineer_features(df: pd.DataFrame, window: int = ROLLING_WINDOW) -> pd.DataFrame:
     """Add rolling, rate, cross-sensor, residual, and transient features."""
     if df.empty:
@@ -94,9 +154,15 @@ def engineer_features(df: pd.DataFrame, window: int = ROLLING_WINDOW) -> pd.Data
     featured = _sorted_groups(df.copy())
     groups = _group_key(featured)
 
-    for source, dest in RATE_SOURCES.items():
+    all_rate_sources = {**RATE_SOURCES, **ADDITIONAL_RATE_SOURCES}
+    for source, dest in all_rate_sources.items():
         if source in featured.columns:
             featured[dest] = featured.groupby(groups, sort=False)[source].diff().fillna(0.0)
+
+    if "coolant_delta" in featured.columns:
+        featured["coolant_delta_rate_change"] = featured.groupby(groups, sort=False)["coolant_delta"].diff().fillna(0.0)
+    if "vibration_peak_hz" in featured.columns:
+        featured["vibration_peak_hz_rate_change"] = featured.groupby(groups, sort=False)["vibration_peak_hz"].diff().fillna(0.0)
 
     rolling_specs = [
         ("rpm", "mean"),
@@ -150,25 +216,17 @@ def engineer_features(df: pd.DataFrame, window: int = ROLLING_WINDOW) -> pd.Data
         "egt_rate_change", 0.0
     )
 
-    residual_cols = [
-        c
-        for c in (
-            "cht_residual",
-            "egt_residual",
-            "oil_pressure_residual",
-            "fuel_flow_residual",
-            "rpm_residual",
-            "vibration_rms_residual",
-        )
-        if c in featured.columns
-    ]
+    residual_cols = [c for c in RESIDUAL_FEATURES if c in featured.columns]
     if residual_cols:
         featured["physics_prediction_residual"] = featured[residual_cols].abs().mean(axis=1)
     else:
         # Twin residuals not supplied: leave a NaN so models do not invent physics.
         featured["physics_prediction_residual"] = np.nan
 
-    for column in SENSOR_COLUMNS + FEATURE_OUTPUT_COLUMNS:
+    featured = _add_cylinder_features(featured)
+
+    clean_cols = list(SENSOR_COLUMNS) + list(FEATURE_OUTPUT_COLUMNS)
+    for column in clean_cols:
         if column in featured.columns:
             featured[column] = featured[column].replace([np.inf, -np.inf], np.nan)
 

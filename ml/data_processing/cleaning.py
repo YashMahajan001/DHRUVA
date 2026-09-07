@@ -8,32 +8,34 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from ml.schema import CANONICAL_FIELDS, COLUMN_ALIASES, TELEMETRY_RANGES, TWIN_RESIDUAL_ALIASES
+from ml.schema import (
+    CANONICAL_FIELDS,
+    COLUMN_ALIASES,
+    TELEMETRY_CSV_COLUMNS,
+    TELEMETRY_RANGES,
+    TWIN_CSV_COLUMNS,
+    TWIN_RESIDUAL_ALIASES,
+)
 
 logger = logging.getLogger(__name__)
 
 _NUMERIC_CANDIDATES = [
-    "altitude",
-    "ambient_temperature",
-    "rpm",
-    "throttle",
-    "cht",
-    "egt",
-    "oil_pressure",
-    "oil_temperature",
-    "fuel_flow",
-    "vibration_rms",
-    "battery_voltage",
-    "alternator_current",
-    "injection_timing",
-    "health_index",
-    "rul",
-    "cht_residual",
-    "egt_residual",
-    "oil_pressure_residual",
-    "fuel_flow_residual",
-    "rpm_residual",
-    "vibration_rms_residual",
+    col
+    for col in TELEMETRY_CSV_COLUMNS
+    if col
+    not in {
+        "timestamp",
+        "engine_id",
+        "model_id",
+        "mission_id",
+        "mission_phase",
+        "fault_label",
+        "fault_active",
+        "fault_severity",
+        "data_quality",
+        "sensor_status",
+        "simulation_seed",
+    }
 ]
 
 
@@ -50,6 +52,77 @@ def normalize_column_names(df: pd.DataFrame) -> pd.DataFrame:
         # If both alias and canonical existed, keep the first occurrence.
         df = df.loc[:, ~df.columns.duplicated()]
     return df
+
+
+def validate_required_columns(df: pd.DataFrame, required: list[str]) -> None:
+    """Raise if required columns are missing from the incoming DataFrame."""
+    missing = [c for c in required if c not in df.columns]
+    if missing:
+        raise ValueError(
+            f"Missing required columns: {missing}. "
+            f"Got {list(df.columns)}. Expected: {required}"
+        )
+
+
+def is_twin_csv(df: pd.DataFrame) -> bool:
+    """Return True if the DataFrame uses the Digital Twin schema."""
+    twin_set = set(TWIN_CSV_COLUMNS)
+    overlap = sum(1 for c in df.columns if c in twin_set)
+    return overlap >= 12 and "ml_fault_class" in df.columns
+
+
+def clean_telemetry(df: pd.DataFrame) -> pd.DataFrame:
+    """Return a cleaned copy with validity flags. Does not mutate the input."""
+    if df is None or df.empty:
+        empty = pd.DataFrame(columns=TELEMETRY_CSV_COLUMNS)
+        empty["data_valid"] = pd.Series(dtype=bool)
+        return empty
+
+    cleaned = df.copy()
+    cleaned = normalize_column_names(cleaned)
+    original_sensors = [
+        c for c in _NUMERIC_CANDIDATES if c in cleaned.columns and not c.endswith("_residual")
+    ]
+    cleaned = _ensure_core_columns(cleaned)
+    cleaned["timestamp_invalid"] = False
+    cleaned = _parse_timestamps(cleaned)
+    cleaned = _coerce_numeric(cleaned)
+    cleaned = _drop_duplicates(cleaned)
+    cleaned = _flag_range_violations(cleaned)
+    cleaned = _handle_missing(cleaned, original_sensors=original_sensors)
+
+    if "fault_label" in cleaned.columns:
+        cleaned["fault_label"] = (
+            cleaned["fault_label"].astype("string").fillna("healthy").str.strip().str.lower()
+        )
+        cleaned.loc[cleaned["fault_label"].isin(["nan", "none", "null", ""]), "fault_label"] = "healthy"
+
+    if "engine_id" in cleaned.columns:
+        cleaned["engine_id"] = cleaned["engine_id"].astype("string").fillna("UNKNOWN")
+    if "model_id" in cleaned.columns:
+        cleaned["model_id"] = cleaned["model_id"].astype("string")
+    if "mission_phase" in cleaned.columns:
+        cleaned["mission_phase"] = cleaned["mission_phase"].astype("string").fillna("unknown").str.lower()
+    if "sensor_status" in cleaned.columns:
+        cleaned["sensor_status"] = cleaned["sensor_status"].astype("string").fillna("OK").str.upper()
+
+    cleaned["data_valid"] = ~(
+        cleaned.get("timestamp_invalid", False)
+        | cleaned.get("range_invalid", False)
+        | (cleaned.get("missing_sensor_count", 0) > 3)
+    )
+    return cleaned.reset_index(drop=True)
+
+
+def telemetry_to_frame(telemetry: Any) -> pd.DataFrame:
+    """Accept a dict, list of dicts, or DataFrame."""
+    if isinstance(telemetry, pd.DataFrame):
+        return telemetry.copy()
+    if isinstance(telemetry, dict):
+        return pd.DataFrame([telemetry])
+    if isinstance(telemetry, list):
+        return pd.DataFrame(telemetry)
+    raise TypeError("telemetry must be a dict, list of dicts, or pandas DataFrame")
 
 
 def _ensure_core_columns(df: pd.DataFrame) -> pd.DataFrame:
@@ -120,53 +193,3 @@ def _drop_duplicates(df: pd.DataFrame) -> pd.DataFrame:
     if dropped:
         logger.info("Dropped %s duplicate telemetry rows", dropped)
     return df
-
-
-def clean_telemetry(df: pd.DataFrame) -> pd.DataFrame:
-    """Return a cleaned copy with validity flags. Does not mutate the input."""
-    if df is None or df.empty:
-        empty = pd.DataFrame(columns=CANONICAL_FIELDS)
-        empty["data_valid"] = pd.Series(dtype=bool)
-        return empty
-
-    cleaned = df.copy()
-    cleaned = normalize_column_names(cleaned)
-    original_sensors = [
-        c for c in _NUMERIC_CANDIDATES if c in cleaned.columns and not c.endswith("_residual")
-    ]
-    cleaned = _ensure_core_columns(cleaned)
-    cleaned["timestamp_invalid"] = False
-    cleaned = _parse_timestamps(cleaned)
-    cleaned = _coerce_numeric(cleaned)
-    cleaned = _drop_duplicates(cleaned)
-    cleaned = _flag_range_violations(cleaned)
-    cleaned = _handle_missing(cleaned, original_sensors=original_sensors)
-
-    if "fault_label" in cleaned.columns:
-        cleaned["fault_label"] = (
-            cleaned["fault_label"].astype("string").fillna("healthy").str.strip().str.lower()
-        )
-        cleaned.loc[cleaned["fault_label"].isin(["nan", "none", "null", ""]), "fault_label"] = "healthy"
-
-    if "engine_id" in cleaned.columns:
-        cleaned["engine_id"] = cleaned["engine_id"].astype("string").fillna("UNKNOWN")
-    if "model_id" in cleaned.columns:
-        cleaned["model_id"] = cleaned["model_id"].astype("string")
-
-    cleaned["data_valid"] = ~(
-        cleaned.get("timestamp_invalid", False)
-        | cleaned.get("range_invalid", False)
-        | (cleaned.get("missing_sensor_count", 0) > 3)
-    )
-    return cleaned.reset_index(drop=True)
-
-
-def telemetry_to_frame(telemetry: Any) -> pd.DataFrame:
-    """Accept a dict, list of dicts, or DataFrame."""
-    if isinstance(telemetry, pd.DataFrame):
-        return telemetry.copy()
-    if isinstance(telemetry, dict):
-        return pd.DataFrame([telemetry])
-    if isinstance(telemetry, list):
-        return pd.DataFrame(telemetry)
-    raise TypeError("telemetry must be a dict, list of dicts, or pandas DataFrame")

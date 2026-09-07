@@ -56,6 +56,8 @@ def _heuristic_anomaly(row: pd.Series) -> dict:
     cht_rate = abs(float(row.get("cht_rate_change") or 0.0))
     egt_rate = abs(float(row.get("egt_rate_change") or 0.0))
     vib = float(row.get("vibration_rms") or 0.0)
+    vib_kurt = float(row.get("vibration_kurtosis") or 0.0)
+    EGT_res = abs(float(row.get("egt_residual") or 0.0))
     mismatch = abs(float(row.get("rpm_throttle_mismatch") or 0.0))
     score = min(
         1.0,
@@ -63,6 +65,8 @@ def _heuristic_anomaly(row: pd.Series) -> dict:
         + 0.04 * cht_rate
         + 0.03 * egt_rate
         + 0.05 * max(0.0, vib - 2.0)
+        + 0.04 * max(0.0, vib_kurt - 3.5)
+        + 0.02 * EGT_res
         + 0.4 * mismatch,
     )
     detected = score >= 0.45
@@ -75,18 +79,45 @@ def _heuristic_fault(row: pd.Series) -> dict:
     egt = float(row.get("egt") or 0.0)
     oil_p = float(row.get("oil_pressure") or 0.0)
     vib = float(row.get("vibration_rms") or 0.0)
+    vib_kurt = float(row.get("vibration_kurtosis") or 0.0)
+    coolant = float(row.get("coolant_temp") or 0.0)
+    coolant_delta = float(row.get("coolant_delta") or 0.0)
     alt_i = float(row.get("alternator_current") or 0.0)
     dropout = bool(row.get("sensor_dropout_flag", False))
     cht_res = abs(float(row.get("cht_residual") or 0.0))
+    egt_res = abs(float(row.get("egt_residual") or 0.0))
+    oil_res = abs(float(row.get("oil_pressure_residual") or 0.0))
+    vib_res = abs(float(row.get("vibration_rms_residual") or 0.0))
+    rpm_res = abs(float(row.get("rpm_residual") or 0.0))
     scores = {
         "sensor_dropout": 0.95 if dropout else 0.0,
-        "cooling_degradation": min(1.0, max(0.0, (cht - 210) / 80) + cht_res / 40),
-        "overheating": min(1.0, max(0.0, (cht - 240) / 60) + max(0.0, (egt - 850) / 200)),
-        "lubrication_loss": min(1.0, max(0.0, (35 - oil_p) / 25)),
-        "abnormal_vibration": min(1.0, max(0.0, (vib - 3.5) / 6)),
+        "cooling_degradation": min(
+            1.0,
+            max(0.0, (cht - 210) / 80)
+            + cht_res / 40
+            + max(0.0, coolant_delta / 10.0),
+        ),
+        "overheating": min(
+            1.0,
+            max(0.0, (cht - 240) / 60)
+            + max(0.0, (egt - 850) / 200)
+            + max(0.0, (coolant - 110) / 30),
+        ),
+        "lubrication_loss": min(
+            1.0, max(0.0, (35 - oil_p) / 25) + oil_res / 40
+        ),
+        "abnormal_vibration": min(
+            1.0,
+            max(0.0, (vib - 3.5) / 6)
+            + max(0.0, (vib_kurt - 4.0) / 6)
+            + vib_res / 8,
+        ),
         "alternator_degradation": min(1.0, max(0.0, (12 - alt_i) / 12)),
         "injector_degradation": min(
             1.0, abs(float(row.get("fuel_efficiency") or 0.0) - 0.004) * 80
+        ),
+        "sensor_drift": min(
+            1.0, (cht_res / 40 + egt_res / 40 + vib_res / 8 + rpm_res / 150) / 4
         ),
         "healthy": 0.4,
     }

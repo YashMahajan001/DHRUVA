@@ -11,32 +11,11 @@ import pandas as pd
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 
-from ml.config import PREPROCESSOR_PATH
+from ml.config import ANOMALY_FEATURE_COLUMNS, PREPROCESSOR_PATH
 from ml.data_processing.cleaning import clean_telemetry, telemetry_to_frame
 from ml.data_processing.feature_engineering import FEATURE_OUTPUT_COLUMNS, engineer_features
 
-DEFAULT_SCALE_COLUMNS = [
-    "rpm",
-    "throttle",
-    "cht",
-    "egt",
-    "oil_pressure",
-    "oil_temperature",
-    "fuel_flow",
-    "vibration_rms",
-    "altitude",
-    "ambient_temperature",
-    "cht_rate_change",
-    "egt_rate_change",
-    "oil_pressure_rate_change",
-    "vibration_rate_change",
-    "rpm_rate_change",
-    "fuel_efficiency",
-    "rpm_throttle_mismatch",
-    "cht_egt_residual",
-    "oil_pressure_rpm_ratio",
-    "physics_prediction_residual",
-]
+DEFAULT_SCALE_COLUMNS = ANOMALY_FEATURE_COLUMNS
 
 
 class TelemetryPreprocessor:

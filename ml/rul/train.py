@@ -9,9 +9,9 @@ import numpy as np
 from sklearn.ensemble import GradientBoostingRegressor
 
 from ml.config import (
-    FAULT_FEATURE_COLUMNS,
     NOMINAL_LIFE_HOURS,
     RANDOM_STATE,
+    RUL_FEATURE_COLUMNS,
     RUL_MODEL_PATH,
     RUL_UNCERTAINTY_CEILING_HOURS,
     RUL_UNCERTAINTY_FLOOR_HOURS,
@@ -47,14 +47,15 @@ def train_rul_model(
     model_path: Path | str = RUL_MODEL_PATH,
     random_state: int = RANDOM_STATE,
 ) -> Path:
-    preprocessor = TelemetryPreprocessor(feature_columns=FAULT_FEATURE_COLUMNS)
+    # Use a dedicated feature set that EXCLUDES `rul`, `health_index`, and
+    # Digital Twin health outputs.  `health_index` here is generated from the
+    # same degradation signal as `rul`, so it would leak the target.
+    preprocessor = TelemetryPreprocessor(feature_columns=RUL_FEATURE_COLUMNS)
     featured, scaled = preprocessor.fit_transform(telemetry, scale=True)
     if target_column in featured.columns and featured[target_column].notna().any():
-        y = featured[target_column].fillna(featured["health_index"] if "health_index" in featured.columns else 50.0)
-    elif "health_index" in featured.columns:
-        y = featured["health_index"].map(_hours_from_health)
+        y = featured[target_column]  # no fallback to health_index (would leak)
     else:
-        raise ValueError("Training data needs 'rul' or 'health_index'")
+        raise ValueError(f"Training data needs a non-empty '{target_column}' column")
 
     model = GradientBoostingRegressor(
         n_estimators=150,
@@ -69,7 +70,7 @@ def train_rul_model(
     joblib.dump(
         {
             "model": model,
-            "feature_columns": FAULT_FEATURE_COLUMNS,
+            "feature_columns": RUL_FEATURE_COLUMNS,
             "preprocessor_path": str(preprocessor.save(pre_path)),
         },
         path,

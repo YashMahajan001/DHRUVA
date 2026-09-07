@@ -1,8 +1,10 @@
-"""In-memory telemetry fixtures for ML training/tests.
+"""In-memory telemetry fixtures + CSV loading for ML training/tests.
 
-This is not Yash's telemetry generator. It only produces compact labeled
-windows so Isolation Forest / classifiers / tests can run on this branch.
-When `data/synthetic/` CSVs exist, training scripts should prefer those.
+This is not Yash's telemetry generator. It produces compact labeled windows
+so Isolation Forest / classifiers / tests can run on this branch.  When
+``data/synthetic/`` CSVs exist, training scripts should prefer those via
+:func:`load_external_dataset`, which correctly excludes the Digital Twin
+CSV (different schema) and validates required columns.
 """
 
 from __future__ import annotations
@@ -14,25 +16,76 @@ import numpy as np
 import pandas as pd
 
 from ml.config import FAULT_CLASSES, RANDOM_STATE
+from ml.schema import TELEMETRY_CSV_COLUMNS, TWIN_CSV_COLUMNS
 
-SYNTHETIC_CSV_GLOBS = (
-    "data/synthetic/**/*.csv",
-    "data/processed/**/*.csv",
+TELEMETRY_CSV_GLOBS = (
+    "data/synthetic/faults/**/*.csv",
+    "data/synthetic/healthy/**/*.csv",
 )
+
+# Explicitly excluded — the Digital Twin CSV has a different schema.
+TWIN_CSV_DIR = "data/synthetic/twin"
+TWIN_CSV_NAME = "twin_cooling_o320.csv"
+
+# Columns without which the telemetry pipeline cannot operate.  Unknown/new
+# columns are kept but logged; missing required columns raise a clear error.
+REQUIRED_TELEMETRY_COLUMNS = [
+    "timestamp",
+    "engine_id",
+    "fault_label",
+    "health_index",
+    "rul",
+]
 
 
 def load_external_dataset(root: Path | None = None) -> pd.DataFrame | None:
+    """Concatenate telemetry CSVs (faults + healthy) into one training frame.
+
+    The Digital Twin CSV is deliberately excluded — it has a different schema
+    and is consumed separately (see ``ml/twin_adapter.py``).
+    """
     base = root or Path.cwd()
     frames: list[pd.DataFrame] = []
-    for pattern in SYNTHETIC_CSV_GLOBS:
-        for path in base.glob(pattern):
-            try:
-                frames.append(pd.read_csv(path))
-            except Exception:
+    loaded_paths: list[Path] = []
+    for pattern in TELEMETRY_CSV_GLOBS:
+        for path in sorted(base.glob(pattern)):
+            if TWIN_CSV_DIR in path.parts and path.name == TWIN_CSV_NAME:
                 continue
+            if path.name == TWIN_CSV_NAME:
+                continue
+            try:
+                df = pd.read_csv(path)
+            except Exception as exc:  # pragma: no cover - file read error
+                continue
+            missing = [c for c in REQUIRED_TELEMETRY_COLUMNS if c not in df.columns]
+            if missing:
+                print(f"[load_external_dataset] SKIP {path.name}: missing {missing}")
+                continue
+            frames.append(df)
+            loaded_paths.append(path)
     if not frames:
         return None
-    return pd.concat(frames, ignore_index=True)
+    combined = pd.concat(frames, ignore_index=True)
+    unexpected = sorted(set(combined.columns) - set(TELEMETRY_CSV_COLUMNS))
+    if unexpected:
+        print(
+            f"[load_external_dataset] NOTE: unexpected columns kept: {unexpected}"
+        )
+    print(f"[load_external_dataset] Loaded {len(loaded_paths)} CSV(s): {[p.name for p in loaded_paths]}")
+    return combined
+
+
+def load_twin_dataset(root: Path | None = None) -> pd.DataFrame | None:
+    """Load the Digital Twin CSV separately (different schema)."""
+    base = root or Path.cwd()
+    twin_glob = base / TWIN_CSV_DIR / TWIN_CSV_NAME
+    if not twin_glob.exists():
+        return None
+    df = pd.read_csv(twin_glob)
+    missing = [c for c in TWIN_CSV_COLUMNS if c not in df.columns]
+    if missing:
+        raise ValueError(f"Digital Twin CSV missing required columns: {missing}")
+    return df
 
 
 def _base_row(i: int, engine_id: str, model_id: str, start: datetime) -> dict:
