@@ -53,7 +53,7 @@ export const Login: React.FC = () => {
         await login(operatorId, accessKey, stationRole);
         setTimeout(() => {
           setIsScanning(false);
-          navigate('/dashboard');
+          navigate('/overview');
         }, 600);
       }
     }, 35);

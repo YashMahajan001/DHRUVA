@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { EngineProvider, useEngine } from './context/EngineContext';
 import { Sidebar } from './components/common/Sidebar';
 import { Header } from './components/common/Header';
@@ -46,6 +46,13 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     </div>
   );
 };
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated } = useAuth();
+  if (!isAuthenticated) {
+    return <Navigate to="/entry" replace />;
+  }
+  return <>{children}</>;
+};
 
 export default function App() {
   return (
@@ -56,17 +63,17 @@ export default function App() {
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/entry" element={<Entry />} />
-              <Route path="/" element={<Navigate to="/overview" replace />} />
-              <Route path="/overview" element={<ExecutiveOverview />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/engine/:id" element={<EngineDetails />} />
+              <Route path="/" element={<Navigate to="/entry" replace />} />
+              <Route path="/overview" element={<ProtectedRoute><ExecutiveOverview /></ProtectedRoute>} />
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/engine/:id" element={<ProtectedRoute><EngineDetails /></ProtectedRoute>} />
               <Route path="/engine" element={<Navigate to="/engine/eng-01" replace />} />
-              <Route path="/faults" element={<FaultDiagnostics />} />
-              <Route path="/mission-simulation" element={<MissionSimulation />} />
-              <Route path="/mission-tuning" element={<MissionTuning />} />
-              <Route path="/fleet" element={<FleetMonitoring />} />
-              <Route path="/maintenance" element={<Maintenance />} />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/faults" element={<ProtectedRoute><FaultDiagnostics /></ProtectedRoute>} />
+              <Route path="/mission-simulation" element={<ProtectedRoute><MissionSimulation /></ProtectedRoute>} />
+              <Route path="/mission-tuning" element={<ProtectedRoute><MissionTuning /></ProtectedRoute>} />
+              <Route path="/fleet" element={<ProtectedRoute><FleetMonitoring /></ProtectedRoute>} />
+              <Route path="/maintenance" element={<ProtectedRoute><Maintenance /></ProtectedRoute>} />
+              <Route path="*" element={<Navigate to="/entry" replace />} />
             </Routes>
           </AppLayout>
         </EngineProvider>
