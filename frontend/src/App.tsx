@@ -7,6 +7,7 @@ import { Header } from './components/common/Header';
 
 // Pages
 import { Login } from './pages/Login';
+import { Entry } from './pages/Entry';
 import { ExecutiveOverview } from './pages/ExecutiveOverview';
 import { Dashboard } from './pages/Dashboard';
 import { EngineDetails } from './pages/EngineDetails';
@@ -19,9 +20,9 @@ import { Maintenance } from './pages/Maintenance';
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const { alerts, isStreamActive, toggleStream } = useEngine();
-  const isLoginPage = location.pathname === '/login';
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/entry';
 
-  if (isLoginPage) {
+  if (isAuthPage) {
     return <>{children}</>;
   }
 
@@ -54,6 +55,7 @@ export default function App() {
           <AppLayout>
             <Routes>
               <Route path="/login" element={<Login />} />
+              <Route path="/entry" element={<Entry />} />
               <Route path="/" element={<Navigate to="/overview" replace />} />
               <Route path="/overview" element={<ExecutiveOverview />} />
               <Route path="/dashboard" element={<Dashboard />} />

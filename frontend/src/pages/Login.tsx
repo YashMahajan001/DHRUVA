@@ -18,9 +18,20 @@ export const Login: React.FC = () => {
 
   const handleInitiateAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!operatorId.trim() || !accessKey.trim()) {
+    const trimmedId = operatorId.trim();
+    if (!trimmedId || !accessKey.trim()) {
       setErrorMessage('Please provide both Operator ID and Terminal Access Key.');
       return;
+    }
+
+    // DRDO Official Domain Validation
+    // If entered credential is an email address, strictly validate official @drdo.gov.in domain
+    if (trimmedId.includes('@')) {
+      const drdoDomainRegex = /^[a-zA-Z0-9._%+-]+@drdo\.gov\.in$/i;
+      if (!drdoDomainRegex.test(trimmedId)) {
+        setErrorMessage('Access Denied: Authentication requires an official DRDO credential (@drdo.gov.in).');
+        return;
+      }
     }
     setErrorMessage('');
     setIsScanning(true);
@@ -100,13 +111,15 @@ export const Login: React.FC = () => {
           {/* Operator ID */}
           <div>
             <div className="flex justify-between items-center text-xs font-mono text-[#b9cacb] mb-1.5">
-              <span>OPERATOR CALLSIGN / ID</span>
+              <span>OPERATOR DRDO EMAIL / CALLSIGN</span>
               <span className="text-[10px] text-[#00f0ff] font-bold">CAC VERIFIED</span>
             </div>
             <input
+              id="operator-id-input"
               type="text"
               value={operatorId}
               onChange={(e) => setOperatorId(e.target.value)}
+              placeholder="e.g. operator@drdo.gov.in or CDR. V. SHASTRI [OP-7741]"
               required
               className="w-full bg-[#090e1b] text-[#dee2f5] font-mono text-sm px-3.5 py-2.5 rounded border border-[#3b494b] focus:border-[#00f0ff] focus:outline-none transition-colors"
             />
