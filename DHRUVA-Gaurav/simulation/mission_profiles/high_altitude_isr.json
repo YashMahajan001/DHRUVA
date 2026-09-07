@@ -1,0 +1,12 @@
+{
+  "name": "High-Altitude ISR",
+  "description": "Climb to 25 000 ft for intelligence, surveillance & reconnaissance.",
+  "phases": [
+    {"name": "takeoff",  "duration": 120,  "altitude": [0, 300],     "throttle": [0.95, 0.90], "ambient_temp": [35, 30]},
+    {"name": "climb",    "duration": 600,  "altitude": [300, 7620],  "throttle": [0.85, 0.80], "ambient_temp": [30, -20]},
+    {"name": "cruise",   "duration": 300,  "altitude": [7620, 7620], "throttle": [0.65, 0.65], "ambient_temp": [-20, -20]},
+    {"name": "loiter",   "duration": 3600, "altitude": [7620, 7620], "throttle": [0.55, 0.55], "ambient_temp": [-20, -20]},
+    {"name": "descent",  "duration": 600,  "altitude": [7620, 300],  "throttle": [0.30, 0.25], "ambient_temp": [-20, 30]},
+    {"name": "landing",  "duration": 120,  "altitude": [300, 0],     "throttle": [0.25, 0.10], "ambient_temp": [30, 35]}
+  ]
+}

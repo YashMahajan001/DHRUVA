@@ -1,0 +1,8 @@
+{
+  "name": "Remix DHRUVAA — Aero Piston Digital Twin",
+  "description": "AI-enabled digital twin mission dashboard for aero piston engine telemetry, health prognostics, and real-time flight diagnostics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

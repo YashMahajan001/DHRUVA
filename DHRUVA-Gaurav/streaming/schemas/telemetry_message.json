@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+<<<<<<< HEAD
+  "$id": "https://dhruva.local/schemas/telemetry_message.json",
+  "title": "DHRUVA Canonical Telemetry Message",
+  "description": "Schema for one telemetry reading matching the backend integration contract. Exactly 8 fields, no extras.",
+=======
+  "title": "UAVTelemetryMessage",
+>>>>>>> 428b29a499f4fbffd45a8684a761d4229e3a15d8
+  "type": "object",
+  "required": [
+    "engine_id",
+    "timestamp",
+    "rpm",
+    "temperature",
+    "oil_pressure",
+    "fuel_flow",
+    "altitude",
+    "throttle"
+  ],
+  "properties": {
+    "engine_id": {
+      "type": "string",
+<<<<<<< HEAD
+      "description": "Unique engine instance identifier (e.g. ENG001)."
+=======
+      "description": "Unique identifier for the UAV engine instance (e.g. ENG001)"
+>>>>>>> 428b29a499f4fbffd45a8684a761d4229e3a15d8
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+<<<<<<< HEAD
+      "description": "ISO-8601 timestamp of this reading."
+=======
+      "description": "ISO 8601 timestamp of sensor capture"
+>>>>>>> 428b29a499f4fbffd45a8684a761d4229e3a15d8
+    },
+    "rpm": {
+      "type": "number",
+      "minimum": 0,
+<<<<<<< HEAD
+      "description": "Engine revolutions per minute."
+    },
+    "temperature": {
+      "type": ["number", "null"],
+      "description": "Engine temperature in deg C. May be null during sensor dropout."
+    },
+    "oil_pressure": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Engine oil pressure in psi. May be null during sensor dropout."
+    },
+    "fuel_flow": {
+      "type": ["number", "null"],
+      "description": "Fuel flow rate in L/h. May be null during sensor dropout."
+    },
+    "altitude": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Altitude in metres above sea level."
+=======
+      "maximum": 10000,
+      "description": "Engine rotations per minute"
+    },
+    "temperature": {
+      "type": "number",
+      "description": "Cylinder Head / Exhaust Gas Temperature in Celsius"
+    },
+    "oil_pressure": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Engine lubrication oil pressure in PSI"
+    },
+    "fuel_flow": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Fuel consumption rate in liters per hour"
+    },
+    "altitude": {
+      "type": "number",
+      "description": "UAV barometric / GPS altitude in feet"
+>>>>>>> 428b29a499f4fbffd45a8684a761d4229e3a15d8
+    },
+    "throttle": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+<<<<<<< HEAD
+      "description": "Throttle position 0-100%."
+    }
+  },
+  "additionalProperties": false
+=======
+      "description": "Throttle input percentage (0-100%)"
+    }
+  },
+  "additionalProperties": true
+>>>>>>> 428b29a499f4fbffd45a8684a761d4229e3a15d8
+}

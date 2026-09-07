@@ -1,0 +1,9 @@
+{
+  "source": "data/ synthetic CSVs",
+  "rows": 7200,
+  "models": {
+    "anomaly": "D:\\DHRUVA-1\\ml\\artifacts\\anomaly_isolation_forest.joblib",
+    "fault": "D:\\DHRUVA-1\\ml\\artifacts\\fault_classifier.joblib",
+    "rul": "D:\\DHRUVA-1\\ml\\artifacts\\rul_model.joblib"
+  }
+}

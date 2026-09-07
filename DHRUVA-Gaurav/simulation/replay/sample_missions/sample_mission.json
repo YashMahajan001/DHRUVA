@@ -1,0 +1,312 @@
+[
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 1425.6,
+    "temperature": 67.5,
+    "oil_pressure": 27.5,
+    "fuel_flow": 15.6,
+    "altitude": 0.0,
+    "throttle": 100.0
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 1925.5,
+    "temperature": 69.4,
+    "oil_pressure": 31.1,
+    "fuel_flow": 22.7,
+    "altitude": 6.7,
+    "throttle": 99.9
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2226.9,
+    "temperature": 72.3,
+    "oil_pressure": 34.9,
+    "fuel_flow": 28.3,
+    "altitude": 13.3,
+    "throttle": 99.8
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2413.0,
+    "temperature": 74.4,
+    "oil_pressure": 38.3,
+    "fuel_flow": 31.5,
+    "altitude": 20.0,
+    "throttle": 99.8
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2519.8,
+    "temperature": 76.8,
+    "oil_pressure": 41.9,
+    "fuel_flow": 34.0,
+    "altitude": 26.7,
+    "throttle": 99.7
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2586.0,
+    "temperature": 77.6,
+    "oil_pressure": 44.7,
+    "fuel_flow": 35.5,
+    "altitude": 33.3,
+    "throttle": 99.6
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2625.6,
+    "temperature": 79.8,
+    "oil_pressure": 47.4,
+    "fuel_flow": 36.3,
+    "altitude": 40.0,
+    "throttle": 99.5
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2646.8,
+    "temperature": 81.0,
+    "oil_pressure": 49.6,
+    "fuel_flow": 36.4,
+    "altitude": 46.7,
+    "throttle": 99.4
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2641.6,
+    "temperature": 82.7,
+    "oil_pressure": 51.0,
+    "fuel_flow": 37.2,
+    "altitude": 53.3,
+    "throttle": 99.3
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2663.9,
+    "temperature": 83.9,
+    "oil_pressure": 53.0,
+    "fuel_flow": 36.9,
+    "altitude": 60.0,
+    "throttle": 99.2
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2662.4,
+    "temperature": 85.5,
+    "oil_pressure": 53.9,
+    "fuel_flow": 37.4,
+    "altitude": 66.7,
+    "throttle": 99.2
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2666.0,
+    "temperature": 87.0,
+    "oil_pressure": 55.1,
+    "fuel_flow": 37.3,
+    "altitude": 73.3,
+    "throttle": 99.1
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2658.4,
+    "temperature": 87.7,
+    "oil_pressure": 55.6,
+    "fuel_flow": 37.3,
+    "altitude": 80.0,
+    "throttle": 99.0
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2658.2,
+    "temperature": 90.0,
+    "oil_pressure": 56.1,
+    "fuel_flow": 36.9,
+    "altitude": 86.7,
+    "throttle": 98.9
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2660.7,
+    "temperature": 90.6,
+    "oil_pressure": 57.0,
+    "fuel_flow": 37.2,
+    "altitude": 93.3,
+    "throttle": 98.8
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2661.1,
+    "temperature": 90.9,
+    "oil_pressure": 56.9,
+    "fuel_flow": 36.9,
+    "altitude": 100.0,
+    "throttle": 98.8
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2655.6,
+    "temperature": 93.4,
+    "oil_pressure": 57.7,
+    "fuel_flow": 37.0,
+    "altitude": 106.7,
+    "throttle": 98.7
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2646.1,
+    "temperature": 97.30000000000001,
+    "oil_pressure": 58.1,
+    "fuel_flow": 37.3,
+    "altitude": 113.3,
+    "throttle": 98.6
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2647.6,
+    "temperature": 99.69999999999999,
+    "oil_pressure": 58.0,
+    "fuel_flow": 36.6,
+    "altitude": 120.0,
+    "throttle": 98.5
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2646.0,
+    "temperature": 102.6,
+    "oil_pressure": 58.3,
+    "fuel_flow": 36.9,
+    "altitude": 126.7,
+    "throttle": 98.4
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2634.3,
+    "temperature": 105.6,
+    "oil_pressure": 57.9,
+    "fuel_flow": 36.5,
+    "altitude": 133.3,
+    "throttle": 98.3
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2631.8,
+    "temperature": 108.7,
+    "oil_pressure": 58.9,
+    "fuel_flow": 36.6,
+    "altitude": 140.0,
+    "throttle": 98.2
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2632.6,
+    "temperature": 111.30000000000001,
+    "oil_pressure": 58.9,
+    "fuel_flow": 36.7,
+    "altitude": 146.7,
+    "throttle": 98.2
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2629.4,
+    "temperature": 113.60000000000001,
+    "oil_pressure": 58.9,
+    "fuel_flow": 36.5,
+    "altitude": 153.3,
+    "throttle": 98.1
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2630.9,
+    "temperature": 116.7,
+    "oil_pressure": 59.2,
+    "fuel_flow": 36.3,
+    "altitude": 160.0,
+    "throttle": 98.0
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2629.4,
+    "temperature": 119.4,
+    "oil_pressure": 58.5,
+    "fuel_flow": 36.1,
+    "altitude": 166.7,
+    "throttle": 97.9
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2617.4,
+    "temperature": 120.3,
+    "oil_pressure": 58.9,
+    "fuel_flow": 36.4,
+    "altitude": 173.3,
+    "throttle": 97.8
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2602.9,
+    "temperature": 120.4,
+    "oil_pressure": 58.8,
+    "fuel_flow": 36.1,
+    "altitude": 180.0,
+    "throttle": 97.8
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2608.4,
+    "temperature": 120.5,
+    "oil_pressure": 59.1,
+    "fuel_flow": 35.9,
+    "altitude": 186.7,
+    "throttle": 97.7
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.888508+00:00",
+    "rpm": 2606.1,
+    "temperature": 121.4,
+    "oil_pressure": 58.5,
+    "fuel_flow": 36.0,
+    "altitude": 193.3,
+    "throttle": 97.6
+  },
+  {
+    "engine_id": "ENG001",
+    "timestamp": "2026-09-06T09:31:38.890016+00:00",
+    "rpm": 2605.4,
+    "temperature": 120.6,
+    "oil_pressure": 58.6,
+    "fuel_flow": 35.7,
+    "altitude": 200.0,
+    "throttle": 97.5
+  }
+]

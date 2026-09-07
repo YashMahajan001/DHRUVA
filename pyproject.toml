@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dhruva"
+version = "1.0.0"
+description = "SIH26054 Digital Twin for Aerospace Engines"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.28.0",
+    "pydantic>=2.0",
+    "sqlalchemy>=2.0.28",
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scikit-learn>=1.3",
+    "joblib>=1.3",
+    "scipy>=1.11",
+    "websockets>=12.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["backend*", "ml*", "agent*", "streaming*", "digital_twin*", "simulation*", "data*"]

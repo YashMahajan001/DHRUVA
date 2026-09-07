@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UAVTelemetryMessage",
+  "type": "object",
+  "required": [
+    "engine_id",
+    "timestamp",
+    "rpm",
+    "temperature",
+    "oil_pressure",
+    "fuel_flow",
+    "altitude",
+    "throttle"
+  ],
+  "properties": {
+    "engine_id": {
+      "type": "string",
+      "description": "Unique identifier for the UAV engine instance (e.g. ENG001)"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of sensor capture"
+    },
+    "rpm": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10000,
+      "description": "Engine rotations per minute"
+    },
+    "temperature": {
+      "type": "number",
+      "description": "Cylinder Head / Exhaust Gas Temperature in Celsius"
+    },
+    "oil_pressure": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Engine lubrication oil pressure in PSI"
+    },
+    "fuel_flow": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Fuel consumption rate in liters per hour"
+    },
+    "altitude": {
+      "type": "number",
+      "description": "UAV barometric / GPS altitude in feet"
+    },
+    "throttle": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Throttle input percentage (0-100%)"
+    }
+  },
+  "additionalProperties": true
+}

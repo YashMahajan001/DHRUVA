@@ -1,0 +1,25 @@
+[DHRUVA ENGINEERING DIAGNOSTIC TASK]
+Analyze the provided aero-engine state and formulate a structured engineering response.
+
+USER QUERY: {query}
+ACTIVE ENGINE: {engine_id} ({engine_name})
+CLASSIFIED INTENT: {intent}
+
+TELEMETRY CONTEXT:
+- RPM: {rpm} (Baseline: ~2450 RPM)
+- CHT: {cht} °C (Baseline: ~175 °C, Cylinders: {cylinder_temps})
+- EGT: {egt} °C (Baseline: ~690 °C)
+- Oil Pressure: {oil_pressure} PSI (Baseline: ~80 PSI)
+- Oil Temperature: {oil_temp} °C (Baseline: ~85 °C)
+- Fuel Flow: {fuel_flow} L/hr (Baseline: ~32.0 L/hr)
+- Vibration: {vibration} mm/s RMS (Baseline: ~2.0 mm/s, Harmonic: {harmonic_freq} Hz)
+- Derived Vibration Phasor: Magnitude {vib_mag} mm/s, Phase {vib_phase}°
+- Derived Throttle Response Metric: {throttle_metric}
+- Health Index: {health}%
+- Remaining Useful Life (RUL): {rul} hrs (Demo analytical estimate)
+
+TOOL RESULTS SUMMARY:
+{tool_outputs}
+
+OUTPUT INSTRUCTIONS:
+Synthesize the above facts into a structured engineering response matching the agent schema. Maintain professional aerospace engineering tone.

@@ -1,0 +1,12 @@
+{
+  "name": "Hot-Weather Operations",
+  "description": "Desert sortie with high ambient temps stressing cooling systems.",
+  "phases": [
+    {"name": "takeoff",  "duration": 120,  "altitude": [0, 250],     "throttle": [0.95, 0.90], "ambient_temp": [48, 46]},
+    {"name": "climb",    "duration": 480,  "altitude": [250, 3000],  "throttle": [0.82, 0.78], "ambient_temp": [46, 20]},
+    {"name": "cruise",   "duration": 600,  "altitude": [3000, 3000], "throttle": [0.60, 0.60], "ambient_temp": [20, 20]},
+    {"name": "loiter",   "duration": 3600, "altitude": [3000, 3000], "throttle": [0.50, 0.50], "ambient_temp": [20, 20]},
+    {"name": "descent",  "duration": 480,  "altitude": [3000, 250],  "throttle": [0.28, 0.22], "ambient_temp": [20, 46]},
+    {"name": "landing",  "duration": 120,  "altitude": [250, 0],     "throttle": [0.22, 0.08], "ambient_temp": [46, 48]}
+  ]
+}

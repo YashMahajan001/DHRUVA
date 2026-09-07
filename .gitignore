@@ -3,9 +3,15 @@ __pycache__/
 .venv/
 venv/
 node_modules/
+frontend/node_modules/
 dist/
+frontend/dist/
 .env
+frontend/.env
+*.db
+digital_twin_uav.db
 *.pkl
+!ml/**/*.joblib
 .ipynb_checkpoints/
 .pytest_cache/
 data/synthetic/**/*.csv
