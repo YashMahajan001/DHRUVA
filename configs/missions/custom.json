@@ -1,0 +1,12 @@
+{
+  "mission_id": "CUSTOM",
+  "name": "Custom steady cruise (representative)",
+  "sea_level_temp_c": 15.0,
+  "phases": [
+    {"phase": "TAKEOFF", "duration_frac": 0.05, "altitude_m": [0, 200], "throttle": [0.7, 0.75]},
+    {"phase": "CLIMB", "duration_frac": 0.1, "altitude_m": [200, 1200], "throttle": [0.72, 0.7]},
+    {"phase": "CRUISE", "duration_frac": 0.7, "altitude_m": [1200, 1200], "throttle": [0.65, 0.65]},
+    {"phase": "DESCENT", "duration_frac": 0.1, "altitude_m": [1200, 150], "throttle": [0.4, 0.32]},
+    {"phase": "LANDING", "duration_frac": 0.05, "altitude_m": [150, 0], "throttle": [0.25, 0.18]}
+  ]
+}

@@ -22,6 +22,8 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+*.pkl
+.ipynb_checkpoints/
 
 # Databases & local state
 *.db
@@ -48,3 +50,10 @@ htmlcov/
 node_modules/
 dist/
 .npm
+
+# Synthetic data
+data/synthetic/**/*.csv
+data/synthetic/**/*.json
+!data/synthetic/**/.gitkeep
+!data/synthetic/missions/sample_cooling_o320_60s.csv
+!data/synthetic/missions/sample_cooling_o320_60s.json

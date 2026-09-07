@@ -1,0 +1,43 @@
+{
+  "disclaimer": "Demonstration scoring only. Not certified aircraft operational limits.",
+  "ema_alpha": 0.12,
+  "ml_blend_weight": 0.35,
+  "min_component_blend": 0.35,
+  "health_states": [
+    {"name": "NORMAL", "min": 90},
+    {"name": "WATCH", "min": 70},
+    {"name": "WARNING", "min": 40},
+    {"name": "CRITICAL", "min": 0}
+  ],
+  "component_weights": {
+    "thermal": 0.28,
+    "lubrication": 0.18,
+    "mechanical": 0.16,
+    "combustion": 0.14,
+    "electrical": 0.10,
+    "sensor": 0.14
+  },
+  "residual_scales": {
+    "rpm": 80.0,
+    "cht": 18.0,
+    "egt": 35.0,
+    "oil_pressure": 8.0,
+    "oil_temp": 12.0,
+    "fuel_flow": 3.0,
+    "vibration_rms": 0.25,
+    "battery_voltage": 1.2,
+    "alternator_current": 4.0
+  },
+  "component_channels": {
+    "thermal": ["cht", "egt", "oil_temp"],
+    "lubrication": ["oil_pressure", "oil_temp"],
+    "mechanical": ["vibration_rms"],
+    "combustion": ["fuel_flow", "rpm"],
+    "electrical": ["battery_voltage", "alternator_current"],
+    "sensor": ["cht", "egt", "oil_pressure", "fuel_flow"]
+  },
+  "excessive_norm_residual": 4.0,
+  "inconsistent_rpm_throttle": 0.45,
+  "rul_failure_threshold": 40,
+  "rul_max_s": 3600
+}

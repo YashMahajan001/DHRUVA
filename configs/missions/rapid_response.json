@@ -1,0 +1,12 @@
+{
+  "mission_id": "RAPID_RESPONSE",
+  "name": "Rapid-response (representative)",
+  "sea_level_temp_c": 18.0,
+  "phases": [
+    {"phase": "TAKEOFF", "duration_frac": 0.1, "altitude_m": [0, 350], "throttle": [0.92, 1.0]},
+    {"phase": "CLIMB", "duration_frac": 0.18, "altitude_m": [350, 2800], "throttle": [0.95, 0.92]},
+    {"phase": "CRUISE", "duration_frac": 0.42, "altitude_m": [2800, 3000], "throttle": [0.88, 0.86]},
+    {"phase": "DESCENT", "duration_frac": 0.2, "altitude_m": [3000, 300], "throttle": [0.42, 0.35]},
+    {"phase": "LANDING", "duration_frac": 0.1, "altitude_m": [300, 0], "throttle": [0.3, 0.18]}
+  ]
+}

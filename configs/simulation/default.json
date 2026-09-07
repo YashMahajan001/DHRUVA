@@ -1,0 +1,13 @@
+{
+  "start_timestamp": "2026-01-01T00:00:00Z",
+  "default_sampling_rate_hz": 1.0,
+  "default_seed": 42,
+  "integrity": {
+    "throttle_max": 1.05,
+    "rpm_max": 8000,
+    "cht_min": -40,
+    "cht_max": 400,
+    "egt_min": 0,
+    "egt_max": 1400
+  }
+}

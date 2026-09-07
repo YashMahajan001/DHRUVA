@@ -1,0 +1,8 @@
+{
+  "engine": "O320_CLASS",
+  "mission": "HIGH_ALTITUDE_ISR",
+  "duration": 1800,
+  "faults": [
+    {"type": "COOLING_DEGRADATION", "start": 900, "duration": 900, "severity": 0.7, "progression": "gradual"}
+  ]
+}
