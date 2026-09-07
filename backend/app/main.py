@@ -1,9 +1,18 @@
+import sys
+from pathlib import Path
+
+# Ensure project root is always in sys.path regardless of working directory
+_ROOT = Path(__file__).resolve().parents[2]
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
 import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 
 from backend.app.core.config import settings
+
 from backend.app.database.connection import init_db
 from backend.app.middleware import setup_cors, RequestLoggingMiddleware, setup_error_handlers
 from backend.app.api import api_router
