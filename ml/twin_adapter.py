@@ -35,10 +35,14 @@ def extract_twin_state(telemetry: Mapping[str, Any] | pd.Series | None) -> dict:
         "data_valid",
         "component_health",
     ):
-        if key in nested:
+        if key in nested and not pd.isna(nested[key]):
             state[key] = nested[key]
-        elif key in row and key in {"health_index", "status", "health_state"}:
+        elif key in row and key in {"health_index", "status", "health_state"} and not pd.isna(row[key]):
+            if key == "health_index" and float(row[key] or 0) <= 0:
+                continue
             state[key] = row[key]
+
+
 
     residuals = {}
     source = {**row, **nested}

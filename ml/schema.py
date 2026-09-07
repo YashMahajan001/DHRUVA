@@ -34,8 +34,11 @@ CANONICAL_FIELDS = [
 COLUMN_ALIASES: Mapping[str, str] = {
     "ambient_temp": "ambient_temperature",
     "ambientTemperature": "ambient_temperature",
+    "temperature": "cht",
+    "temp": "cht",
     "CHT": "cht",
     "EGT": "egt",
+
     "oil_temp": "oil_temperature",
     "oilTemp": "oil_temperature",
     "oilPressure": "oil_pressure",
