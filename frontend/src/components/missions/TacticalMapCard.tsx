@@ -47,7 +47,7 @@ export const TacticalMapCard: React.FC = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-luminosity"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=1200&q=80')`
+            backgroundImage: `url('/tactical_uav_bg.jpg')`
           }}
         />
 

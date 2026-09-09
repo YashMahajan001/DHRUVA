@@ -105,12 +105,33 @@ export const EngineProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
         return next;
       });
+
+      if (event.engineIndex === selectedEngineIndex) {
+        setTelemetryHistory((prev) => {
+          const t = event.telemetry;
+          const newPoint: TelemetryHistoryPoint = {
+            timeLabel: 'T-0',
+            timeSec: 0,
+            rpm: t.rpm || 0,
+            cht: t.cht || t.temperature || 0,
+            egt: t.egt || 0,
+            oil: t.oilPressure || t.oil_pressure || 0,
+            fuel: t.fuelFlow || t.fuel_flow || 0,
+            vibration: t.vibration || 0,
+            battery: t.batteryVoltage,
+            alternator: t.alternatorCurrent,
+          };
+          const nextHistory = [...prev, newPoint];
+          // Keep a rolling window of history points
+          return nextHistory.length > 30 ? nextHistory.slice(nextHistory.length - 30) : nextHistory;
+        });
+      }
     });
 
     return () => {
       unsubscribe();
     };
-  }, [isStreamActive]);
+  }, [isStreamActive, selectedEngineIndex]);
 
   const selectEngine = (indexOrId: number | string) => {
     if (typeof indexOrId === 'number') {

@@ -7,14 +7,23 @@ import { AlertTriangle, Hourglass, Cpu, Radio, ShieldAlert } from 'lucide-react'
 import { ReticleCorner } from '../common/ReticleCorner';
 
 export const MetricKpiCards: React.FC = () => {
-  const { setSelectedEngineId, openModal } = useMission();
+  const { engines, selectedEngine, setSelectedEngineId, openModal } = useMission();
+
+  const criticalCount = engines.filter((e) => e.status === 'CRITICAL').length;
+  const warningCount = engines.filter((e) => e.status === 'WARNING').length;
+  const criticalEngine = engines.find((e) => e.status === 'CRITICAL');
+  const warningEngine = engines.find((e) => e.status === 'WARNING');
+  const fleetMtbur = Math.round(engines.reduce((sum, e) => sum + e.totalHours, 0) / engines.length);
+  const twinFidelity = selectedEngine.twinState.modelFidelityPercent;
+  const confidenceLevel = selectedEngine.twinState.confidenceLevel;
+  const rulErrorBand = selectedEngine.twinState.rulErrorBandHours;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
       {/* Card 1: Critical Actions (Engine 03) */}
       <div
         onClick={() => {
-          setSelectedEngineId('eng-03');
+          if (criticalEngine) setSelectedEngineId(criticalEngine.id);
         }}
         className="relative p-4 rounded bg-[#090e1b]/85 border border-red-500/40 shadow-[0_0_16px_rgba(239,68,68,0.15)] flex flex-col justify-between overflow-hidden cursor-pointer hover:border-red-500 hover:bg-[#090e1b] transition-all group"
       >
@@ -30,23 +39,23 @@ export const MetricKpiCards: React.FC = () => {
 
         <div className="my-3 flex items-baseline justify-between">
           <span className="font-telemetry text-3xl font-bold text-red-400 tracking-tight">
-            01
+            {String(criticalCount).padStart(2, '0')}
           </span>
           <span className="px-2 py-0.5 rounded bg-red-950/40 text-red-400 text-[10px] font-telemetry uppercase font-bold border border-red-500/30 group-hover:bg-red-900/40 transition-colors">
-            ENGINE 03 (UAV-03)
+            {criticalEngine ? `${criticalEngine.displayId} (${criticalEngine.airframeId})` : 'NONE'}
           </span>
         </div>
 
         <div className="flex items-center justify-between text-[#b9cacb] font-body text-xs border-t border-[#3b494b]/20 pt-2">
           <span>Target Grounding: IMMEDIATE</span>
-          <span className="font-tactical text-[11px] text-red-400 font-bold">18h RUL</span>
+          <span className="font-tactical text-[11px] text-red-400 font-bold">{criticalEngine ? `${criticalEngine.rulHours}h RUL` : '—'}</span>
         </div>
       </div>
 
       {/* Card 2: Impending Warnings (Engine 02) */}
       <div
         onClick={() => {
-          setSelectedEngineId('eng-02');
+          if (warningEngine) setSelectedEngineId(warningEngine.id);
         }}
         className="relative p-4 rounded bg-[#090e1b]/85 border border-amber-500/40 shadow-[0_0_16px_rgba(245,158,11,0.1)] flex flex-col justify-between overflow-hidden cursor-pointer hover:border-amber-400 hover:bg-[#090e1b] transition-all group"
       >
@@ -62,16 +71,16 @@ export const MetricKpiCards: React.FC = () => {
 
         <div className="my-3 flex items-baseline justify-between">
           <span className="font-telemetry text-3xl font-bold text-amber-300 tracking-tight">
-            01
+            {String(warningCount).padStart(2, '0')}
           </span>
           <span className="px-2 py-0.5 rounded bg-amber-950/40 text-amber-300 text-[10px] font-telemetry uppercase font-bold border border-amber-500/30 group-hover:bg-amber-900/40 transition-colors">
-            ENGINE 02 (UAV-02)
+            {warningEngine ? `${warningEngine.displayId} (${warningEngine.airframeId})` : 'NONE'}
           </span>
         </div>
 
         <div className="flex items-center justify-between text-[#b9cacb] font-body text-xs border-t border-[#3b494b]/20 pt-2">
-          <span>Thermal Decay Delta: +14%</span>
-          <span className="font-tactical text-[11px] text-amber-300 font-bold">61h RUL</span>
+          <span>Thermal Decay Delta: {warningEngine ? `+${warningEngine.twinState.thermalDecayDeltaPercent}%` : '—'}</span>
+          <span className="font-tactical text-[11px] text-amber-300 font-bold">{warningEngine ? `${warningEngine.rulHours}h RUL` : '—'}</span>
         </div>
       </div>
 
@@ -88,13 +97,13 @@ export const MetricKpiCards: React.FC = () => {
 
         <div className="my-3 flex items-baseline gap-2">
           <span className="font-telemetry text-3xl font-bold text-[#dee2f5] tracking-tight">
-            480
+            {fleetMtbur}
           </span>
           <span className="font-headline text-lg text-[#b9cacb] font-semibold">
             HRS
           </span>
           <span className="ml-auto text-emerald-400 font-tactical text-[11px] flex items-center font-bold">
-            +18h vs Q3
+            {fleetMtbur > 450 ? `+${fleetMtbur - 450}h vs Q3` : `${fleetMtbur - 450}h vs Q3`}
           </span>
         </div>
 
@@ -117,16 +126,16 @@ export const MetricKpiCards: React.FC = () => {
 
         <div className="my-3 flex items-baseline gap-2">
           <span className="font-telemetry text-3xl font-bold text-[#00f0ff] tracking-tight">
-            98.4%
+            {twinFidelity}%
           </span>
           <span className="ml-auto text-emerald-400 font-tactical text-[11px] flex items-center font-bold">
-            CONFIDENCE L1
+            {confidenceLevel}
           </span>
         </div>
 
         <div className="flex items-center justify-between text-[#b9cacb] font-body text-xs border-t border-[#3b494b]/20 pt-2">
           <span>RUL Error Band</span>
-          <span className="font-tactical text-[11px] text-[#dee2f5] font-bold">±1.8 FLIGHT HRS</span>
+          <span className="font-tactical text-[11px] text-[#dee2f5] font-bold">±{rulErrorBand} FLIGHT HRS</span>
         </div>
       </div>
     </div>

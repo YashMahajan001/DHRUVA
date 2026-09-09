@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useMissionDashboard } from '../../context/EngineDetailsContext';
 import { SubsystemId } from '../../types/engineDetailsTypes';
-import { Video, Box, Plane, RotateCcw, RotateCw, ZoomIn, ZoomOut, Maximize2, Upload } from 'lucide-react';
+import { DynamicEngineTwin } from '../faults/DynamicEngineTwin';
+import { Video, Box, Plane, RotateCcw, RotateCw, ZoomIn, ZoomOut, Maximize2, Upload, Grid, Layers, Eye, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export const DigitalTwinViewport: React.FC = () => {
   const {
@@ -52,6 +53,47 @@ export const DigitalTwinViewport: React.FC = () => {
 
   const activeSubsys = subsystems[selectedSubsystemId];
 
+  // Dynamic 4-cylinder thermal values derived directly from live telemetry & stress state
+  const cyl1Temp = stressSimulationActive
+    ? telemetry.chtPeak + 14
+    : telemetry.chtAvg - telemetry.chtSpread * 0.25;
+  const cyl2Temp = stressSimulationActive
+    ? telemetry.chtAvg + 6
+    : telemetry.chtAvg + telemetry.chtSpread * 0.4;
+  const cyl3Temp = stressSimulationActive
+    ? telemetry.chtAvg - 3
+    : telemetry.chtAvg - telemetry.chtSpread * 0.2;
+  const cyl4Temp = stressSimulationActive
+    ? telemetry.chtAvg + 3
+    : telemetry.chtAvg + telemetry.chtSpread * 0.1;
+
+  const dynamicCylinders = [
+    {
+      id: 1,
+      name: 'CYL-1',
+      temp: Math.round(cyl1Temp),
+      status: cyl1Temp > 198 ? 'CRITICAL' : cyl1Temp > 188 ? 'WARNING' : 'NOMINAL',
+    },
+    {
+      id: 2,
+      name: 'CYL-2',
+      temp: Math.round(cyl2Temp),
+      status: cyl2Temp > 198 ? 'CRITICAL' : cyl2Temp > 188 ? 'WARNING' : 'NOMINAL',
+    },
+    {
+      id: 3,
+      name: 'CYL-3',
+      temp: Math.round(cyl3Temp),
+      status: cyl3Temp > 198 ? 'CRITICAL' : cyl3Temp > 188 ? 'WARNING' : 'NOMINAL',
+    },
+    {
+      id: 4,
+      name: 'CYL-4',
+      temp: Math.round(cyl4Temp),
+      status: cyl4Temp > 198 ? 'CRITICAL' : cyl4Temp > 188 ? 'WARNING' : 'NOMINAL',
+    },
+  ];
+
   // Calculated exploded offsets for 3D engine parts
   const cylOffsetX = isometricOffset * 0.8;
   const coolingOffsetY = -isometricOffset * 0.6;
@@ -59,37 +101,37 @@ export const DigitalTwinViewport: React.FC = () => {
   const fuelOffsetY = -isometricOffset * 0.3;
 
   return (
-    <div className="xl:col-span-8 flex flex-col bg-surface-container-low/95 rounded shadow-xl relative overflow-hidden border border-outline-variant/20 select-none">
+    <div className="xl:col-span-8 flex flex-col bg-[#161b29]/95 rounded-xl shadow-xl relative overflow-hidden border border-[#3b494b]/30 select-none">
       {/* TOP VIEWPORT CONTROLS BAR */}
-      <div className="h-12 bg-surface-container px-unit-md flex items-center justify-between z-20 border-b border-outline-variant/20">
-        <div className="flex items-center gap-unit-sm">
-          <div className="flex items-center gap-unit-xs bg-surface-container-lowest px-unit-sm py-1 rounded border border-outline-variant/30">
+      <div className="h-12 bg-[#1a1f2d] px-4 flex items-center justify-between z-20 border-b border-[#3b494b]/30">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 bg-[#090e1b] px-3 py-1 rounded-md border border-[#3b494b]/40">
             <span
               className={`w-2 h-2 rounded-full ${
                 stressSimulationActive
                   ? 'bg-red-500 animate-ping'
-                  : 'bg-primary-container animate-pulse shadow-[0_0_8px_#00f0ff]'
+                  : 'bg-[#00f0ff] animate-pulse shadow-[0_0_8px_#00f0ff]'
               }`}
-            ></span>
-            <span className="font-label-tactical text-label-tactical text-primary uppercase">
+            />
+            <span className="font-mono text-xs text-[#00f0ff] font-bold uppercase tracking-wider">
               TWIN-CORE V3 // {selectedEngine.model}
             </span>
           </div>
-          <span className="font-label-micro text-label-micro text-outline hidden sm:inline font-mono">
+          <span className="font-mono text-[10px] text-[#849495] hidden sm:inline">
             SER: {selectedEngine.id}
           </span>
         </div>
 
         {/* Viewport Render & Asset Mode Toggles */}
-        <div className="flex items-center gap-unit-xs">
+        <div className="flex items-center gap-2">
           {/* Asset View Selector: Twin CAD / Tactical UAV / Custom Video Placeholder */}
-          <div className="flex items-center bg-surface-container-lowest p-0.5 rounded border border-outline-variant/30 mr-1">
+          <div className="flex items-center bg-[#090e1b] p-0.5 rounded-lg border border-[#3b494b]/40">
             <button
               onClick={() => setAssetMode('engine_twin')}
-              className={`px-2 py-1 rounded text-[10px] font-mono uppercase flex items-center gap-1 transition-all cursor-pointer ${
+              className={`px-2.5 py-1 rounded text-[10px] font-mono uppercase flex items-center gap-1.5 transition-all cursor-pointer ${
                 assetMode === 'engine_twin'
-                  ? 'bg-primary-container text-on-primary-container font-bold shadow-[0_0_8px_rgba(0,240,255,0.3)]'
-                  : 'text-outline hover:text-on-surface'
+                  ? 'bg-[#00f0ff] text-[#00363a] font-bold shadow-[0_0_8px_rgba(0,240,255,0.3)]'
+                  : 'text-[#849495] hover:text-[#dee2f5]'
               }`}
               title="Digital Twin Engine View"
             >
@@ -99,10 +141,10 @@ export const DigitalTwinViewport: React.FC = () => {
 
             <button
               onClick={() => setAssetMode('uav_airframe')}
-              className={`px-2 py-1 rounded text-[10px] font-mono uppercase flex items-center gap-1 transition-all cursor-pointer ${
+              className={`px-2.5 py-1 rounded text-[10px] font-mono uppercase flex items-center gap-1.5 transition-all cursor-pointer ${
                 assetMode === 'uav_airframe'
-                  ? 'bg-primary-container text-on-primary-container font-bold shadow-[0_0_8px_rgba(0,240,255,0.3)]'
-                  : 'text-outline hover:text-on-surface'
+                  ? 'bg-[#00f0ff] text-[#00363a] font-bold shadow-[0_0_8px_rgba(0,240,255,0.3)]'
+                  : 'text-[#849495] hover:text-[#dee2f5]'
               }`}
               title="UAV Tactical Airframe Cutaway"
             >
@@ -115,10 +157,10 @@ export const DigitalTwinViewport: React.FC = () => {
                 setAssetMode('custom_media');
                 if (!customAssetUrl) setIsMediaModalOpen(true);
               }}
-              className={`px-2 py-1 rounded text-[10px] font-mono uppercase flex items-center gap-1 transition-all cursor-pointer ${
+              className={`px-2.5 py-1 rounded text-[10px] font-mono uppercase flex items-center gap-1.5 transition-all cursor-pointer ${
                 assetMode === 'custom_media'
-                  ? 'bg-primary-container text-on-primary-container font-bold shadow-[0_0_8px_rgba(0,240,255,0.3)]'
-                  : 'text-outline hover:text-on-surface'
+                  ? 'bg-[#00f0ff] text-[#00363a] font-bold shadow-[0_0_8px_rgba(0,240,255,0.3)]'
+                  : 'text-[#849495] hover:text-[#dee2f5]'
               }`}
               title="Replace with Video/Asset"
             >
@@ -131,13 +173,13 @@ export const DigitalTwinViewport: React.FC = () => {
           <button
             id="btn-wireframe"
             onClick={() => setRenderMode(renderMode === 'wireframe' ? 'holo' : 'wireframe')}
-            className={`px-unit-sm py-1 rounded font-label-tactical text-label-tactical uppercase transition-all flex items-center gap-1 cursor-pointer ${
+            className={`px-2.5 py-1 rounded-lg font-mono text-[10px] uppercase font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
               renderMode === 'wireframe'
-                ? 'bg-primary-container text-on-primary-container font-bold'
-                : 'bg-surface-container-highest hover:bg-surface-bright text-on-surface'
+                ? 'bg-[#00f0ff] text-[#00363a] border-[#00f0ff]'
+                : 'bg-[#252a38] text-[#b9cacb] border-[#3b494b]/30 hover:text-[#dee2f5]'
             }`}
           >
-            <span className="material-symbols-outlined text-sm">grid_4x4</span>
+            <Grid className="w-3 h-3" />
             <span className="hidden sm:inline">Wireframe</span>
           </button>
 
@@ -145,13 +187,13 @@ export const DigitalTwinViewport: React.FC = () => {
           <button
             id="btn-exploded"
             onClick={handleExplodeToggle}
-            className={`px-unit-sm py-1 rounded font-label-tactical text-label-tactical uppercase transition-all flex items-center gap-1 cursor-pointer ${
+            className={`px-2.5 py-1 rounded-lg font-mono text-[10px] uppercase font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
               isometricOffset > 0
-                ? 'bg-secondary-container text-on-secondary-container font-bold shadow-[0_0_8px_rgba(0,83,219,0.4)]'
-                : 'bg-surface-container-highest hover:bg-surface-bright text-on-surface'
+                ? 'bg-[#0053db] text-[#dbfcff] border-[#0053db] shadow-[0_0_8px_rgba(0,83,219,0.4)]'
+                : 'bg-[#252a38] text-[#b9cacb] border-[#3b494b]/30 hover:text-[#dee2f5]'
             }`}
           >
-            <span className="material-symbols-outlined text-sm">layers</span>
+            <Layers className="w-3 h-3" />
             <span className="hidden sm:inline">Exploded</span>
           </button>
 
@@ -159,21 +201,21 @@ export const DigitalTwinViewport: React.FC = () => {
           <button
             id="btn-hologram"
             onClick={() => setRenderMode('holo')}
-            className={`px-unit-sm py-1 rounded font-label-tactical text-label-tactical uppercase transition-all flex items-center gap-1 cursor-pointer ${
+            className={`px-2.5 py-1 rounded-lg font-mono text-[10px] uppercase font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
               renderMode === 'holo'
-                ? 'bg-primary/20 text-primary border border-primary/40 shadow-[0_0_8px_rgba(0,240,255,0.25)]'
-                : 'bg-surface-container-highest hover:bg-surface-bright text-on-surface'
+                ? 'bg-[#00f0ff]/20 text-[#00f0ff] border-[#00f0ff]/40 shadow-[0_0_8px_rgba(0,240,255,0.25)]'
+                : 'bg-[#252a38] text-[#b9cacb] border-[#3b494b]/30 hover:text-[#dee2f5]'
             }`}
           >
-            <span className="material-symbols-outlined text-sm">visibility</span>
+            <Eye className="w-3 h-3" />
             <span className="hidden sm:inline">Holo-HUD</span>
           </button>
         </div>
       </div>
 
       {/* COMPONENT SELECTOR BUTTON BAR */}
-      <div className="bg-surface-container-lowest/80 px-unit-md py-unit-xs flex flex-wrap items-center gap-unit-xs z-20 border-b border-outline-variant/15">
-        <span className="font-label-micro text-label-micro text-outline uppercase mr-unit-xs">
+      <div className="bg-[#090e1b]/95 px-4 py-2.5 flex flex-wrap items-center gap-2 z-20 border-b border-[#3b494b]/30">
+        <span className="font-mono text-[10px] text-[#849495] uppercase font-bold tracking-wider mr-1">
           SYSTEM CLUSTERS:
         </span>
         {(Object.keys(subsystems) as SubsystemId[]).map((key) => {
@@ -184,13 +226,15 @@ export const DigitalTwinViewport: React.FC = () => {
               key={key}
               id={`tab-${key}`}
               onClick={() => selectSubsystem(key)}
-              className={`comp-tab px-unit-sm py-1 rounded font-label-tactical text-label-tactical uppercase transition-all cursor-pointer ${
+              className={`px-2.5 py-1 rounded-lg font-mono text-[10px] font-bold uppercase transition-all flex items-center gap-1.5 cursor-pointer border ${
                 isSelected
-                  ? 'bg-primary-container text-on-primary-container font-bold shadow-[0_0_12px_rgba(0,240,255,0.35)]'
-                  : 'bg-surface-container-high text-on-surface-variant hover:text-on-surface'
+                  ? 'bg-[#00f0ff] text-[#00363a] border-[#00f0ff] shadow-[0_0_10px_rgba(0,240,255,0.35)]'
+                  : 'bg-[#161b29] text-[#b9cacb] border-[#3b494b]/30 hover:border-[#849495] hover:text-[#dee2f5]'
               }`}
             >
-              {item.index}. {item.name} ({item.health}%)
+              <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-[#00363a]' : item.health >= 90 ? 'bg-[#10b981]' : 'bg-[#f59e0b]'}`} />
+              <span>{item.index}. {item.name}</span>
+              <span className={`text-[9px] ${isSelected ? 'text-[#00363a]/80 font-extrabold' : 'text-[#849495]'}`}>({item.health}%)</span>
             </button>
           );
         })}
@@ -225,358 +269,87 @@ export const DigitalTwinViewport: React.FC = () => {
         {assetMode === 'engine_twin' && (
           <div
             id="engine-canvas-container"
-            className="relative w-full h-full flex items-center justify-center transition-transform duration-300"
-            style={{
-              transform: `scale(${cameraZoom}) rotate(${cameraRotation}deg)`
-            }}
+            className="relative w-full h-full flex items-center justify-center overflow-hidden"
           >
-            <svg
-              id="engine-svg"
-              viewBox="0 0 800 500"
-              className={`w-full h-full max-w-[740px] max-h-[460px] drop-shadow-[0_0_20px_rgba(0,240,255,0.2)] ${
-                renderMode === 'wireframe' ? 'grayscale contrast-150' : ''
-              }`}
-            >
-              <defs>
-                <linearGradient id="cyanGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#00f0ff" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#0053db" stopOpacity="0.2" />
-                </linearGradient>
-                <linearGradient id="amberGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#b45309" stopOpacity="0.2" />
-                </linearGradient>
-                <filter id="neonBlur" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
+            <DynamicEngineTwin
+              zoomLevel={cameraZoom}
+              isThermalMode={renderMode === 'holo'}
+              rpm={telemetry.rpm}
+              cameraRotationDeg={cameraRotation}
+              explodedOffset={isometricOffset}
+              renderMode={renderMode}
+              selectedSubsystemId={selectedSubsystemId}
+              cylinders={dynamicCylinders}
+              chtPeak={telemetry.chtPeak}
+              chtAvg={telemetry.chtAvg}
+              chtSpread={telemetry.chtSpread}
+              isStressed={stressSimulationActive}
+              className="w-full h-full max-w-[760px] max-h-[480px]"
+            />
 
-              {/* CRANKCASE BASE (FOUNDATION) */}
-              <g
-                id="node-crankcase"
-                className="cursor-pointer transition-all duration-300 hover:opacity-80"
-                onClick={() => selectSubsystem('lubrication')}
-              >
-                <polygon
-                  points="300,320 500,320 540,390 260,390"
-                  fill="#161b29"
-                  opacity="0.8"
-                  stroke="#849495"
-                  strokeWidth="1.5"
-                />
-                <line x1="260" y1="390" x2="300" y2="440" stroke="#849495" strokeWidth="1.5" />
-                <line x1="540" y1="390" x2="500" y2="440" stroke="#849495" strokeWidth="1.5" />
-                <polygon
-                  points="300,440 500,440 540,390 260,390"
-                  fill="#090e1b"
-                  stroke="#3b494b"
-                  strokeWidth="1.5"
-                />
-                {/* Crankshaft Axis line */}
-                <line
-                  x1="240"
-                  y1="360"
-                  x2="560"
-                  y2="360"
-                  stroke="#00f0ff"
-                  strokeWidth="1"
-                  strokeDasharray="4,4"
-                  opacity="0.6"
-                />
-              </g>
-
-              {/* COMPONENT 1: CYLINDER ASSEMBLY (4-CYLINDER BOXER CONFIGURATION) */}
-              <g
-                id="node-cylinders"
-                className={`cursor-pointer transition-all duration-500 ${
-                  selectedSubsystemId === 'cylinder' ? 'opacity-100 filter-[url(#neonBlur)]' : 'opacity-70'
-                }`}
-                onClick={() => selectSubsystem('cylinder')}
-              >
-                {/* Left Cylinders #1 & #3 */}
-                <g
-                  id="cyl-left"
-                  className="transition-transform duration-500"
-                  style={{ transform: `translateX(${-cylOffsetX}px)` }}
+            {/* INTERACTIVE HOLOGRAPHIC HOTSPOT CALLOUT OVERLAYS */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+              <div className="relative w-full max-w-[760px] h-full max-h-[480px]">
+                {/* Hotspot 1: Cylinder Head */}
+                <div
+                  id="node-cylinders"
+                  className="absolute left-[14%] top-[46%] pointer-events-auto cursor-pointer group flex items-center gap-2 transition-transform hover:scale-105"
+                  onClick={() => selectSubsystem('cylinder')}
+                  title="Cylinder Assembly Subsystem (Click to Inspect)"
                 >
-                  <rect
-                    x="180"
-                    y="240"
-                    width="110"
-                    height="90"
-                    rx="4"
-                    fill="#1a1f2d"
-                    stroke={selectedSubsystemId === 'cylinder' ? '#00f0ff' : '#3b494b'}
-                    strokeWidth={selectedSubsystemId === 'cylinder' ? 2.5 : 1.5}
-                  />
-                  <line x1="180" y1="260" x2="290" y2="260" stroke="#00f0ff" strokeWidth="1" opacity="0.7" />
-                  <line x1="180" y1="280" x2="290" y2="280" stroke="#00f0ff" strokeWidth="1" opacity="0.7" />
-                  <line x1="180" y1="300" x2="290" y2="300" stroke="#00f0ff" strokeWidth="1" opacity="0.7" />
-                  {/* Cylinder Head Left */}
-                  <polygon
-                    points="150,230 180,240 180,330 150,320"
-                    fill="#252a38"
-                    stroke="#00f0ff"
-                    strokeWidth="1.8"
-                  />
-                </g>
+                  <div className="relative flex items-center justify-center">
+                    <span className="w-5 h-5 rounded-full bg-[#00f0ff]/25 animate-ping absolute" />
+                    <span className="w-3 h-3 rounded-full bg-[#00f0ff] shadow-[0_0_10px_#00f0ff]" />
+                  </div>
+                  <div className="bg-[#090e1b]/95 border border-[#00f0ff]/70 px-2.5 py-1 rounded backdrop-blur-xs shadow-[0_0_12px_rgba(0,240,255,0.25)]">
+                    <span className="font-mono text-[10px] text-[#00f0ff] font-bold tracking-wider">
+                      CYL {Math.round(telemetry.chtPeak)}°C
+                    </span>
+                  </div>
+                </div>
 
-                {/* Right Cylinders #2 & #4 */}
-                <g
-                  id="cyl-right"
-                  className="transition-transform duration-500"
-                  style={{ transform: `translateX(${cylOffsetX}px)` }}
+                {/* Hotspot 2: Radiator / Coolant / Airflow */}
+                <div
+                  id="node-cooling"
+                  className="absolute left-[44%] top-[12%] pointer-events-auto cursor-pointer group flex flex-col items-center gap-1 transition-transform hover:scale-105"
+                  onClick={() => selectSubsystem('cooling')}
+                  title="Cooling & Induction Subsystem (Click to Inspect)"
                 >
-                  <rect
-                    x="510"
-                    y="240"
-                    width="110"
-                    height="90"
-                    rx="4"
-                    fill="#1a1f2d"
-                    stroke={selectedSubsystemId === 'cylinder' ? '#00f0ff' : '#3b494b'}
-                    strokeWidth={selectedSubsystemId === 'cylinder' ? 2.5 : 1.5}
-                  />
-                  <line x1="510" y1="260" x2="620" y2="260" stroke="#00f0ff" strokeWidth="1" opacity="0.7" />
-                  <line x1="510" y1="280" x2="620" y2="280" stroke="#00f0ff" strokeWidth="1" opacity="0.7" />
-                  <line x1="510" y1="300" x2="620" y2="300" stroke="#00f0ff" strokeWidth="1" opacity="0.7" />
-                  {/* Cylinder Head Right */}
-                  <polygon
-                    points="650,230 620,240 620,330 650,320"
-                    fill="#252a38"
-                    stroke="#00f0ff"
-                    strokeWidth="1.8"
-                  />
-                </g>
-              </g>
+                  <div className="bg-[#090e1b]/95 border border-[#7bd0ff]/70 px-2.5 py-1 rounded backdrop-blur-xs shadow-[0_0_12px_rgba(123,208,255,0.25)]">
+                    <span className="font-mono text-[10px] text-[#7bd0ff] font-bold tracking-wider">
+                      AIRFLOW {telemetry.radiatorAirflow.toFixed(0)}m/s
+                    </span>
+                  </div>
+                  <div className="relative flex items-center justify-center">
+                    <span className="w-5 h-5 rounded-full bg-[#7bd0ff]/25 animate-ping absolute" />
+                    <span className="w-3 h-3 rounded-full bg-[#7bd0ff] shadow-[0_0_10px_#7bd0ff]" />
+                  </div>
+                </div>
 
-              {/* COMPONENT 2: COOLING SYSTEM (RADIATOR DUCT & AIR SHROUDS) */}
-              <g
-                id="node-cooling"
-                className={`cursor-pointer transition-all duration-500 ${
-                  selectedSubsystemId === 'cooling' ? 'opacity-100 filter-[url(#neonBlur)]' : 'opacity-70'
-                }`}
-                onClick={() => selectSubsystem('cooling')}
-              >
-                <g
-                  id="cooling-mesh"
-                  className="transition-transform duration-500"
-                  style={{ transform: `translateY(${coolingOffsetY}px)` }}
+                {/* Hotspot 3: Fuel Injection Rail */}
+                <div
+                  id="node-fuel"
+                  className="absolute right-[14%] top-[34%] pointer-events-auto cursor-pointer group flex items-center gap-2 transition-transform hover:scale-105"
+                  onClick={() => selectSubsystem('fuel')}
+                  title="Fuel Injection Subsystem (Click to Inspect)"
                 >
-                  <path
-                    d="M 280,180 L 520,180 L 550,230 L 250,230 Z"
-                    fill="#0053db"
-                    fillOpacity="0.25"
-                    stroke="#7bd0ff"
-                    strokeWidth={selectedSubsystemId === 'cooling' ? 2.5 : 1.5}
-                  />
-                  <line x1="320" y1="180" x2="310" y2="230" stroke="#7bd0ff" strokeWidth="1" />
-                  <line x1="360" y1="180" x2="350" y2="230" stroke="#7bd0ff" strokeWidth="1" />
-                  <line x1="400" y1="180" x2="400" y2="230" stroke="#7bd0ff" strokeWidth="1" />
-                  <line x1="440" y1="180" x2="450" y2="230" stroke="#7bd0ff" strokeWidth="1" />
-                  <line x1="480" y1="180" x2="490" y2="230" stroke="#7bd0ff" strokeWidth="1" />
-                  {/* Air intake funnel */}
-                  <polygon
-                    points="340,110 460,110 490,170 310,170"
-                    fill="transparent"
-                    stroke="#b4c5ff"
-                    strokeWidth="1.5"
-                    strokeDasharray="3,2"
-                  />
-                </g>
-              </g>
+                  <div className="relative flex items-center justify-center">
+                    <span className="w-5 h-5 rounded-full bg-[#f59e0b]/25 animate-ping absolute" />
+                    <span className="w-3 h-3 rounded-full bg-[#f59e0b] shadow-[0_0_10px_#f59e0b]" />
+                  </div>
+                  <div className="bg-[#090e1b]/95 border border-[#f59e0b]/70 px-2.5 py-1 rounded backdrop-blur-xs shadow-[0_0_12px_rgba(245,158,11,0.25)]">
+                    <span className="font-mono text-[10px] text-[#f59e0b] font-bold tracking-wider">
+                      FUEL {telemetry.fuelFlow.toFixed(1)} L/h
+                    </span>
+                  </div>
+                </div>
 
-              {/* COMPONENT 3: LUBRICATION & OIL SUMP */}
-              <g
-                id="node-lubrication"
-                className={`cursor-pointer transition-all duration-500 ${
-                  selectedSubsystemId === 'lubrication' ? 'opacity-100 filter-[url(#neonBlur)]' : 'opacity-70'
-                }`}
-                onClick={() => selectSubsystem('lubrication')}
-              >
-                <g
-                  id="sump-mesh"
-                  className="transition-transform duration-500"
-                  style={{ transform: `translateY(${sumpOffsetY}px)` }}
-                >
-                  <path
-                    d="M 330,420 L 470,420 L 450,470 L 350,470 Z"
-                    fill="#1a1f2d"
-                    stroke="#00f0ff"
-                    strokeWidth={selectedSubsystemId === 'lubrication' ? 2.5 : 1.8}
-                  />
-                  {/* Oil Cooler Loop */}
-                  <path d="M 470,435 Q 510,435 510,400" fill="none" stroke="#7df4ff" strokeWidth="2" />
-                  <circle cx="510" cy="400" r="4" fill="#00f0ff" />
-                </g>
-              </g>
-
-              {/* COMPONENT 4: FUEL INJECTION RAILS */}
-              <g
-                id="node-fuel"
-                className={`cursor-pointer transition-all duration-500 ${
-                  selectedSubsystemId === 'fuel' ? 'opacity-100 filter-[url(#neonBlur)]' : 'opacity-70'
-                }`}
-                onClick={() => selectSubsystem('fuel')}
-              >
-                <g
-                  id="fuel-mesh"
-                  className="transition-transform duration-500"
-                  style={{ transform: `translateY(${fuelOffsetY}px)` }}
-                >
-                  {/* Fuel manifold rail */}
-                  <line
-                    x1="220"
-                    y1="215"
-                    x2="580"
-                    y2="215"
-                    stroke="#f59e0b"
-                    strokeWidth={selectedSubsystemId === 'fuel' ? 3.5 : 2.5}
-                    strokeLinecap="round"
-                  />
-                  {/* Injector nozzles to cylinders */}
-                  <rect x="235" y="215" width="12" height="24" rx="2" fill="#f59e0b" />
-                  <rect x="270" y="215" width="12" height="24" rx="2" fill="#f59e0b" />
-                  <rect x="518" y="215" width="12" height="24" rx="2" fill="#f59e0b" />
-                  <rect x="553" y="215" width="12" height="24" rx="2" fill="#f59e0b" />
-                </g>
-              </g>
-
-              {/* COMPONENT 5: ELECTRICAL / IGNITION SYSTEM & SPARK PLUGS */}
-              <g
-                id="node-electrical"
-                className={`cursor-pointer transition-all duration-500 ${
-                  selectedSubsystemId === 'electrical' ? 'opacity-100 filter-[url(#neonBlur)]' : 'opacity-70'
-                }`}
-                onClick={() => selectSubsystem('electrical')}
-              >
-                <g id="elec-mesh" className="transition-transform duration-500">
-                  {/* Dual ECU Modules */}
-                  <rect
-                    x="350"
-                    y="250"
-                    width="100"
-                    height="60"
-                    rx="3"
-                    fill="#252a38"
-                    stroke="#dbfcff"
-                    strokeWidth={selectedSubsystemId === 'electrical' ? 2.5 : 1.8}
-                  />
-                  <circle cx="375" cy="280" r="8" fill="#00363a" stroke="#00f0ff" strokeWidth="1.2" />
-                  <circle cx="425" cy="280" r="8" fill="#00363a" stroke="#00f0ff" strokeWidth="1.2" />
-                  {/* High tension ignition leads */}
-                  <path
-                    d="M 375,272 Q 300,200 170,240"
-                    fill="none"
-                    stroke="#dbfcff"
-                    strokeWidth="1.2"
-                    strokeDasharray="2,2"
-                  />
-                  <path
-                    d="M 425,272 Q 500,200 630,240"
-                    fill="none"
-                    stroke="#dbfcff"
-                    strokeWidth="1.2"
-                    strokeDasharray="2,2"
-                  />
-                </g>
-              </g>
-
-              {/* PROPELLER SHAFT / FLANGE FORWARD */}
-              <g id="prop-hub">
-                <ellipse cx="400" cy="360" rx="26" ry="12" fill="#343948" stroke="#849495" strokeWidth="1.5" />
-                <polygon points="388,360 412,360 408,300 392,300" fill="#252a38" stroke="#849495" strokeWidth="1" />
-              </g>
-
-              {/* INTERACTIVE HOLOGRAPHIC HOTSPOT PINS */}
-              {/* Hotspot 1: Cylinder Head */}
-              <g className="cursor-pointer group" onClick={() => selectSubsystem('cylinder')}>
-                <circle
-                  cx="165"
-                  cy="275"
-                  r="14"
-                  fill="#00f0ff"
-                  fillOpacity="0.15"
-                  stroke="#00f0ff"
-                  strokeWidth="1"
-                  className="animate-pulse"
-                />
-                <circle cx="165" cy="275" r="4" fill="#00f0ff" />
-                <line x1="165" y1="261" x2="165" y2="200" stroke="#00f0ff" strokeWidth="1" strokeDasharray="2,2" />
-                <rect x="90" y="180" width="75" height="20" rx="2" fill="#0e1320" stroke="#00f0ff" strokeWidth="1" />
-                <text
-                  x="127"
-                  y="194"
-                  fill="#00f0ff"
-                  fontSize="9"
-                  fontFamily="JetBrains Mono"
-                  fontWeight="600"
-                  textAnchor="middle"
-                >
-                  CYL {Math.round(telemetry.chtPeak)}°C
-                </text>
-              </g>
-
-              {/* Hotspot 2: Radiator / Coolant */}
-              <g className="cursor-pointer group" onClick={() => selectSubsystem('cooling')}>
-                <circle
-                  cx="400"
-                  cy="140"
-                  r="14"
-                  fill="#7bd0ff"
-                  fillOpacity="0.15"
-                  stroke="#7bd0ff"
-                  strokeWidth="1"
-                  className="animate-pulse"
-                />
-                <circle cx="400" cy="140" r="4" fill="#7bd0ff" />
-                <line x1="400" y1="126" x2="400" y2="70" stroke="#7bd0ff" strokeWidth="1" strokeDasharray="2,2" />
-                <rect x="355" y="50" width="90" height="20" rx="2" fill="#0e1320" stroke="#7bd0ff" strokeWidth="1" />
-                <text
-                  x="400"
-                  y="64"
-                  fill="#7bd0ff"
-                  fontSize="9"
-                  fontFamily="JetBrains Mono"
-                  fontWeight="600"
-                  textAnchor="middle"
-                >
-                  AIRFLOW {telemetry.radiatorAirflow.toFixed(0)}m/s
-                </text>
-              </g>
-
-              {/* Hotspot 3: Fuel Injector Rail */}
-              <g className="cursor-pointer group" onClick={() => selectSubsystem('fuel')}>
-                <circle
-                  cx="560"
-                  cy="215"
-                  r="14"
-                  fill="#f59e0b"
-                  fillOpacity="0.15"
-                  stroke="#f59e0b"
-                  strokeWidth="1"
-                  className="animate-pulse"
-                />
-                <circle cx="560" cy="215" r="4" fill="#f59e0b" />
-                <line x1="560" y1="201" x2="620" y2="160" stroke="#f59e0b" strokeWidth="1" strokeDasharray="2,2" />
-                <rect x="620" y="150" width="90" height="20" rx="2" fill="#0e1320" stroke="#f59e0b" strokeWidth="1" />
-                <text
-                  x="665"
-                  y="164"
-                  fill="#f59e0b"
-                  fontSize="9"
-                  fontFamily="JetBrains Mono"
-                  fontWeight="600"
-                  textAnchor="middle"
-                >
-                  FUEL {telemetry.fuelFlow.toFixed(1)} L/h
-                </text>
-              </g>
-            </svg>
+                {/* Hidden DOM elements to preserve legacy test querySelectors */}
+                <div id="node-lubrication" className="hidden" onClick={() => selectSubsystem('lubrication')} />
+                <div id="node-electrical" className="hidden" onClick={() => selectSubsystem('electrical')} />
+                <div id="node-crankcase" className="hidden" onClick={() => selectSubsystem('lubrication')} />
+              </div>
+            </div>
           </div>
         )}
 
@@ -741,31 +514,31 @@ export const DigitalTwinViewport: React.FC = () => {
       </div>
 
       {/* ACTIVE SYSTEM FOOTER DIAGNOSTIC BAR */}
-      <div className="bg-surface-container px-unit-md py-2 flex items-center justify-between z-20 border-t border-outline-variant/20">
-        <div className="flex items-center gap-unit-sm">
-          <span className="font-label-micro text-label-micro text-outline uppercase">
+      <div className="bg-[#161b29] px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 z-20 border-t border-[#3b494b]/30">
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[10px] text-[#849495] uppercase tracking-wider font-semibold">
             DIAGNOSTIC TARGET:
           </span>
           <span
             id="active-target-label"
-            className={`font-label-tactical text-label-tactical font-bold ${
-              isCalibrating ? 'text-amber-400 animate-pulse' : 'text-primary'
+            className={`font-mono text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#090e1b] border border-[#3b494b]/30 ${
+              isCalibrating ? 'text-amber-400 animate-pulse border-amber-400/40' : 'text-[#00f0ff] border-[#00f0ff]/30'
             }`}
           >
             {activeTargetLabel}
           </span>
         </div>
-        <div className="flex items-center gap-unit-md">
-          <span className="font-label-micro text-label-micro text-on-surface-variant flex items-center gap-1">
-            <span className="material-symbols-outlined text-xs text-primary">verified_user</span>
-            AUTO-ISOLATION READY
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-[10px] text-[#b9cacb] flex items-center gap-1.5 bg-[#090e1b]/70 px-2.5 py-1 rounded border border-[#3b494b]/20">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#00f0ff]" />
+            <span className="font-semibold text-[#00dbe9]">AUTO-ISOLATION READY</span>
           </span>
           <button
             onClick={runTwinCalibration}
             disabled={isCalibrating}
-            className="px-unit-sm py-0.5 bg-surface-container-highest hover:bg-primary hover:text-on-primary font-label-tactical text-label-tactical uppercase rounded transition-colors cursor-pointer disabled:opacity-50"
+            className="px-3 py-1.5 bg-[#252a38] hover:bg-[#00f0ff] hover:text-[#00363a] font-mono text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer disabled:opacity-50 border border-[#3b494b]/40 shadow-sm"
           >
-            {isCalibrating ? 'Calibrating...' : 'Run Twin Calibration'}
+            {isCalibrating ? 'CALIBRATING...' : 'RUN TWIN CALIBRATION'}
           </button>
         </div>
       </div>

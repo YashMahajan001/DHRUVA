@@ -19,24 +19,24 @@ export const ComparativeVisualization: React.FC = () => {
     setSelectedTimeRange,
     selectedChartMetric,
     setSelectedChartMetric,
-    candidates 
+    candidates,
+    customTuneConfig,
   } = useDashboard();
 
   const [activeViewMode, setActiveViewMode] = useState<'pareto' | 'timeseries'>('pareto');
 
   // Filter history based on time range
   const filteredData = React.useMemo(() => {
-    const total = telemetryHistory.length;
-    if (selectedTimeRange === '1m') return telemetryHistory.slice(-12);
-    if (selectedTimeRange === '5m') return telemetryHistory.slice(-25);
-    if (selectedTimeRange === '15m') return telemetryHistory.slice(-35);
-    return telemetryHistory;
+    if (selectedTimeRange === '1m') return telemetryHistory.slice(-30);
+    if (selectedTimeRange === '5m') return telemetryHistory.slice(-150);
+    if (selectedTimeRange === '15m') return telemetryHistory.slice(-450);
+    return telemetryHistory; // '1h' uses all 1800 points
   }, [telemetryHistory, selectedTimeRange]);
 
-  // Alpha, Beta, Gamma data points
+  // Alpha, Beta, Custom Tune data points
   const alpha = candidates[0];
   const beta = candidates[1];
-  const gamma = candidates[2];
+  const custom = customTuneConfig;
 
   return (
     <div 
@@ -97,96 +97,96 @@ export const ComparativeVisualization: React.FC = () => {
             <span className="flex items-center gap-1 text-[#00f0ff] font-semibold">
               <span className="w-2 h-2 rounded-full bg-[#00f0ff] shadow-[0_0_6px_#00f0ff]" /> BETA (REC)
             </span>
-            <span className="flex items-center gap-1 text-[#ffb4ab]">
-              <span className="w-2 h-2 rounded-full bg-[#ef4444]" /> GAMMA
+            <span className="flex items-center gap-1 text-[#a78bfa] font-semibold">
+              <span className="w-2 h-2 rounded-full bg-[#a78bfa]" /> CUSTOM TUNE
             </span>
           </div>
 
           {/* SVG Comparative Multi-Bar Visualization */}
           <div className="h-32 w-full flex items-end gap-6 pt-2 px-2">
-            {/* Bar 1: Fuel Burn */}
+            {/* Bar 1: Fuel Burn — normalized to max 40 L/h */}
             <div className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
               <div className="w-full flex items-end justify-center gap-2 h-20">
                 <div 
                   className="w-3.5 bg-[#849495] rounded-t transition-all hover:brightness-125 cursor-pointer" 
-                  style={{ height: '75%' }} 
+                  style={{ height: `${Math.min(100, (alpha.fuelBurnLh / 40) * 100)}%` }} 
                   title={`Alpha: ${alpha.fuelBurnLh} L/h`} 
                 />
                 <div 
                   className="w-3.5 bg-[#00f0ff] rounded-t transition-all shadow-[0_0_8px_rgba(0,240,255,0.4)] hover:brightness-125 cursor-pointer" 
-                  style={{ height: '60%' }} 
-                  title={`Beta: ${beta.fuelBurnLh} L/h (-16.3% ECON)`} 
+                  style={{ height: `${Math.min(100, (beta.fuelBurnLh / 40) * 100)}%` }} 
+                  title={`Beta: ${beta.fuelBurnLh} L/h`} 
                 />
                 <div 
-                  className="w-3.5 bg-[#ef4444] rounded-t transition-all hover:brightness-125 cursor-pointer" 
-                  style={{ height: '52%' }} 
-                  title={`Gamma: ${gamma.fuelBurnLh} L/h`} 
+                  className="w-3.5 bg-[#a78bfa] rounded-t transition-all hover:brightness-125 cursor-pointer" 
+                  style={{ height: `${Math.min(100, (custom.fuelBurnLh / 40) * 100)}%` }} 
+                  title={`Custom: ${custom.fuelBurnLh} L/h (${custom.fuelDeltaText})`} 
                 />
               </div>
               <span className="font-mono text-[9px] text-[#b9cacb] uppercase tracking-wider font-medium">Burn Rate</span>
             </div>
 
-            {/* Bar 2: Peak CHT */}
+            {/* Bar 2: Peak CHT — normalized to max 230°C */}
             <div className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
               <div className="w-full flex items-end justify-center gap-2 h-20">
                 <div 
                   className="w-3.5 bg-[#849495] rounded-t transition-all hover:brightness-125 cursor-pointer" 
-                  style={{ height: '65%' }} 
+                  style={{ height: `${Math.min(100, (alpha.thermalCht / 230) * 100)}%` }} 
                   title={`Alpha: ${alpha.thermalCht}°C`} 
                 />
                 <div 
                   className="w-3.5 bg-[#00f0ff] rounded-t transition-all hover:brightness-125 cursor-pointer" 
-                  style={{ height: '70%' }} 
-                  title={`Beta: ${beta.thermalCht}°C (+4°C STABLE)`} 
+                  style={{ height: `${Math.min(100, (beta.thermalCht / 230) * 100)}%` }} 
+                  title={`Beta: ${beta.thermalCht}°C`} 
                 />
                 <div 
-                  className="w-3.5 bg-[#ef4444] rounded-t transition-all animate-pulse hover:brightness-125 cursor-pointer" 
-                  style={{ height: '98%' }} 
-                  title={`Gamma: ${gamma.thermalCht}°C (LIMIT EXCEEDED)`} 
+                  className={`w-3.5 rounded-t transition-all hover:brightness-125 cursor-pointer ${!custom.envelopeValid ? 'bg-[#ef4444] animate-pulse' : 'bg-[#a78bfa]'}`}
+                  style={{ height: `${Math.min(100, (custom.thermalCht / 230) * 100)}%` }} 
+                  title={`Custom: ${custom.thermalCht}°C (${custom.thermalDeltaText})`} 
                 />
               </div>
               <span className="font-mono text-[9px] text-[#b9cacb] uppercase tracking-wider font-medium">Peak CHT</span>
             </div>
 
-            {/* Bar 3: Loiter Endurance */}
+            {/* Bar 3: Loiter Endurance — normalized to max 15 hrs */}
             <div className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
               <div className="w-full flex items-end justify-center gap-2 h-20">
                 <div 
                   className="w-3.5 bg-[#849495] rounded-t transition-all hover:brightness-125 cursor-pointer" 
-                  style={{ height: '70%' }} 
+                  style={{ height: `${Math.min(100, (alpha.missionLoiterHours / 15) * 100)}%` }} 
                   title={`Alpha: ${alpha.missionLoiterHours} hrs`} 
                 />
                 <div 
                   className="w-3.5 bg-[#00f0ff] rounded-t transition-all shadow-[0_0_8px_rgba(0,240,255,0.4)] hover:brightness-125 cursor-pointer" 
-                  style={{ height: '92%' }} 
-                  title={`Beta: ${beta.missionLoiterHours} hrs (+2.3 HRS TACTICAL)`} 
+                  style={{ height: `${Math.min(100, (beta.missionLoiterHours / 15) * 100)}%` }} 
+                  title={`Beta: ${beta.missionLoiterHours} hrs`} 
                 />
                 <div 
-                  className="w-3.5 bg-[#ef4444] rounded-t transition-all hover:brightness-125 cursor-pointer" 
-                  style={{ height: '10%' }} 
-                  title="Gamma: Aborted" 
+                  className="w-3.5 bg-[#a78bfa] rounded-t transition-all hover:brightness-125 cursor-pointer" 
+                  style={{ height: `${Math.min(100, Math.max(3, (custom.missionLoiterHours / 15) * 100))}%` }} 
+                  title={`Custom: ${custom.missionLoiterHours} hrs (${custom.loiterDeltaText})`} 
                 />
               </div>
               <span className="font-mono text-[9px] text-[#b9cacb] uppercase tracking-wider font-medium">Endurance</span>
             </div>
 
-            {/* Bar 4: RUL Margin */}
+            {/* Bar 4: RUL Margin — normalized to max 200 hrs */}
             <div className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
               <div className="w-full flex items-end justify-center gap-2 h-20">
                 <div 
                   className="w-3.5 bg-[#849495] rounded-t transition-all hover:brightness-125 cursor-pointer" 
-                  style={{ height: '85%' }} 
+                  style={{ height: `${Math.min(100, (alpha.estRulHours / 200) * 100)}%` }} 
                   title={`Alpha: ${alpha.estRulHours} hrs`} 
                 />
                 <div 
                   className="w-3.5 bg-[#00f0ff] rounded-t transition-all hover:brightness-125 cursor-pointer" 
-                  style={{ height: '81%' }} 
+                  style={{ height: `${Math.min(100, (beta.estRulHours / 200) * 100)}%` }} 
                   title={`Beta: ${beta.estRulHours} hrs`} 
                 />
                 <div 
-                  className="w-3.5 bg-[#ef4444] rounded-t transition-all hover:brightness-125 cursor-pointer" 
-                  style={{ height: '25%' }} 
-                  title={`Gamma: ${gamma.estRulHours} hrs (-66% CRIT)`} 
+                  className="w-3.5 bg-[#a78bfa] rounded-t transition-all hover:brightness-125 cursor-pointer" 
+                  style={{ height: `${Math.min(100, Math.max(3, (custom.estRulHours / 200) * 100))}%` }} 
+                  title={`Custom: ${custom.estRulHours} hrs (${custom.rulDeltaText})`} 
                 />
               </div>
               <span className="font-mono text-[9px] text-[#b9cacb] uppercase tracking-wider font-medium">RUL Margin</span>
@@ -194,6 +194,8 @@ export const ComparativeVisualization: React.FC = () => {
           </div>
         </div>
       )}
+
+
 
       {/* VIEW 2: RECHARTS REAL-TIME STREAM */}
       {activeViewMode === 'timeseries' && (
@@ -280,6 +282,15 @@ export const ComparativeVisualization: React.FC = () => {
                   interval="preserveStartEnd"
                 />
                 <YAxis 
+                  yAxisId="left"
+                  stroke="#849495" 
+                  tick={{ fontSize: 9, fill: '#849495', fontFamily: 'JetBrains Mono' }}
+                  domain={['auto', 'auto']}
+                  width={32}
+                />
+                <YAxis 
+                  yAxisId="right"
+                  orientation="right"
                   stroke="#849495" 
                   tick={{ fontSize: 9, fill: '#849495', fontFamily: 'JetBrains Mono' }}
                   domain={['auto', 'auto']}
@@ -297,21 +308,21 @@ export const ComparativeVisualization: React.FC = () => {
                 />
                 {selectedChartMetric === 'cht_egt' && (
                   <>
-                    <Line type="monotone" dataKey="cht" stroke="#00f0ff" strokeWidth={1.5} dot={false} name="CHT (°C)" />
-                    <Line type="monotone" dataKey="egt" stroke="#f59e0b" strokeWidth={1.5} dot={false} name="EGT (°C)" />
+                    <Line yAxisId="left" type="monotone" dataKey="cht" stroke="#00f0ff" strokeWidth={1.5} dot={false} isAnimationActive={false} name="CHT (°C)" />
+                    <Line yAxisId="right" type="monotone" dataKey="egt" stroke="#f59e0b" strokeWidth={1.5} dot={false} isAnimationActive={false} name="EGT (°C)" />
                   </>
                 )}
                 {selectedChartMetric === 'rpm_fuel' && (
                   <>
-                    <Line type="monotone" dataKey="rpm" stroke="#00f0ff" strokeWidth={1.5} dot={false} name="RPM" />
-                    <Line type="monotone" dataKey="fuelFlow" stroke="#10b981" strokeWidth={1.5} dot={false} name="Fuel Flow (L/h)" />
+                    <Line yAxisId="left" type="monotone" dataKey="rpm" stroke="#00f0ff" strokeWidth={1.5} dot={false} isAnimationActive={false} name="RPM" />
+                    <Line yAxisId="right" type="monotone" dataKey="fuelFlow" stroke="#10b981" strokeWidth={1.5} dot={false} isAnimationActive={false} name="Fuel Flow (L/h)" />
                   </>
                 )}
                 {selectedChartMetric === 'vibration' && (
-                  <Line type="monotone" dataKey="vibration" stroke="#ffb4ab" strokeWidth={1.5} dot={false} name="Vibration (g)" />
+                  <Line yAxisId="left" type="monotone" dataKey="vibration" stroke="#ffb4ab" strokeWidth={1.5} dot={false} isAnimationActive={false} name="Vibration (g)" />
                 )}
                 {selectedChartMetric === 'health_trend' && (
-                  <Line type="monotone" dataKey="health" stroke="#10b981" strokeWidth={2} dot={false} name="Engine Health (%)" />
+                  <Line yAxisId="left" type="monotone" dataKey="health" stroke="#10b981" strokeWidth={2} dot={false} isAnimationActive={false} name="Engine Health (%)" />
                 )}
               </LineChart>
             </ResponsiveContainer>

@@ -1,18 +1,31 @@
 import { EngineInstance, TwinState } from '../types';
 import { apiClient } from './api';
 import { INITIAL_ENGINES } from './mockData';
+import { adaptEngineInstance, adaptFleetResponse } from '../utils/engineAdapter';
 
 class EngineService {
   private engines: EngineInstance[] = JSON.parse(JSON.stringify(INITIAL_ENGINES));
 
   public async getEngines(): Promise<EngineInstance[]> {
-    return apiClient.get<EngineInstance[]>('/api/v1/engines', this.engines);
+    const raw = await apiClient.get<any>('/api/v1/engines', this.engines);
+    const adapted = adaptFleetResponse(raw);
+    if (adapted && adapted.length > 0) {
+      this.engines = adapted;
+    }
+    return this.engines;
   }
 
   public async getEngineById(id: string): Promise<EngineInstance | undefined> {
-    const found = this.engines.find((e) => e.id === id || e.name.toLowerCase().includes(id.toLowerCase()));
+    const found = this.engines.find(
+      (e) => e.id.toLowerCase() === id.toLowerCase() || e.name.toLowerCase().includes(id.toLowerCase())
+    );
     if (found) return found;
-    return apiClient.get<EngineInstance | undefined>(`/api/v1/engines/${id}`, this.engines[0]);
+
+    const raw = await apiClient.get<any>(`/api/v1/engines/${id}`, this.engines[0]);
+    if (raw) {
+      return adaptEngineInstance(raw, 0);
+    }
+    return this.engines[0];
   }
 
   public async getTwinState(engineId: string): Promise<TwinState | undefined> {

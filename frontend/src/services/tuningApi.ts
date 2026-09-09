@@ -21,7 +21,21 @@ class DhruvaaApiService {
     if (API_BASE_URL) {
       try {
         const res = await fetch(`${API_BASE_URL}/api/v1/engines`);
-        if (res.ok) return await res.json();
+        if (res.ok) {
+          const rawList = await res.json();
+          if (Array.isArray(rawList) && rawList.length > 0) {
+            return rawList.map((raw: any, idx: number) => {
+              const fb = this.engines[idx % this.engines.length] || INITIAL_ENGINES[0];
+              return {
+                ...fb,
+                id: raw.id || fb.id,
+                name: raw.name || fb.name,
+                model: raw.engine_model?.name || raw.name || fb.model,
+                totalFlightHours: raw.total_hours ?? fb.totalFlightHours,
+              };
+            });
+          }
+        }
       } catch (err) {
         console.warn('[Dhruvaa API] Remote endpoint unavailable, falling back to cached digital twin state:', err);
       }
@@ -33,12 +47,24 @@ class DhruvaaApiService {
     if (API_BASE_URL) {
       try {
         const res = await fetch(`${API_BASE_URL}/api/v1/engines/${id}`);
-        if (res.ok) return await res.json();
+        if (res.ok) {
+          const raw = await res.json();
+          if (raw) {
+            const fb = this.engines.find(e => e.id.toLowerCase() === id.toLowerCase()) || this.engines[0];
+            return {
+              ...fb,
+              id: raw.id || fb.id,
+              name: raw.name || fb.name,
+              model: raw.engine_model?.name || raw.name || fb.model,
+              totalFlightHours: raw.total_hours ?? fb.totalFlightHours,
+            };
+          }
+        }
       } catch (err) {
         console.warn('[Dhruvaa API] Remote endpoint unavailable, using local mock data:', err);
       }
     }
-    const found = this.engines.find(e => e.id === id);
+    const found = this.engines.find(e => e.id.toLowerCase() === id.toLowerCase());
     return Promise.resolve(found ? { ...found } : null);
   }
 
@@ -46,7 +72,19 @@ class DhruvaaApiService {
     if (API_BASE_URL) {
       try {
         const res = await fetch(`${API_BASE_URL}/api/v1/missions`);
-        if (res.ok) return await res.json();
+        if (res.ok) {
+          const rawList = await res.json();
+          if (Array.isArray(rawList) && rawList.length > 0) {
+            return rawList.map((raw: any, idx: number) => {
+              const fb = this.missions[idx % this.missions.length] || INITIAL_MISSIONS[0];
+              return {
+                ...fb,
+                ...raw,
+                id: raw.id || fb.id,
+              };
+            });
+          }
+        }
       } catch (err) {
         console.warn('[Dhruvaa API] Remote endpoint unavailable, using local mock data:', err);
       }
@@ -58,7 +96,13 @@ class DhruvaaApiService {
     if (API_BASE_URL) {
       try {
         const res = await fetch(`${API_BASE_URL}/api/v1/missions/${id}`);
-        if (res.ok) return await res.json();
+        if (res.ok) {
+          const raw = await res.json();
+          if (raw) {
+            const fb = this.missions.find(m => m.id === id) || this.missions[0];
+            return { ...fb, ...raw };
+          }
+        }
       } catch (err) {
         console.warn('[Dhruvaa API] Remote endpoint unavailable, using local mock data:', err);
       }
@@ -96,22 +140,28 @@ class DhruvaaApiService {
 
     // Thermodynamic calculations based on tuning params
     // Higher lambda (lean) -> higher CHT, lower fuel burn
-    // Higher timing -> higher peak pressure
+    // Higher timing -> higher peak pressure, higher CHT
+    // Higher cowl threshold -> opens later, higher CHT
+    // MAP profile -> eco dampens fuel/CHT, aggr increases them
     const lambdaFactor = (tuning.lambda - 0.85) / 0.3; // 0 (rich) to 1 (lean)
     const timingFactor = (tuning.timingBtdc - 18) / 10; // 0 to 1
     const rpmFactor = (tuning.rpmCeiling - 2200) / 600;
+    const cowlFactor = (tuning.cowlShutterCht - 175) * 0.35;
+    const mapChtFactor = tuning.mapProfile === 'aggr' ? 3 : tuning.mapProfile === 'eco' ? -2 : 0;
+    const mapPressFactor = tuning.mapProfile === 'aggr' ? 2.1 : tuning.mapProfile === 'eco' ? -1.5 : 0;
+    const mapFuelFactor = tuning.mapProfile === 'aggr' ? 1.3 : tuning.mapProfile === 'eco' ? -1.0 : 0;
 
-    const baseCht = 168 + lambdaFactor * 42 + rpmFactor * 8;
-    const basePressure = 68 + timingFactor * 9 + rpmFactor * 7;
-    const baseFuel = 34 - lambdaFactor * 8 + rpmFactor * 5;
+    const baseCht = Math.round(168 + lambdaFactor * 30 + timingFactor * 4 + rpmFactor * 6 + cowlFactor + mapChtFactor);
+    const basePressure = parseFloat((68 + timingFactor * 10 + rpmFactor * 5 + mapPressFactor).toFixed(1));
+    const baseFuel = parseFloat(Math.max(16.0, 32.5 - lambdaFactor * 9 + rpmFactor * 4 + mapFuelFactor).toFixed(1));
 
-    const passedEnvelope = baseCht <= 190 && basePressure <= 85;
+    const passedEnvelope = baseCht <= 190 && basePressure <= 85.0;
 
     return {
       cycles: 1024,
-      peakPressureBar: parseFloat(basePressure.toFixed(1)),
-      peakChtC: Math.round(baseCht),
-      fuelBurnLh: parseFloat(baseFuel.toFixed(1)),
+      peakPressureBar: basePressure,
+      peakChtC: baseCht,
+      fuelBurnLh: baseFuel,
       passedEnvelope,
     };
   }

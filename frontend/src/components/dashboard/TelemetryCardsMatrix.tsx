@@ -31,10 +31,10 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
   return (
     <div className="flex flex-col gap-1.5 w-full">
       {/* 6 Primary Telemetry Metric Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {/* Metric 1: RPM */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/30 p-2.5 rounded flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
-          <div className="flex justify-between items-center text-[#849495] font-mono text-[9px]">
+        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-4 rounded flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
+          <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
             <span>CORE SPEED</span>
             <span className="text-[#10b981] font-bold">OK</span>
           </div>
@@ -54,13 +54,13 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
 
         {/* Metric 2: CHT */}
         <div
-          className={`p-2.5 rounded flex flex-col justify-between border transition-colors ${
+          className={`p-4 rounded flex flex-col justify-between border transition-colors ${
             cht > 210
               ? 'bg-[#93000a]/20 border-[#ffb4ab]/40'
-              : 'bg-[#252a38]/70 border-[#3b494b]/30 hover:border-[#00f0ff]/40'
+              : 'bg-[#252a38]/70 border-[#3b494b]/20 hover:border-[#00f0ff]/40'
           }`}
         >
-          <div className="flex justify-between items-center text-[#849495] font-mono text-[9px]">
+          <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
             <span>CHT MAX</span>
             <span className={`font-bold ${chtStatus.color}`}>{chtStatus.text}</span>
           </div>
@@ -85,8 +85,8 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
         </div>
 
         {/* Metric 3: EGT */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/30 p-2.5 rounded flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
-          <div className="flex justify-between items-center text-[#849495] font-mono text-[9px]">
+        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-4 rounded flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
+          <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
             <span>EGT EXHAUST</span>
             <span className="text-[#10b981] font-bold">NOM</span>
           </div>
@@ -105,8 +105,8 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
         </div>
 
         {/* Metric 4: Oil Pressure */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/30 p-2.5 rounded flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
-          <div className="flex justify-between items-center text-[#849495] font-mono text-[9px]">
+        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-4 rounded flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
+          <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
             <span>OIL PRESSURE</span>
             <span className={`font-bold ${oilStatus.color}`}>{oilStatus.text}</span>
           </div>
@@ -127,8 +127,8 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
         </div>
 
         {/* Metric 5: Fuel Flow */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/30 p-2.5 rounded flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
-          <div className="flex justify-between items-center text-[#849495] font-mono text-[9px]">
+        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-4 rounded flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
+          <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
             <span>FUEL CONSUMPTION</span>
             <span className="text-[#10b981] font-bold">OPT</span>
           </div>
@@ -148,15 +148,15 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
 
         {/* Metric 6: Vibration RMS */}
         <div
-          className={`p-2.5 rounded flex flex-col justify-between border transition-colors ${
+          className={`p-4 rounded flex flex-col justify-between border transition-colors ${
             parseFloat(vib) > 4.0
               ? 'bg-[#93000a]/20 border-[#ffb4ab]/40'
               : parseFloat(vib) > 3.0
               ? 'bg-[#f59e0b]/15 border-[#f59e0b]/40'
-              : 'bg-[#252a38]/70 border-[#3b494b]/30 hover:border-[#00f0ff]/40'
+              : 'bg-[#252a38]/70 border-[#3b494b]/20 hover:border-[#00f0ff]/40'
           }`}
         >
-          <div className="flex justify-between items-center text-[#849495] font-mono text-[9px]">
+          <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
             <span>VIBRATION RMS</span>
             <span className={`font-bold ${vibStatus.color}`}>{vibStatus.text}</span>
           </div>
@@ -185,7 +185,7 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
       <div className="flex justify-end">
         <button
           onClick={() => setShowSecondary((prev) => !prev)}
-          className="text-[#849495] hover:text-[#00f0ff] font-mono text-[9px] flex items-center gap-1 uppercase tracking-wider py-0.5 px-2 rounded hover:bg-[#161b29] transition-colors"
+          className="text-[#849495] hover:text-[#00f0ff] font-mono text-xs flex items-center gap-1.5 uppercase tracking-wider py-1 px-3 mt-2 rounded hover:bg-[#161b29] transition-colors"
         >
           <span>{showSecondary ? 'Hide Secondary Telemetry' : 'Auxiliary Bus & Electrical Telemetry (Battery, Alternator, Oil Temp)'}</span>
           {showSecondary ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}

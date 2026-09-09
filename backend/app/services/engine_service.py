@@ -8,7 +8,25 @@ class EngineService:
         return db.query(Engine).offset(skip).limit(limit).all()
 
     def get_by_id(self, db: Session, engine_id: str) -> Optional[Engine]:
-        return db.query(Engine).filter(Engine.id == engine_id).first()
+        eng = db.query(Engine).filter(Engine.id == engine_id).first()
+        if eng:
+            return eng
+        # Try case-insensitive or normalized match (e.g. 'eng001', 'eng-01')
+        norm = engine_id.replace("-", "").replace("_", "").upper()
+        for e in db.query(Engine).all():
+            if e.id.replace("-", "").replace("_", "").upper() == norm:
+                return e
+        # Try UAV / ENG index mapping (e.g. 'uav-01' -> 1st engine, 'uav-02' -> 2nd engine)
+        all_engines = db.query(Engine).order_by(Engine.id).all()
+        if all_engines and (engine_id.lower().startswith("uav-") or engine_id.lower().startswith("eng-")):
+            try:
+                parts = engine_id.split("-")
+                num = int(parts[1])
+                idx = (num - 1) % len(all_engines)
+                return all_engines[idx]
+            except (IndexError, ValueError):
+                pass
+        return None
 
     def create(self, db: Session, engine_in: EngineCreate) -> Engine:
         engine = Engine(

@@ -45,12 +45,12 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header
       id="aerospace-header"
-      className="fixed top-0 left-20 right-0 h-16 bg-[#090e1b]/95 backdrop-blur-xl border-b border-[#3b494b]/30 z-40 flex items-center justify-between px-6"
+      className="fixed top-0 left-20 right-0 h-16 bg-[#090e1b]/95 backdrop-blur-xl border-b border-[#3b494b]/15 z-40 flex items-center justify-between px-4 lg:px-6"
     >
       {/* Brand & Live Zulu Clock */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 shrink-0">
         <div
-          className="flex items-center gap-3 cursor-pointer select-none"
+          className="flex items-center gap-2.5 cursor-pointer select-none"
           onClick={() => navigate('/dashboard')}
           title="DHRUVAA — Mission Command Hub"
         >
@@ -63,10 +63,10 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
           <div className="flex flex-col">
-            <span className="font-display text-lg font-bold text-[#dee2f5] tracking-wider leading-none uppercase">
-              DHRUVAA
+            <span className="font-display text-base xl:text-lg font-bold text-[#dee2f5] tracking-wider leading-none uppercase">
+              DHRUVA
             </span>
-            <span className="font-mono text-[9px] text-[#849495] tracking-widest uppercase">
+            <span className="font-mono text-[10px] text-[#849495] tracking-widest uppercase">
               AI DIGITAL TWIN SYSTEM
             </span>
           </div>
@@ -74,7 +74,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         <div className="h-6 w-[1px] bg-[#3b494b]/30 mx-1 hidden xl:block"></div>
 
-        <div className="hidden xl:flex items-center gap-1.5 font-mono text-[11px] text-[#b9cacb] bg-[#161b29]/80 px-2 py-1 rounded border border-[#3b494b]/20">
+        <div className="hidden xl:flex items-center gap-1.5 font-mono text-xs xl:text-sm text-[#b9cacb] bg-[#161b29]/80 px-2.5 py-1 rounded border border-[#3b494b]/15">
           <Clock className="w-3.5 h-3.5 text-[#00f0ff]" />
           <span>{utcTime || 'UTC 14:28:09'}</span>
         </div>
@@ -83,7 +83,7 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Primary Aerospace Horizontal Navigation Bar */}
       <nav
         id="header-nav-tabs"
-        className="hidden lg:flex items-center gap-1 px-1.5 py-1 bg-[#161b29]/80 rounded border border-[#3b494b]/30"
+        className="hidden lg:flex items-center gap-1 px-1.5 py-1 bg-[#161b29]/80 rounded border border-[#3b494b]/15"
       >
         {navLinks.map((item) => {
           const isActive =
@@ -94,9 +94,9 @@ export const Header: React.FC<HeaderProps> = ({
               key={item.path}
               id={`tab-link-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
               onClick={() => navigate(item.path)}
-              className={`px-3 py-1 font-mono text-[11px] uppercase tracking-wider rounded transition-all ${
+              className={`px-2.5 py-1 font-mono text-xs uppercase tracking-wider rounded transition-all whitespace-nowrap ${
                 isActive
-                  ? 'text-[#dee2f5] bg-[#252a38] border border-[#00f0ff]/50 font-bold shadow-[0_0_8px_rgba(0,240,255,0.2)]'
+                  ? 'text-[#dee2f5] bg-[#252a38] border border-[#00f0ff]/30 shadow-[0_0_8px_rgba(0,240,255,0.1)]'
                   : 'text-[#b9cacb] hover:text-[#dee2f5] hover:bg-[#1a1f2d]/60'
               }`}
             >
@@ -107,16 +107,7 @@ export const Header: React.FC<HeaderProps> = ({
       </nav>
 
       {/* Flight Deck Security & Operator Identity */}
-      <div className="flex items-center gap-3">
-        {/* Secure Link Token */}
-        <div className="hidden 2xl:flex items-center gap-2 px-3 py-1 bg-[#161b29]/90 border border-[#00f0ff]/30 rounded">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] shadow-[0_0_8px_#00f0ff] animate-pulse"></span>
-          <ShieldCheck className="w-3.5 h-3.5 text-[#00f0ff]" />
-          <span className="font-mono text-[9px] text-[#00f0ff] tracking-widest uppercase font-semibold">
-            SECURE // MALE-LINK-01
-          </span>
-        </div>
-
+      <div className="flex items-center gap-2 shrink-0 pr-2">
         {/* Notifications Bell with Anomaly Badge */}
         <button
           id="btn-alerts-bell"
@@ -125,7 +116,7 @@ export const Header: React.FC<HeaderProps> = ({
           title={`${unreadAlertsCount} Flagged Anomalies`}
           type="button"
         >
-          <Bell className="w-5 h-5 text-[#dee2f5]" />
+          <Bell className="w-4 h-4 text-[#dee2f5]" />
           {unreadAlertsCount > 0 && (
             <span className="absolute -top-1 -right-1 font-mono text-[9px] bg-[#93000a] text-[#ffdad6] border border-[#ffb4ab]/40 px-1 rounded-full font-bold animate-pulse">
               {unreadAlertsCount}
@@ -133,25 +124,25 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </button>
 
-        <div className="h-6 w-[1px] bg-[#3b494b]/30 hidden sm:block"></div>
+        <div className="h-5 w-[1px] bg-[#3b494b]/30 hidden sm:block"></div>
 
         {/* Flight Controller Profile & Auth */}
-        <div className="flex items-center gap-2.5">
-          <div className="flex flex-col text-right hidden sm:flex">
-            <span className="font-mono text-[11px] text-[#dee2f5] font-semibold tracking-wider leading-tight">
-              {operatorId || 'CDR. V. SHASTRI'}
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="flex flex-col text-right hidden sm:flex leading-tight">
+            <span className="font-mono text-xs text-[#dee2f5] font-semibold tracking-wide truncate max-w-[130px]">
+              {operatorId ? operatorId.replace(/\s*\[.*\]/, '') : 'CDR. V. SHASTRI'}
             </span>
-            <span className="font-mono text-[9px] text-[#00dbe9] uppercase tracking-widest">
-              {clearanceLevel ? clearanceLevel.split('//')[0] : 'LEVEL 2 CONTROLLER'}
+            <span className="font-mono text-[9px] text-[#00dbe9] uppercase tracking-wider">
+              {clearanceLevel ? clearanceLevel.split('//')[0].trim() : 'LEVEL 2'}
             </span>
           </div>
 
           <div
             onClick={() => navigate('/login')}
-            className="w-8 h-8 rounded-full bg-[#00f0ff] flex items-center justify-center shadow-[0_0_10px_rgba(0,240,255,0.4)] cursor-pointer"
+            className="w-7 h-7 rounded-full bg-[#00f0ff] flex items-center justify-center shadow-[0_0_8px_rgba(0,240,255,0.4)] cursor-pointer shrink-0"
             title="Authentication Gateway"
           >
-            <User className="w-4 h-4 text-[#00363a]" />
+            <User className="w-3.5 h-3.5 text-[#00363a]" />
           </div>
 
           {isAuthenticated && (
@@ -161,9 +152,9 @@ export const Header: React.FC<HeaderProps> = ({
                 navigate('/login');
               }}
               title="Disconnect Console"
-              className="p-1 rounded text-[#849495] hover:text-[#ffb4ab] transition-colors"
+              className="p-1 rounded text-[#849495] hover:text-[#ffb4ab] transition-colors shrink-0"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-3.5 h-3.5" />
             </button>
           )}
         </div>

@@ -2,7 +2,11 @@ import React from 'react';
 import { useTelemetry } from '../../context/FleetContext';
 
 export const AirbaseReadinessPanel: React.FC = () => {
-  const { fleetAggregate, mission } = useTelemetry();
+  const { fleet, fleetAggregate, mission } = useTelemetry();
+
+  const airborneCount = fleet.filter(f => f.altitudeFt > 0).length;
+  const taxiPreflightCount = fleet.filter(f => f.altitudeFt === 0 && f.missionPhase === 'PRE_FLIGHT').length;
+  const inRepairCount = fleet.filter(f => f.missionPhase === 'RECOVERY').length;
 
   return (
     <div
@@ -19,33 +23,33 @@ export const AirbaseReadinessPanel: React.FC = () => {
         <div
           className="h-full bg-[#00f0ff] shadow-[0_0_8px_rgba(0,240,255,0.4)] transition-all duration-500"
           style={{ width: `${fleetAggregate.readinessAllocation.airbornePct}%` }}
-          title={`4 Airborne (${fleetAggregate.readinessAllocation.airbornePct}%)`}
+          title={`${airborneCount} Airborne (${fleetAggregate.readinessAllocation.airbornePct}%)`}
         ></div>
         <div
           className="h-full bg-amber-400 transition-all duration-500"
           style={{ width: `${fleetAggregate.readinessAllocation.taxiPreflightPct}%` }}
-          title={`2 Taxi/Pre-flight (${fleetAggregate.readinessAllocation.taxiPreflightPct}%)`}
+          title={`${taxiPreflightCount} Taxi/Pre-flight (${fleetAggregate.readinessAllocation.taxiPreflightPct}%)`}
         ></div>
         <div
           className="h-full bg-[#849495] transition-all duration-500"
           style={{ width: `${fleetAggregate.readinessAllocation.inRepairPct}%` }}
-          title={`2 Maintenance Bay (${fleetAggregate.readinessAllocation.inRepairPct}%)`}
+          title={`${inRepairCount} Maintenance Bay (${fleetAggregate.readinessAllocation.inRepairPct}%)`}
         ></div>
       </div>
 
       {/* 3 Status Columns */}
       <div className="grid grid-cols-3 text-center pt-1 font-label-micro text-[9.5px] font-mono">
         <div className="flex flex-col">
-          <span className="text-[#00f0ff] font-bold">4 AIRBORNE</span>
-          <span className="text-[#849495]">50% OF FLEET</span>
+          <span className="text-[#00f0ff] font-bold">{airborneCount} AIRBORNE</span>
+          <span className="text-[#849495]">{fleetAggregate.readinessAllocation.airbornePct}% OF FLEET</span>
         </div>
         <div className="flex flex-col">
-          <span className="text-amber-300 font-bold">2 TAXI/PRE-FLIGHT</span>
-          <span className="text-[#849495]">25% OF FLEET</span>
+          <span className="text-amber-300 font-bold">{taxiPreflightCount} TAXI/PRE-FLIGHT</span>
+          <span className="text-[#849495]">{fleetAggregate.readinessAllocation.taxiPreflightPct}% OF FLEET</span>
         </div>
         <div className="flex flex-col">
-          <span className="text-[#849495] font-bold">2 IN REPAIR</span>
-          <span className="text-[#849495]">25% OF FLEET</span>
+          <span className="text-[#849495] font-bold">{inRepairCount} IN REPAIR</span>
+          <span className="text-[#849495]">{fleetAggregate.readinessAllocation.inRepairPct}% OF FLEET</span>
         </div>
       </div>
     </div>

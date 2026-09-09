@@ -37,11 +37,11 @@ export const TelemetryTrendChart: React.FC<TelemetryTrendChartProps> = ({
       ...pt,
       timeLabel,
       // Normalized indices (0-100) for clean comparison
-      rpmNorm: Math.min(100, Math.max(0, ((pt.rpm - 1800) / (2700 - 1800)) * 100)),
-      chtNorm: Math.min(100, Math.max(0, ((pt.cht - 140) / (240 - 140)) * 100)),
-      oilNorm: Math.min(100, Math.max(0, (pt.oil / 100) * 100)),
-      egtNorm: Math.min(100, Math.max(0, ((pt.egt - 550) / (850 - 550)) * 100)),
-      vibNorm: Math.min(100, Math.max(0, (pt.vibration / 5.5) * 100)),
+      rpmNorm: Math.min(100, Math.max(0, (((pt.rpm || 0) - 1800) / (2700 - 1800)) * 100)),
+      chtNorm: Math.min(100, Math.max(0, (((pt.cht || (pt as any).temperature || 0) - 140) / (240 - 140)) * 100)),
+      oilNorm: Math.min(100, Math.max(0, (((pt.oil || 0)) / 100) * 100)),
+      egtNorm: Math.min(100, Math.max(0, (((pt.egt || 0) - 550) / (850 - 550)) * 100)),
+      vibNorm: Math.min(100, Math.max(0, ((pt.vibration || 0) / 5.5) * 100)),
     };
   });
 
@@ -165,19 +165,19 @@ export const TelemetryTrendChart: React.FC<TelemetryTrendChartProps> = ({
                       </div>
                       <div className="flex flex-col gap-0.5">
                         <span className="text-[#00f0ff]">
-                          CORE RPM: <strong className="text-white">{Math.round(data.rpm)}</strong>
+                          CORE RPM: <strong className="text-white">{Math.round(data.rpm || 0)}</strong>
                         </span>
                         <span className="text-[#f59e0b]">
-                          CYL HEAD CHT: <strong className="text-white">{Math.round(data.cht)} °C</strong>
+                          CYL HEAD CHT: <strong className="text-white">{Math.round(data.cht || (data as any).temperature || 0)} °C</strong>
                         </span>
                         <span className="text-[#10b981]">
-                          OIL PRESSURE: <strong className="text-white">{Math.round(data.oil)} PSI</strong>
+                          OIL PRESSURE: <strong className="text-white">{Math.round((data as any).oilPressure || (data as any).oil || (data as any).oil_pressure || 0)} PSI</strong>
                         </span>
                         <span className="text-[#dbfcff]">
-                          EXHAUST EGT: <strong className="text-white">{Math.round(data.egt)} °C</strong>
+                          EXHAUST EGT: <strong className="text-white">{Math.round(data.egt || 0)} °C</strong>
                         </span>
                         <span className="text-[#ef4444]">
-                          VIBRATION: <strong className="text-white">{data.vibration.toFixed(1)} mm/s</strong>
+                          VIBRATION: <strong className="text-white">{(data.vibration || 0).toFixed(1)} mm/s</strong>
                         </span>
                       </div>
                     </div>

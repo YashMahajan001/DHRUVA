@@ -171,19 +171,14 @@ export const SubsystemHealthTable: React.FC = () => {
 
                     {/* Actions */}
                     <td className="py-2.5 px-3 text-right">
-                      {isCritical ? (
+                      {comp.activeWorkOrderId ? (
                         <button
-                          onClick={() => openModal('workOrder', { woId: '8924', engine: selectedEngine })}
-                          className="text-red-400 hover:underline font-tactical text-[10px] uppercase font-bold cursor-pointer"
+                          onClick={() => openModal('workOrder', { woId: comp.activeWorkOrderId, engine: selectedEngine })}
+                          className={`hover:underline font-tactical text-[10px] uppercase font-bold cursor-pointer ${
+                            isCritical ? 'text-red-400' : 'text-amber-400'
+                          }`}
                         >
-                          VIEW ORDER #8924
-                        </button>
-                      ) : isWarning ? (
-                        <button
-                          onClick={() => openModal('workOrder', { woId: '8925', engine: selectedEngine })}
-                          className="text-amber-400 hover:underline font-tactical text-[10px] uppercase font-bold cursor-pointer"
-                        >
-                          AUDIT BAFFLE
+                          {isCritical ? `VIEW ORDER #${comp.activeWorkOrderId}` : `AUDIT BAFFLE`}
                         </button>
                       ) : (
                         <button

@@ -47,7 +47,20 @@ export class DHRUVAA_ApiService {
     if (this.isUsingRemoteApi()) {
       try {
         const res = await fetch(`${API_BASE_URL}/api/v1/engines`);
-        if (res.ok) return await res.json();
+        if (res.ok) {
+          const rawList = await res.json();
+          if (Array.isArray(rawList) && rawList.length > 0) {
+            return rawList.map((raw: any, idx: number) => {
+              const fb = INITIAL_ENGINES[idx % INITIAL_ENGINES.length] || INITIAL_ENGINES[0];
+              return {
+                ...fb,
+                id: raw.id || fb.id,
+                model: raw.engine_model?.name || raw.name || fb.model,
+                operatingHours: raw.total_hours ?? fb.operatingHours,
+              };
+            });
+          }
+        }
       } catch (err) {
         console.warn('[DHRUVAA API] Failed to fetch remote engines, using local digital twin store:', err);
       }
@@ -59,7 +72,20 @@ export class DHRUVAA_ApiService {
     if (this.isUsingRemoteApi()) {
       try {
         const res = await fetch(`${API_BASE_URL}/api/v1/missions`);
-        if (res.ok) return await res.json();
+        if (res.ok) {
+          const raw = await res.json();
+          if (Array.isArray(raw) && raw.length > 0) {
+            return raw.map((m: any, idx: number) => {
+              const fb = INITIAL_MISSIONS[idx % INITIAL_MISSIONS.length] || INITIAL_MISSIONS[0];
+              return {
+                ...fb,
+                ...m,
+                id: m.id || fb.id,
+                callsign: m.callsign || fb.callsign,
+              };
+            });
+          }
+        }
       } catch (err) {
         console.warn('[DHRUVAA API] Failed to fetch remote missions, using local store:', err);
       }

@@ -11,13 +11,18 @@ import {
 import { useDashboard } from '../../context/MissionTuningContext';
 
 export const StatusBanner: React.FC = () => {
-  const { currentEngine, currentMission, activeCandidate, telemetry } = useDashboard();
+  const { currentEngine, currentMission, activeCandidate, telemetry, telemetryHistory } = useDashboard();
 
-  // Color mapping based on health
-  const isHealthy = currentEngine.currentHealth >= 90;
-  const isDegraded = currentEngine.currentHealth < 90 && currentEngine.currentHealth >= 75;
+  // Dynamic live health from telemetry history
+  const liveHealth = telemetryHistory.length > 0 
+    ? telemetryHistory[telemetryHistory.length - 1].health 
+    : currentEngine.currentHealth;
+  const isHealthy = liveHealth >= 90;
+  const isDegraded = liveHealth < 90 && liveHealth >= 75;
+  const healthStatus = liveHealth >= 90 ? 'OPTIMIZED' : liveHealth >= 75 ? 'DEGRADED' : 'CRITICAL';
 
-  const remainingHours = (currentMission.totalPlannedHours - currentMission.elapsedHours).toFixed(1);
+  // Active candidate endurance loiter calculated dynamically from active burn rate
+  const activeLoiterHours = (currentMission.currentFuelLiters / activeCandidate.fuelBurnLh).toFixed(1);
   const remainingFuelPercent = Math.round((currentMission.currentFuelLiters / currentMission.fuelCapacityLiters) * 100);
 
   return (
@@ -38,11 +43,13 @@ export const StatusBanner: React.FC = () => {
           <div>
             <div className="flex items-center gap-1.5">
               <span className="font-mono text-[9px] text-[#849495] uppercase tracking-wider">HEALTH:</span>
-              <span className="font-mono font-bold text-sm text-[#00f0ff]">
-                {currentEngine.currentHealth}%
+              <span className={`font-mono font-bold text-sm ${isHealthy ? 'text-[#00f0ff]' : isDegraded ? 'text-[#f59e0b]' : 'text-[#ffb4ab]'}`}>
+                {liveHealth}%
               </span>
-              <span className="font-mono text-[9px] px-1.5 py-0.2 rounded bg-[#10b981]/20 text-[#10b981] font-bold uppercase">
-                {currentEngine.healthStatus}
+              <span className={`font-mono text-[9px] px-1.5 py-0.2 rounded font-bold uppercase ${
+                isHealthy ? 'bg-[#10b981]/20 text-[#10b981]' : isDegraded ? 'bg-[#f59e0b]/20 text-[#f59e0b]' : 'bg-[#93000a] text-[#ffb4ab]'
+              }`}>
+                {healthStatus}
               </span>
             </div>
           </div>
@@ -99,7 +106,7 @@ export const StatusBanner: React.FC = () => {
             {currentMission.currentFuelLiters} L ({remainingFuelPercent}%)
           </span>
           <span className="font-mono text-[#00f0ff] text-[10px]">
-            ~{remainingHours}h LOITER
+            ~{activeLoiterHours}h LOITER ({activeCandidate.tag})
           </span>
         </div>
       </div>

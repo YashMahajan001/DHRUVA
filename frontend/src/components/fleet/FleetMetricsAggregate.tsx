@@ -9,7 +9,16 @@ import {
 import { useTelemetry } from '../../context/FleetContext';
 
 export const FleetMetricsAggregate: React.FC = () => {
-  const { fleetAggregate } = useTelemetry();
+  const { fleet, fleetAggregate, telemetry } = useTelemetry();
+
+  // Find UAV with highest CHT skew from the fleet average
+  const worstChtUav = fleet.length > 0 ? fleet.reduce((worst, uav) => {
+    const uavCht = telemetry[uav.id]?.cht || 0;
+    const worstCht = telemetry[worst.id]?.cht || 0;
+    return uavCht > worstCht ? uav : worst;
+  }, fleet[0]) : null;
+  const worstChtValue = worstChtUav ? (telemetry[worstChtUav.id]?.cht || 0) : 0;
+  const chtDelta = worstChtValue - fleetAggregate.averageChtDegC;
 
   return (
     <div
@@ -84,7 +93,7 @@ export const FleetMetricsAggregate: React.FC = () => {
           </div>
           <div className="flex items-center gap-1 text-amber-300 font-label-micro text-[9.5px] font-mono">
             <Thermometer className="w-3 h-3" />
-            <span>UAV-02 skew (+18°C)</span>
+            <span>{worstChtUav && chtDelta > 5 ? `${worstChtUav.callsign} skew (+${chtDelta}°C)` : 'All within nominal'}</span>
           </div>
         </div>
 
@@ -95,7 +104,7 @@ export const FleetMetricsAggregate: React.FC = () => {
           </span>
           <div className="flex items-baseline gap-1 my-1">
             <span className="font-telemetry-num-xl text-[24px] text-[#ffb4ab] font-mono font-bold leading-none">
-              0{fleetAggregate.anomalyIndex.total}
+              {String(fleetAggregate.anomalyIndex.total).padStart(2, '0')}
             </span>
             <span className="font-label-tactical text-[11px] text-[#849495] font-mono">
               EVENTS
@@ -103,7 +112,7 @@ export const FleetMetricsAggregate: React.FC = () => {
           </div>
           <div className="flex items-center gap-1 text-[#ffb4ab] font-label-micro text-[9.5px] font-mono font-bold">
             <AlertTriangle className="w-3 h-3" />
-            <span>1 CRITICAL / 2 WARNING</span>
+            <span>{fleetAggregate.anomalyIndex.critical} CRITICAL / {fleetAggregate.anomalyIndex.warning} WARNING</span>
           </div>
         </div>
       </div>

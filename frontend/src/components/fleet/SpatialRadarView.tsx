@@ -154,7 +154,7 @@ export const SpatialRadarView: React.FC = () => {
         className="relative flex-1 w-full transition-transform duration-300 pointer-events-none"
         style={{ transform: `scale(${zoomLevel})` }}
       >
-        {fleet.slice(0, 4).map((uav) => {
+        {fleet.map((uav) => {
           const isSelected = selectedEngineId === uav.id;
           const isMatchFilter =
             activeFilter === 'all' ||
@@ -215,7 +215,7 @@ export const SpatialRadarView: React.FC = () => {
                           : 'text-[#dee2f5]'
                       }`}
                     >
-                      {uav.callsign} {isCritical ? '[RTB]' : ''}
+                      {uav.callsign} {isCritical ? '[RTB]' : uav.altitudeFt === 0 ? `[${uav.missionPhase === 'PRE_FLIGHT' ? 'TAXI' : 'BAY'}]` : ''}
                     </span>
                     <span
                       className={`font-label-micro text-[9px] px-1 rounded font-mono font-bold ${
@@ -238,9 +238,8 @@ export const SpatialRadarView: React.FC = () => {
                         : 'text-[#849495]'
                     }`}
                   >
-                    {uav.altitudeFt.toLocaleString()} FT // {uav.airspeedKt} KT
-                    {uav.id === 'uav-02' ? ' // CHT DRIFT' : ''}
-                    {uav.id === 'uav-03' ? ' // BRG WEAR' : ''}
+                    {uav.altitudeFt > 0 ? `${uav.altitudeFt.toLocaleString()} FT // ${uav.airspeedKt} KT` : `${uav.missionPhase.replace('_', ' ')} // ${uav.airspeedKt} KT`}
+                    {uav.activeFaultSnippet?.includes('CHT') || uav.activeFaultSnippet?.includes('thermal') ? ' // CHT DRIFT' : uav.activeFaultSnippet?.includes('Bearing') || uav.activeFaultSnippet?.includes('Crankshaft') ? ' // BRG WEAR' : ''}
                   </span>
                 </div>
               </div>

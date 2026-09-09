@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Shield, Radio, Lock, ArrowRight, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Shield, Radio, Lock, ArrowRight, Eye, EyeOff, CheckCircle2, UserCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
+
+  const targetDestination = (location.state as any)?.from?.pathname || '/dashboard';
 
   const [operatorId, setOperatorId] = useState('CDR. V. SHASTRI [OP-7741]');
   const [accessKey, setAccessKey] = useState('aerospace-telemetry-alpha');
@@ -53,8 +56,8 @@ export const Login: React.FC = () => {
         await login(operatorId, accessKey, stationRole);
         setTimeout(() => {
           setIsScanning(false);
-          navigate('/dashboard');
-        }, 600);
+          navigate(targetDestination);
+        }, 500);
       }
     }, 35);
   };
@@ -73,7 +76,8 @@ export const Login: React.FC = () => {
           <div>
             <div className="flex items-center gap-2.5">
               <h1 className="font-display font-bold text-3xl text-[#dbfcff] tracking-tight">
-                DHRUVAA
+                DHRUVA
+                
               </h1>
               <span className="bg-[#00f0ff]/15 text-[#00f0ff] border border-[#00f0ff]/30 text-xs font-mono px-2 py-0.5 rounded uppercase tracking-wider font-semibold">
                 v2.4 SECURE

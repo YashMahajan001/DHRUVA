@@ -551,17 +551,29 @@ export const TelemetryService = {
   },
 
   async fetchEngines(): Promise<EngineInstance[]> {
+    const baseList = createInitialEngines();
     if (this.isExternalApiConfigured()) {
       try {
         const res = await fetch(`${API_BASE_URL}/api/v1/engines`);
         if (res.ok) {
-          return await res.json();
+          const raw = await res.json();
+          if (Array.isArray(raw) && raw.length > 0) {
+            return raw.map((item: any, idx: number) => {
+              const fb = baseList[idx % baseList.length] || baseList[0];
+              return {
+                ...fb,
+                id: item.id || fb.id,
+                model: item.engine_model?.name || item.name || fb.model,
+                totalHours: item.total_hours ?? fb.totalHours,
+              };
+            });
+          }
         }
       } catch (err) {
         console.warn('Backend API unreachable, falling back to tactical local engine simulation:', err);
       }
     }
-    return createInitialEngines();
+    return baseList;
   },
 
   async syncWithERP(): Promise<{ success: boolean; message: string; timestamp: string }> {

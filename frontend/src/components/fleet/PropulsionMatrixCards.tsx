@@ -15,7 +15,7 @@ export const PropulsionMatrixCards: React.FC = () => {
   const { fleet, selectedEngineId, setSelectedEngineId, activeFilter } = useTelemetry();
 
   // Filter cards based on top tab selection
-  const filteredFleet = fleet.slice(0, 4).filter(uav => {
+  const filteredFleet = fleet.filter(uav => {
     if (activeFilter === 'all') return true;
     if (activeFilter === 'healthy') return uav.healthStatus === 'NOMINAL' || uav.healthStatus === 'OPTIMAL';
     if (activeFilter === 'warning') return uav.healthStatus === 'WARNING' || uav.healthStatus === 'WATCH';

@@ -15,6 +15,10 @@ export const WorkOrderModal: React.FC = () => {
   const is8924 = woId === '8924';
   const is8925 = woId === '8925';
 
+  // Read actual WO from engine context if available
+  const contextEngine = modalData?.engine;
+  const contextWo = contextEngine?.workOrders?.find((w: any) => w.id === woId);
+
   const order = {
     id: woId,
     title: is8924
@@ -35,8 +39,8 @@ export const WorkOrderModal: React.FC = () => {
           { name: 'Cylinder #2 Silicone Baffle Gasket Seal', partNo: 'BG-44-A', status: 'IN STOCK (DEPOT 2)' },
           { name: 'Thermal Dissipation Fin Cleaner Solvent', partNo: 'SL-770', status: 'IN STOCK' }
         ],
-    status: is8924 ? 'DISPATCHED' : 'PENDING APPROVAL',
-    estimatedLaborHours: is8924 ? '8.5 Hours' : '3.0 Hours'
+    status: contextWo?.status || (is8924 ? 'DISPATCHED' : 'PENDING APPROVAL'),
+    estimatedLaborHours: contextWo?.estimatedLaborHours ? `${contextWo.estimatedLaborHours} Hours` : (is8924 ? '8.5 Hours' : '3.0 Hours')
   };
 
   const handleApprove = () => {

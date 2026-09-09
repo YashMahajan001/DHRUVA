@@ -46,7 +46,33 @@ class TelemetryService {
     if (API_BASE_URL) {
       try {
         const res = await fetch(`${API_BASE_URL}/api/fleet`);
-        if (res.ok) return await res.json();
+        if (res.ok) {
+          const data = await res.json();
+          let rawList: any[] = [];
+          if (Array.isArray(data)) {
+            rawList = data;
+          } else if (data && Array.isArray(data.engines)) {
+            rawList = data.engines;
+          }
+
+          if (rawList.length > 0) {
+            return rawList.map((raw: any, index: number) => {
+              const fallback = this.fleet[index % this.fleet.length] || INITIAL_FLEET[0];
+              const healthScore = typeof raw.health_score === 'number' ? raw.health_score : (raw.healthPercentage ?? fallback.healthPercentage);
+              const healthStatus = raw.health_status || (healthScore > 85 ? 'NOMINAL' : healthScore > 70 ? 'WARNING' : 'CRITICAL');
+              return {
+                ...fallback,
+                id: raw.engine_id || raw.id || fallback.id,
+                callsign: raw.name || fallback.callsign,
+                tacticalName: raw.name || fallback.tacticalName,
+                healthPercentage: healthScore,
+                healthStatus: healthStatus as any,
+                statusLabel: `${healthStatus} // ${Math.round(healthScore)}%`,
+                rulHours: raw.total_hours ? Math.max(0, 1900 - raw.total_hours) : fallback.rulHours,
+              };
+            });
+          }
+        }
       } catch (err) {
         console.warn('Remote API failed, falling back to local simulation:', err);
       }
@@ -56,7 +82,7 @@ class TelemetryService {
 
   async getEngine(id: string): Promise<EngineInstance | undefined> {
     const list = await this.getFleet();
-    return list.find(e => e.id === id);
+    return Array.isArray(list) ? list.find(e => e.id === id) : undefined;
   }
 
   async getTelemetry(id: string): Promise<Telemetry> {
@@ -304,16 +330,40 @@ Advisory Note: Recommended actions must be confirmed by Command Air Operations. 
       return uav;
     });
 
-    // 3. Update aggregate metrics
+    // 3. Update aggregate metrics from live fleet state
     const airborne = this.fleet.filter(f => f.altitudeFt > 0);
+    const preflight = this.fleet.filter(f => f.altitudeFt === 0 && f.missionPhase === 'PRE_FLIGHT');
+    const inRepair = this.fleet.filter(f => f.missionPhase === 'RECOVERY');
     const avgCht = Math.round(
       airborne.reduce((acc, u) => acc + (this.telemetryData[u.id]?.cht || 170), 0) / (airborne.length || 1)
     );
 
+    const activeAlerts = this.alerts.filter(a => !a.acknowledged);
+    const critAlerts = activeAlerts.filter(a => a.severity === 'CRITICAL').length;
+    const warnAlerts = activeAlerts.filter(a => a.severity === 'WARNING').length;
+
+    const totalUavs = this.fleet.length || 1;
+    const healthyUavs = this.fleet.filter(f => f.healthStatus === 'NOMINAL' || f.healthStatus === 'OPTIMAL');
+    const avgHealth = Math.round(this.fleet.reduce((acc, u) => acc + u.healthPercentage, 0) / totalUavs * 10) / 10;
+
     this.fleetAggregate = {
       ...this.fleetAggregate,
+      aircraftTracked: this.fleet.length,
+      sortiesActive: airborne.length,
+      readinessRating: Math.round((healthyUavs.length / totalUavs) * 100 * 10) / 10,
       averageChtDegC: avgCht,
-      fleetFuelBurnLph: Number((128.0 + (Math.random() - 0.5) * 1.2).toFixed(1))
+      fleetFuelBurnLph: Number((128.0 + (Math.random() - 0.5) * 1.2).toFixed(1)),
+      healthTrendMean: avgHealth,
+      anomalyIndex: {
+        total: activeAlerts.length,
+        critical: critAlerts,
+        warning: warnAlerts
+      },
+      readinessAllocation: {
+        airbornePct: Math.round((airborne.length / totalUavs) * 100),
+        taxiPreflightPct: Math.round((preflight.length / totalUavs) * 100),
+        inRepairPct: Math.round((inRepair.length / totalUavs) * 100)
+      }
     };
 
     this.notifyListeners();

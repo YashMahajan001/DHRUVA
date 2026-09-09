@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMissionDashboard } from '../../context/EngineDetailsContext';
 import { formatShortDuration } from '../../utils/formatters';
-import { Plane, Compass, Fuel, Zap, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plane, Compass, Fuel, Zap, ChevronDown, ChevronUp, Gauge, Activity } from 'lucide-react';
 
 export const MissionSummaryBar: React.FC = () => {
   const { selectedMission, telemetry, selectedEngine } = useMissionDashboard();
@@ -12,97 +12,104 @@ export const MissionSummaryBar: React.FC = () => {
   );
 
   return (
-    <div className="bg-surface-container-low/90 backdrop-blur-md rounded border border-outline-variant/20 p-2 select-none">
-      <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+    <div className="bg-[#161b29]/90 backdrop-blur-md rounded-xl border border-[#3b494b]/30 p-3 shadow-md select-none transition-all">
+      <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
         {/* UAV & Mission Title */}
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded bg-primary/10 border border-primary/30 flex items-center justify-center text-primary">
-            <Plane className="w-3.5 h-3.5" />
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-[#00f0ff]/10 border border-[#00f0ff]/30 flex items-center justify-center text-[#00f0ff] shadow-[0_0_8px_rgba(0,240,255,0.2)]">
+            <Plane className="w-4 h-4" />
           </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-on-surface font-bold text-xs uppercase">{selectedMission.callsign}</span>
-            <span className="text-outline text-[10px]">[{selectedMission.uavTailNumber}]</span>
-            <span className="text-primary text-[10px] hidden sm:inline">• {selectedMission.missionType}</span>
+          <div className="flex flex-wrap items-baseline gap-2">
+            <span className="text-[#dee2f5] font-bold text-xs uppercase tracking-wide">
+              {selectedMission.callsign}
+            </span>
+            <span className="text-[#849495] text-[10px]">[{selectedMission.uavTailNumber}]</span>
+            <span className="text-[#00dbe9] text-[10px] hidden sm:inline font-semibold">
+              • {selectedMission.missionType}
+            </span>
           </div>
         </div>
 
         {/* Tactical Key Metrics Row */}
-        <div className="flex items-center gap-4 text-[11px]">
+        <div className="flex flex-wrap items-center gap-4 text-[11px]">
           {/* Phase & Altitude */}
-          <div className="flex items-center gap-1.5">
-            <Compass className="w-3 h-3 text-secondary-fixed" />
-            <span className="text-outline">PHASE:</span>
-            <span className="text-primary font-bold">{selectedMission.phase}</span>
-            <span className="text-outline">@</span>
-            <span className="text-on-surface font-bold">{selectedMission.altitudeFt.toLocaleString()} FT</span>
+          <div className="flex items-center gap-1.5 bg-[#090e1b]/70 px-2.5 py-1 rounded-md border border-[#3b494b]/20">
+            <Compass className="w-3.5 h-3.5 text-[#00f0ff]" />
+            <span className="text-[#849495] uppercase text-[10px]">PHASE:</span>
+            <span className="text-[#00f0ff] font-bold uppercase">{selectedMission.phase}</span>
+            <span className="text-[#849495]">@</span>
+            <span className="text-[#dee2f5] font-bold">{selectedMission.altitudeFt.toLocaleString()} FT</span>
           </div>
 
           {/* Mission Progress & Remaining */}
-          <div className="hidden lg:flex items-center gap-1.5">
-            <span className="text-outline">PROGRESS:</span>
-            <div className="w-16 bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+          <div className="hidden lg:flex items-center gap-2 bg-[#090e1b]/70 px-2.5 py-1 rounded-md border border-[#3b494b]/20">
+            <span className="text-[#849495] uppercase text-[10px]">PROGRESS:</span>
+            <div className="w-20 bg-[#303443] h-1.5 rounded-full overflow-hidden">
               <div
-                className="bg-primary h-full transition-all duration-500"
+                className="bg-[#00f0ff] h-full transition-all duration-500 shadow-[0_0_6px_#00f0ff]"
                 style={{ width: `${missionProgressPercent}%` }}
-              ></div>
+              />
             </div>
-            <span className="text-primary font-bold">{missionProgressPercent}%</span>
-            <span className="text-outline">({formatShortDuration(selectedMission.remainingSeconds)} REM)</span>
+            <span className="text-[#00f0ff] font-bold">{missionProgressPercent}%</span>
+            <span className="text-[#849495] text-[10px]">({formatShortDuration(selectedMission.remainingSeconds)} REM)</span>
           </div>
 
           {/* Fuel & Endurance */}
-          <div className="hidden md:flex items-center gap-1.5">
-            <Fuel className="w-3 h-3 text-amber-400" />
-            <span className="text-outline">FUEL:</span>
-            <span className="text-amber-400 font-bold">{selectedMission.fuelRemainingLiters} L</span>
-            <span className="text-outline">({telemetry.fuelFlow} L/h • {selectedMission.enduranceHoursRemaining}h END)</span>
+          <div className="hidden md:flex items-center gap-1.5 bg-[#090e1b]/70 px-2.5 py-1 rounded-md border border-[#3b494b]/20">
+            <Fuel className="w-3.5 h-3.5 text-[#f59e0b]" />
+            <span className="text-[#849495] uppercase text-[10px]">FUEL:</span>
+            <span className="text-[#f59e0b] font-bold">{selectedMission.fuelRemainingLiters} L</span>
+            <span className="text-[#849495] text-[10px]">
+              ({telemetry.fuelFlow} L/h • {selectedMission.enduranceHoursRemaining}h END)
+            </span>
           </div>
 
           {/* Expand Details Toggle */}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-1 text-outline hover:text-on-surface rounded hover:bg-surface-container transition-colors cursor-pointer"
+            className="flex items-center gap-1 px-2 py-1 text-[#849495] hover:text-[#dee2f5] rounded-md bg-[#090e1b]/60 hover:bg-[#252a38] border border-[#3b494b]/30 transition-colors cursor-pointer text-[10px]"
             title="Toggle Extended Avionics Telemetry"
           >
-            {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            <span>{isExpanded ? 'LESS' : 'DETAILS'}</span>
+            {isExpanded ? <ChevronUp className="w-3 h-3 text-[#00f0ff]" /> : <ChevronDown className="w-3 h-3 text-[#00f0ff]" />}
           </button>
         </div>
       </div>
 
       {/* Expanded Avionics Telemetry Matrix */}
       {isExpanded && (
-        <div className="mt-2 pt-2 border-t border-outline-variant/20 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2 text-[10px] font-mono">
-          <div className="bg-surface-container p-1.5 rounded">
-            <span className="text-outline uppercase block">ENGINE SPEED</span>
-            <span className="text-primary font-bold text-xs">{telemetry.rpm} RPM</span>
-            <span className="text-outline text-[9px]">CRUISE NOMINAL</span>
+        <div className="mt-3 pt-3 border-t border-[#3b494b]/30 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-[10px] font-mono">
+          <div className="bg-[#090e1b]/80 p-2.5 rounded-lg border border-[#3b494b]/20">
+            <span className="text-[#849495] uppercase block text-[9px] font-semibold">ENGINE SPEED</span>
+            <span className="text-[#00f0ff] font-bold text-sm block mt-0.5">{telemetry.rpm.toLocaleString()} RPM</span>
+            <span className="text-[#10b981] text-[9px]">CRUISE NOMINAL</span>
           </div>
-          <div className="bg-surface-container p-1.5 rounded">
-            <span className="text-outline uppercase block">EXHAUST GAS TEMP (EGT)</span>
-            <span className="text-on-surface font-bold text-xs">{telemetry.egtAvg} °C</span>
-            <span className="text-primary-fixed text-[9px]">PEAK: {telemetry.egtPeak} °C</span>
+          <div className="bg-[#090e1b]/80 p-2.5 rounded-lg border border-[#3b494b]/20">
+            <span className="text-[#849495] uppercase block text-[9px] font-semibold">EXHAUST GAS TEMP (EGT)</span>
+            <span className="text-[#dee2f5] font-bold text-sm block mt-0.5">{telemetry.egtAvg} °C</span>
+            <span className="text-[#f59e0b] text-[9px]">PEAK: {telemetry.egtPeak} °C</span>
           </div>
-          <div className="bg-surface-container p-1.5 rounded">
-            <span className="text-outline uppercase block">OIL CIRCUIT</span>
-            <span className="text-on-surface font-bold text-xs">{telemetry.oilPressure} PSI</span>
-            <span className="text-primary-fixed text-[9px]">TEMP: {telemetry.oilTemperature} °C</span>
+          <div className="bg-[#090e1b]/80 p-2.5 rounded-lg border border-[#3b494b]/20">
+            <span className="text-[#849495] uppercase block text-[9px] font-semibold">OIL CIRCUIT</span>
+            <span className="text-[#dee2f5] font-bold text-sm block mt-0.5">{telemetry.oilPressure} PSI</span>
+            <span className="text-[#7df4ff] text-[9px]">TEMP: {telemetry.oilTemperature} °C</span>
           </div>
-          <div className="bg-surface-container p-1.5 rounded">
-            <span className="text-outline uppercase block">AVIONICS DC BUS</span>
-            <span className="text-on-surface font-bold text-xs flex items-center gap-1">
-              <Zap className="w-2.5 h-2.5 text-primary" /> {telemetry.batteryVoltage} V
+          <div className="bg-[#090e1b]/80 p-2.5 rounded-lg border border-[#3b494b]/20">
+            <span className="text-[#849495] uppercase block text-[9px] font-semibold">AVIONICS DC BUS</span>
+            <span className="text-[#dee2f5] font-bold text-sm flex items-center gap-1 mt-0.5">
+              <Zap className="w-3 h-3 text-[#00f0ff]" /> {telemetry.batteryVoltage} V
             </span>
-            <span className="text-primary-fixed text-[9px]">{telemetry.alternatorCurrent} A ALT</span>
+            <span className="text-[#00dbe9] text-[9px]">{telemetry.alternatorCurrent} A ALT</span>
           </div>
-          <div className="bg-surface-container p-1.5 rounded">
-            <span className="text-outline uppercase block">VIBRATION RMS</span>
-            <span className="text-on-surface font-bold text-xs">{telemetry.vibrationAmplitude} mm/s</span>
-            <span className="text-primary-fixed text-[9px]">PEAK: {telemetry.vibrationPeakHz} Hz</span>
+          <div className="bg-[#090e1b]/80 p-2.5 rounded-lg border border-[#3b494b]/20">
+            <span className="text-[#849495] uppercase block text-[9px] font-semibold">VIBRATION RMS</span>
+            <span className="text-[#dee2f5] font-bold text-sm block mt-0.5">{telemetry.vibrationAmplitude} mm/s</span>
+            <span className="text-[#10b981] text-[9px]">PEAK: {telemetry.vibrationPeakHz} Hz</span>
           </div>
-          <div className="bg-surface-container p-1.5 rounded">
-            <span className="text-outline uppercase block">GROUND SPEED</span>
-            <span className="text-primary font-bold text-xs">{selectedMission.groundSpeedKts} KTS</span>
-            <span className="text-outline text-[9px]">{selectedEngine.displacement}</span>
+          <div className="bg-[#090e1b]/80 p-2.5 rounded-lg border border-[#3b494b]/20">
+            <span className="text-[#849495] uppercase block text-[9px] font-semibold">PLANT MODEL</span>
+            <span className="text-[#dee2f5] font-bold text-xs block mt-0.5 truncate">{(selectedEngine as any).name || selectedEngine.model}</span>
+            <span className="text-[#849495] text-[9px]">ID: {selectedEngine.id.toUpperCase()}</span>
           </div>
         </div>
       )}

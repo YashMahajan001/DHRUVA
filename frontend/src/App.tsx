@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { EngineProvider, useEngine } from './context/EngineContext';
 import { Sidebar } from './components/common/Sidebar';
 import { Header } from './components/common/Header';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 // Pages
 import { Login } from './pages/Login';
@@ -20,7 +21,7 @@ import { Maintenance } from './pages/Maintenance';
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const { alerts, isStreamActive, toggleStream } = useEngine();
-  const isAuthPage = location.pathname === '/login' || location.pathname === '/entry';
+  const isAuthPage = location.pathname === '/' || location.pathname === '/login' || location.pathname === '/entry';
 
   if (isAuthPage) {
     return <>{children}</>;
@@ -53,21 +54,49 @@ export default function App() {
       <AuthProvider>
         <EngineProvider>
           <AppLayout>
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/entry" element={<Entry />} />
-              <Route path="/" element={<Navigate to="/overview" replace />} />
-              <Route path="/overview" element={<ExecutiveOverview />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/engine/:id" element={<EngineDetails />} />
-              <Route path="/engine" element={<Navigate to="/engine/eng-01" replace />} />
-              <Route path="/faults" element={<FaultDiagnostics />} />
-              <Route path="/mission-simulation" element={<MissionSimulation />} />
-              <Route path="/mission-tuning" element={<MissionTuning />} />
-              <Route path="/fleet" element={<FleetMonitoring />} />
-              <Route path="/maintenance" element={<Maintenance />} />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
-            </Routes>
+            <ErrorBoundary fallbackTitle="MISSION CONSOLE ERROR">
+              <Routes>
+                {/* 1. Entry & Authentication */}
+                <Route path="/" element={<Entry />} />
+                <Route path="/entry" element={<Entry />} />
+                <Route path="/login" element={<Login />} />
+
+                {/* 2. Tactical Dashboards & Overviews */}
+                <Route path="/overview" element={<ExecutiveOverview />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+
+                {/* 3. Engine Subsystem & Telemetry Viewports */}
+                <Route path="/engine/:id" element={<EngineDetails />} />
+                <Route path="/engine" element={<Navigate to="/engine/eng-01" replace />} />
+                <Route path="/engine-details" element={<Navigate to="/engine/eng-01" replace />} />
+
+                {/* 4. Fault Diagnostics & Root Cause Analysis */}
+                <Route path="/faults" element={<FaultDiagnostics />} />
+                <Route path="/fault-diagnostics" element={<FaultDiagnostics />} />
+
+                {/* 5. Mission Simulation Sandbox */}
+                <Route path="/mission-simulation" element={<MissionSimulation />} />
+                <Route path="/simulation" element={<MissionSimulation />} />
+                <Route path="/simulation/sandbox" element={<MissionSimulation />} />
+
+                {/* 6. Digital Twin Mission Tuning & Calibration */}
+                <Route path="/mission-tuning" element={<MissionTuning />} />
+                <Route path="/tuning" element={<MissionTuning />} />
+                <Route path="/tuning/calibration" element={<MissionTuning />} />
+
+                {/* 7. Fleet Airspace Monitoring & Radar */}
+                <Route path="/fleet" element={<FleetMonitoring />} />
+                <Route path="/fleet-monitoring" element={<FleetMonitoring />} />
+                <Route path="/monitoring/fleet" element={<FleetMonitoring />} />
+
+                {/* 8. Predictive Maintenance & MRO Scheduler */}
+                <Route path="/maintenance" element={<Maintenance />} />
+                <Route path="/maintenance/scheduler" element={<Maintenance />} />
+
+                {/* Fallback Catch-all */}
+                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              </Routes>
+            </ErrorBoundary>
           </AppLayout>
         </EngineProvider>
       </AuthProvider>

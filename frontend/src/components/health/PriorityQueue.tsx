@@ -18,6 +18,10 @@ export const PriorityQueue: React.FC = () => {
     showToast
   } = useMission();
 
+  const criticalCount = engines.filter((e) => e.status === 'CRITICAL').length;
+  const warningCount = engines.filter((e) => e.status === 'WARNING').length;
+  const routineCount = engines.filter((e) => e.status === 'NOMINAL').length;
+
   const filteredEngines = engines.filter((eng) => {
     if (queueFilter === 'critical') return eng.status === 'CRITICAL';
     if (queueFilter === 'warning') return eng.status === 'WARNING';
@@ -44,7 +48,7 @@ export const PriorityQueue: React.FC = () => {
                 : 'border border-transparent text-[#b9cacb] hover:border-[#00f0ff]/40'
             }`}
           >
-            ALL (3)
+            ALL ({engines.length})
           </button>
           <button
             onClick={() => setQueueFilter('critical')}
@@ -54,7 +58,7 @@ export const PriorityQueue: React.FC = () => {
                 : 'border border-transparent text-red-400 hover:border-red-400/40'
             }`}
           >
-            CRITICAL (1)
+            CRITICAL ({criticalCount})
           </button>
           <button
             onClick={() => setQueueFilter('warning')}
@@ -64,7 +68,7 @@ export const PriorityQueue: React.FC = () => {
                 : 'border border-transparent text-amber-300 hover:border-amber-400/40'
             }`}
           >
-            WARNING (1)
+            WARNING ({warningCount})
           </button>
           <button
             onClick={() => setQueueFilter('routine')}
@@ -74,7 +78,7 @@ export const PriorityQueue: React.FC = () => {
                 : 'border border-transparent text-[#b9cacb] hover:border-[#00f0ff]/40'
             }`}
           >
-            ROUTINE (1)
+            ROUTINE ({routineCount})
           </button>
         </div>
       </div>
@@ -115,9 +119,13 @@ export const PriorityQueue: React.FC = () => {
                     </span>
                     <span
                       id="badge-8924"
-                      className="px-2 py-0.5 rounded font-telemetry text-[9px] bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/40 uppercase font-bold"
+                      className={`px-2 py-0.5 rounded font-telemetry text-[9px] uppercase font-bold border ${
+                        isApproved
+                          ? 'bg-[#00f0ff]/20 text-[#00f0ff] border-[#00f0ff]/40'
+                          : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                      }`}
                     >
-                      WO #8924 [DISPATCHED]
+                      {isApproved ? 'WO #8924 [DISPATCHED]' : `WO #8924 [${wo?.status || 'PENDING'}]`}
                     </span>
                   </div>
                 </div>

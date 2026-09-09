@@ -62,9 +62,9 @@ export const Dashboard: React.FC = () => {
       />
 
       {/* 2. MAIN OPERATIONAL GRID (HUD Viewport + Right AI/Alerts Dock) */}
-      <div className="w-full grid grid-cols-1 xl:grid-cols-12 gap-3 p-3">
+      <div className="w-full grid grid-cols-1 xl:grid-cols-12 gap-4 p-4 lg:gap-6 lg:p-6">
         {/* LEFT & CENTER: Cinematic Drone Viewport & Digital Twin Matrix */}
-        <div className="xl:col-span-7 2xl:col-span-8 flex flex-col gap-3">
+        <div className="xl:col-span-7 2xl:col-span-8 flex flex-col gap-4 lg:gap-6">
           {/* CINEMATIC HUD & DIGITAL TWIN OVERLAY CANVAS */}
           <DigitalTwinHUD
             engine={activeEngine}
@@ -82,7 +82,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* RIGHT DOCK: AEROSPACE AGENTIC AI COPILOT & ACTIVE ALERTS MATRIX */}
-        <div className="xl:col-span-5 2xl:col-span-4 flex flex-col gap-3">
+        <div className="xl:col-span-5 2xl:col-span-4 flex flex-col gap-4 lg:gap-6">
           {/* AI COPILOT INTERACTIVE PANEL */}
           <AiCopilotPanel
             messages={copilotMessages}
@@ -101,7 +101,7 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* 3. BOTTOM MULTI-PANEL DOCK: Live Historical Graph + Subsystems + Predictive Maintenance */}
-      <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-3 p-3 -mt-1">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 lg:gap-6 lg:p-6 lg:-mt-2">
         {/* Live Multi-Param Historical Line Chart */}
         <div className="lg:col-span-6">
           <TelemetryTrendChart

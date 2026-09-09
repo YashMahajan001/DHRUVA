@@ -150,63 +150,63 @@ export const TelemetryWaveformChart: React.FC = () => {
   const timeRanges: TimeRange[] = ['10s', '1m', '5m', '1h'];
 
   return (
-    <div className="xl:col-span-8 bg-surface-container-low/95 p-unit-lg rounded shadow-xl flex flex-col gap-unit-md border border-outline-variant/20 select-none">
-      <div className="flex flex-wrap items-center justify-between gap-unit-sm">
-        <div className="flex items-center gap-unit-md">
+    <div className="xl:col-span-8 bg-[#161b29]/95 p-5 rounded-xl shadow-xl flex flex-col gap-4 border border-[#3b494b]/30 select-none">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
           <div className="flex flex-col">
-            <span className="font-label-micro text-label-micro text-outline uppercase">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
               LIVE WAVEFORM STREAM
             </span>
-            <span id="chart-subsystem-tag" className="font-headline-sm text-headline-sm text-on-surface">
+            <span id="chart-subsystem-tag" className="text-sm font-bold font-mono text-white tracking-wide">
               {selectedSubsystem.chartTag}
             </span>
           </div>
-          <span className="flex items-center gap-1 font-label-micro text-label-micro text-primary bg-primary/10 px-unit-xs py-0.5 rounded border border-primary/20">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+          <span className="flex items-center gap-1.5 text-[11px] font-mono text-[#00f0ff] bg-[#00f0ff]/10 px-2.5 py-1 rounded border border-[#00f0ff]/30">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-ping"></span>
             2.5 kHz STREAM
           </span>
         </div>
 
-        <div className="flex items-center gap-unit-xs">
+        <div className="flex items-center gap-2">
           {/* Mode Switcher: Oscilloscope vs Recharts Historical Trend */}
-          <div className="flex bg-surface-container-highest p-0.5 rounded border border-outline-variant/20 mr-1">
+          <div className="flex bg-[#0e1320] p-1 rounded-lg border border-[#3b494b]/40">
             <button
               onClick={() => setChartViewMode('oscilloscope')}
-              className={`px-2 py-1 rounded text-[10px] font-mono uppercase flex items-center gap-1 cursor-pointer ${
+              className={`px-2.5 py-1 rounded text-[11px] font-mono uppercase flex items-center gap-1.5 transition-all cursor-pointer ${
                 chartViewMode === 'oscilloscope'
-                  ? 'bg-primary-container text-on-primary-container font-bold'
-                  : 'text-outline hover:text-on-surface'
+                  ? 'bg-[#00f0ff] text-[#090e1b] font-bold shadow-[0_0_10px_rgba(0,240,255,0.35)]'
+                  : 'text-slate-400 hover:text-white'
               }`}
               title="Real-time Oscilloscope"
             >
-              <Activity className="w-3 h-3" />
+              <Activity className="w-3.5 h-3.5" />
               <span>Scope</span>
             </button>
             <button
               onClick={() => setChartViewMode('multimetric')}
-              className={`px-2 py-1 rounded text-[10px] font-mono uppercase flex items-center gap-1 cursor-pointer ${
+              className={`px-2.5 py-1 rounded text-[11px] font-mono uppercase flex items-center gap-1.5 transition-all cursor-pointer ${
                 chartViewMode === 'multimetric'
-                  ? 'bg-primary-container text-on-primary-container font-bold'
-                  : 'text-outline hover:text-on-surface'
+                  ? 'bg-[#00f0ff] text-[#090e1b] font-bold shadow-[0_0_10px_rgba(0,240,255,0.35)]'
+                  : 'text-slate-400 hover:text-white'
               }`}
               title="Multi-Metric Historical Telemetry"
             >
-              <ChartIcon className="w-3 h-3" />
+              <ChartIcon className="w-3.5 h-3.5" />
               <span>Trend</span>
             </button>
           </div>
 
           {/* Timebase Selector */}
-          <div className="flex bg-surface-container-highest p-0.5 rounded border border-outline-variant/20">
+          <div className="flex bg-[#0e1320] p-1 rounded-lg border border-[#3b494b]/40">
             {timeRanges.map((tr) => (
               <button
                 key={tr}
                 id={`tb-${tr}`}
                 onClick={() => setTimeRange(tr)}
-                className={`px-unit-sm py-0.5 rounded font-label-micro text-label-micro uppercase transition-colors cursor-pointer ${
+                className={`px-2.5 py-1 rounded text-[11px] font-mono uppercase transition-all cursor-pointer ${
                   timeRange === tr
-                    ? 'bg-primary-container text-on-primary-container font-bold shadow-[0_0_8px_rgba(0,240,255,0.3)]'
-                    : 'text-on-surface hover:text-primary'
+                    ? 'bg-[#00f0ff]/20 text-[#00f0ff] font-bold border border-[#00f0ff]/50 shadow-[0_0_8px_rgba(0,240,255,0.25)]'
+                    : 'text-slate-400 hover:text-white border border-transparent'
                 }`}
               >
                 {tr}
@@ -218,16 +218,16 @@ export const TelemetryWaveformChart: React.FC = () => {
           <button
             id="btn-chart-pause"
             onClick={toggleTelemetryPause}
-            className="p-1.5 bg-surface-container-highest hover:bg-surface-bright rounded text-on-surface transition-colors cursor-pointer border border-outline-variant/20"
+            className="p-2 bg-[#0e1320] hover:bg-[#1a2333] rounded-lg text-slate-300 hover:text-white transition-all cursor-pointer border border-[#3b494b]/40 flex items-center justify-center"
             title={isStreamPaused ? 'Resume Telemetry Stream' : 'Pause Telemetry Stream'}
           >
-            {isStreamPaused ? <Play className="w-3.5 h-3.5 text-primary" /> : <Pause className="w-3.5 h-3.5" />}
+            {isStreamPaused ? <Play className="w-3.5 h-3.5 text-[#00f0ff]" /> : <Pause className="w-3.5 h-3.5" />}
           </button>
         </div>
       </div>
 
       {/* CHART VIEWPORT: HTML5 OSCILLOSCOPE OR RECHARTS TREND */}
-      <div className="w-full h-56 bg-surface-container-lowest rounded relative overflow-hidden flex items-center justify-center border border-outline-variant/20">
+      <div className="w-full h-64 bg-[#090e1b] rounded-lg relative overflow-hidden flex items-center justify-center border border-[#3b494b]/30">
         {chartViewMode === 'oscilloscope' ? (
           <>
             <canvas
@@ -238,26 +238,26 @@ export const TelemetryWaveformChart: React.FC = () => {
               className="w-full h-full block cursor-crosshair"
             />
             {/* Legend Overlay */}
-            <div className="absolute top-2 right-3 font-label-micro text-label-micro text-outline pointer-events-none flex gap-unit-md bg-surface-container-lowest/80 px-2 py-1 rounded backdrop-blur-xs border border-outline-variant/20">
-              <span className="flex items-center gap-1">
-                <span className="w-2 h-0.5 bg-primary"></span> SYNTHETIC TWIN
+            <div className="absolute top-3 right-3 text-[10px] font-mono text-slate-300 pointer-events-none flex items-center gap-3 bg-[#090e1b]/85 px-3 py-1.5 rounded-md backdrop-blur-xs border border-[#3b494b]/40">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-0.5 bg-[#00f0ff]"></span> SYNTHETIC TWIN
               </span>
-              <span className="flex items-center gap-1">
-                <span className="w-2 h-0.5 bg-secondary-fixed"></span> PHYSICAL SENSOR
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-0.5 bg-[#b4c5ff]"></span> PHYSICAL SENSOR
               </span>
             </div>
 
             {/* Live Hover Tooltip */}
             {hoverCoord && (
               <div
-                className="absolute bg-surface-container-high/95 text-on-surface text-[10px] font-mono px-2 py-1 rounded border border-primary/40 shadow-xl pointer-events-none z-30"
+                className="absolute bg-[#161b29]/95 text-white text-[10px] font-mono px-2.5 py-1.5 rounded border border-[#00f0ff]/50 shadow-2xl pointer-events-none z-30"
                 style={{
                   left: Math.min(hoverCoord.x + 12, (canvasRef.current?.width || 500) - 140),
                   top: Math.max(hoverCoord.y - 45, 10)
                 }}
               >
-                <div>TWIN: <span className="text-primary font-bold">{hoverCoord.valSynthetic} V</span></div>
-                <div>SENS: <span className="text-secondary-fixed font-bold">{hoverCoord.valPhysical} V</span></div>
+                <div>TWIN: <span className="text-[#00f0ff] font-bold">{hoverCoord.valSynthetic} V</span></div>
+                <div>SENS: <span className="text-[#b4c5ff] font-bold">{hoverCoord.valPhysical} V</span></div>
               </div>
             )}
           </>
@@ -286,7 +286,7 @@ export const TelemetryWaveformChart: React.FC = () => {
                   contentStyle={{
                     backgroundColor: '#0e1320',
                     borderColor: '#00f0ff55',
-                    borderRadius: '4px',
+                    borderRadius: '6px',
                     fontFamily: 'JetBrains Mono',
                     fontSize: '11px',
                     color: '#dee2f5'
@@ -326,19 +326,25 @@ export const TelemetryWaveformChart: React.FC = () => {
       </div>
 
       {/* FOOTER TELEMETRY STATS */}
-      <div className="flex flex-wrap items-center justify-between font-label-micro text-label-micro text-outline font-mono">
-        <div className="flex items-center gap-unit-md">
-          <span>
-            RESIDUAL ERROR: <strong className="text-primary font-mono font-normal">±{telemetry.residualError} V</strong>
+      <div className="flex flex-wrap items-center justify-between text-[11px] font-mono text-slate-400 pt-1 border-t border-[#3b494b]/20">
+        <div className="flex flex-wrap items-center gap-4">
+          <span className="flex items-center gap-1.5">
+            <span className="text-slate-500">RESIDUAL:</span>
+            <strong className="text-[#00f0ff] font-mono font-medium">±{telemetry.residualError} V</strong>
           </span>
-          <span>
-            SAMPLE RATE: <strong className="text-on-surface font-mono font-normal">2,500 S/sec</strong>
+          <span className="flex items-center gap-1.5">
+            <span className="text-slate-500">RATE:</span>
+            <strong className="text-slate-200 font-mono font-medium">2,500 S/s</strong>
           </span>
-          <span>
-            BUFFER: <strong className="text-on-surface font-mono font-normal">RING_BUFFER_1024</strong>
+          <span className="flex items-center gap-1.5">
+            <span className="text-slate-500">BUFFER:</span>
+            <strong className="text-slate-200 font-mono font-medium">RING_1024</strong>
           </span>
         </div>
-        <div className="text-primary-fixed-dim">KALMAN FILTER: ONLINE</div>
+        <div className="flex items-center gap-1.5 text-xs text-[#00f0ff]/80 font-mono">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff]"></span>
+          <span>KALMAN FILTER: ACTIVE</span>
+        </div>
       </div>
     </div>
   );

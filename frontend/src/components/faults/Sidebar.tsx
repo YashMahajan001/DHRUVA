@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 import { useDashboard } from '../../context/FaultDiagnosticsContext';
 
+import { useNavigate } from 'react-router-dom';
+
 interface NavItem {
   id: string;
   name: string;
@@ -21,11 +23,11 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { id: 'dashboard', name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
-  { id: 'engine-details', name: 'Engine Details', icon: Cpu, path: '/engine-details' },
-  { id: 'fault-diagnostics', name: 'Fault Diagnostics', icon: Activity, path: '/fault-diagnostics' },
+  { id: 'engine-details', name: 'Engine Details', icon: Cpu, path: '/engine/eng-01' },
+  { id: 'fault-diagnostics', name: 'Fault Diagnostics', icon: Activity, path: '/faults' },
   { id: 'mission-simulation', name: 'Mission Simulation', icon: Orbit, path: '/mission-simulation' },
   { id: 'mission-tuning', name: 'Mission Tuning', icon: Sliders, path: '/mission-tuning' },
-  { id: 'fleet-monitoring', name: 'Fleet Monitoring', icon: Radar, path: '/fleet-monitoring' },
+  { id: 'fleet-monitoring', name: 'Fleet Monitoring', icon: Radar, path: '/fleet' },
   { id: 'maintenance', name: 'Maintenance', icon: Wrench, path: '/maintenance' },
 ];
 
@@ -33,6 +35,7 @@ export const Sidebar: React.FC<{ activeRoute?: string; onNavigate?: (route: stri
   activeRoute = 'fault-diagnostics',
   onNavigate,
 }) => {
+  const navigate = useNavigate();
   const { isLiveStreaming, showToast } = useDashboard();
 
   return (
@@ -46,7 +49,7 @@ export const Sidebar: React.FC<{ activeRoute?: string; onNavigate?: (route: stri
           id="sidebar-emblem"
           className="w-10 h-10 rounded border border-[#00f0ff]/30 bg-[#252a38]/60 flex items-center justify-center cursor-pointer hover:border-[#00f0ff] transition-all"
           title="DHRUVAA Telemetry Core"
-          onClick={() => showToast('DHRUVAA Autonomic Kernel: Online. All twin matrices active.', 'info')}
+          onClick={() => navigate('/dashboard')}
         >
           <Terminal className="w-5 h-5 text-[#00dbe9]" />
         </div>
@@ -65,9 +68,7 @@ export const Sidebar: React.FC<{ activeRoute?: string; onNavigate?: (route: stri
                 title={item.name}
                 onClick={() => {
                   if (onNavigate) onNavigate(item.id);
-                  if (item.id !== 'fault-diagnostics' && item.id !== 'dashboard') {
-                    showToast(`${item.name} module is locked in sortie-active mission mode. Focusing Main Mission Dashboard.`, 'info');
-                  }
+                  navigate(item.path);
                 }}
                 className={`group relative flex items-center justify-center w-12 h-12 rounded transition-all ${
                   isActive

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDashboard } from '../../context/FaultDiagnosticsContext';
+import { DynamicEngineTwin } from './DynamicEngineTwin';
 import {
   Layers,
   Video,
@@ -39,6 +40,7 @@ export const Section1DigitalTwin: React.FC = () => {
   const [isPlayingScan, setIsPlayingScan] = useState<boolean>(true);
   const [timelineProgress, setTimelineProgress] = useState<number>(68);
   const [showComponentLabels, setShowComponentLabels] = useState<boolean>(true);
+  const [engineOrientation, setEngineOrientation] = useState<{ yaw: number; pitch: number }>({ yaw: 30, pitch: -15 });
 
   // Active hotspots (Cylinders 1-4)
   const currentHotspots = twinState?.cylinderHotspots || [
@@ -240,28 +242,29 @@ export const Section1DigitalTwin: React.FC = () => {
           }}
         ></div>
 
-        {/* Ambient Radial Core Lighting */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,240,255,0.12)_0,transparent_75%)] pointer-events-none"></div>
-
-        {/* Aerospace Engineering HUD Coordinates Overlay */}
-        <div className="absolute top-3.5 left-4 font-mono-telemetry text-[10px] text-[#00f0ff]/70 pointer-events-none z-10 flex flex-col gap-0.5">
-          <span className="font-bold">┌ DHRUVAA CAD-X AERO DIGITAL TWIN</span>
-          <span className="text-[#849495] text-[9px]">ENGINE MODEL: ROTAX 915 iSC3 TURBO (4-CYLINDER HORIZONTALLY OPPOSED)</span>
-          <span className="text-[#849495] text-[9px]">ISOMETRIC ORIENTATION: +30° YAW | -15° PITCH</span>
+        {/* Aerospace Engineering HUD Status Bars (Cleanly framed to avoid overlapping the central model) */}
+        <div className="absolute top-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 pointer-events-none z-20 font-mono text-[10px]">
+          <div className="bg-[#090e1b]/85 border border-[#3b494b]/50 backdrop-blur-xs px-3 py-1.5 rounded-md flex items-center gap-3 shadow-md">
+            <span className="text-[#00f0ff] font-bold">ROTAX 915 iSC3 TURBO</span>
+            <span className="text-slate-400">
+              YAW: {engineOrientation.yaw >= 0 ? `+${engineOrientation.yaw}` : engineOrientation.yaw}° | PITCH: {engineOrientation.pitch >= 0 ? `+${engineOrientation.pitch}` : engineOrientation.pitch}°
+            </span>
+            <span className="text-slate-400 hidden md:inline">AIRFLOW: 34.2 m/s</span>
+          </div>
+          <div className="bg-[#090e1b]/85 border border-[#3b494b]/50 backdrop-blur-xs px-3 py-1.5 rounded-md flex items-center gap-2.5 shadow-md">
+            <span className="w-2 h-2 rounded-full bg-[#00f0ff] animate-pulse"></span>
+            <span className="text-[#00f0ff] font-bold">{isLiveStreaming ? 'LIVE SYNC (20Hz)' : 'STANDBY'}</span>
+            <span className="text-slate-400 hidden sm:inline">AMBIENT Δ: +18.4°C</span>
+          </div>
         </div>
 
-        <div className="absolute top-3.5 right-4 font-mono-telemetry text-[10px] text-right pointer-events-none z-10">
-          <span className="text-[#00f0ff]/80 font-bold">STATE: {isLiveStreaming ? 'LIVE SYNC' : 'STANDBY'} ┐</span>
-          <span className="text-[#849495] block text-[9px]">COOLING AIRFLOW: 34.2 m/s</span>
-          <span className="text-[#849495] block text-[9px]">AMBIENT DELTA: +18.4°C</span>
-        </div>
-
-        <div className="absolute bottom-12 left-4 font-mono-telemetry text-[10px] text-[#849495] pointer-events-none z-10">
-          <span>└ DYNAMIC AIR PRESSURE: 29.4 inHg • MANIFOLD RUNNER: OK</span>
-        </div>
-
-        <div className="absolute bottom-12 right-4 font-mono-telemetry text-[10px] text-[#00f0ff]/70 pointer-events-none z-10 text-right">
-          <span>ACTIVE CO-SIMULATION CLUSTER: NODE-04 ┘</span>
+        <div className="absolute bottom-14 left-3 right-3 flex items-center justify-between pointer-events-none z-20 font-mono text-[10px]">
+          <div className="bg-[#090e1b]/85 border border-[#3b494b]/50 backdrop-blur-xs px-3 py-1 rounded-md text-slate-300 shadow-md">
+            AIR PRESSURE: 29.4 inHg • MANIFOLD: NOMINAL
+          </div>
+          <div className="bg-[#090e1b]/85 border border-[#3b494b]/50 backdrop-blur-xs px-3 py-1 rounded-md text-[#00f0ff] font-semibold shadow-md">
+            CO-SIM CLUSTER: NODE-04
+          </div>
         </div>
 
         {/* ------------------------------------------------------------- */}
@@ -272,27 +275,79 @@ export const Section1DigitalTwin: React.FC = () => {
             className="relative w-full h-full flex items-center justify-center p-4 transition-transform duration-300 ease-out"
             style={{ transform: `scale(${zoomLevel})` }}
           >
-            {/* Technical CAD Wireframe Aero Engine Asset */}
-            <img
-              id="cad-wireframe-engine-visual"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9nSnI54G1zXINMfqrMSkfsTwQLVFm7Hd852eOEyMKlBmHZZUY_cECExFKCCY7GWCtyfQGy4TZ_j3d4QYTCTxUTwac0CUjVshT8mqndlRX75QZnqeMYE3BCfG76NpwUb3porcXyhbqRsgQbSF16jyZwNUmILzFF3VokuifHUxeNBe8mcyVUruNd6E3tbZkSCw8kVx5GEk-1-KMxRmlTVp8JPWqv_gu0pRwbiAtOclx2SwBfB7qjA7U"
-              alt="Engine 3D Digital Twin CAD wireframe rendering"
-              className="w-full h-full max-h-[500px] object-contain filter drop-shadow-[0_0_25px_rgba(0,240,255,0.22)]"
+            {/* Dynamic Interactive 3D Digital Twin Engine (Replaces static image) */}
+            <DynamicEngineTwin
+              zoomLevel={zoomLevel}
+              isThermalMode={false}
+              rpm={telemetry.rpm || 2450}
+              activeHotspotId={activeHotspotId}
+              onRotationChange={(yaw, pitch) => setEngineOrientation({ yaw, pitch })}
+              cylinders={currentHotspots}
+              className="w-full h-full max-h-[500px]"
             />
 
-            {/* Radar Laser Scanning Effect */}
-            {isPlayingScan && (
-              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {/* Active Engine Tomography Scanning Animation */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none z-20">
+              <div
+                className={`w-full absolute left-0 right-0 ${
+                  isPlayingScan ? 'animate-engine-scan' : ''
+                }`}
+                style={{
+                  top: isPlayingScan ? undefined : `${timelineProgress}%`,
+                  transition: isPlayingScan ? 'none' : 'top 0.2s ease-out',
+                }}
+              >
+                {/* 1. Volumetric Trailing Light Sheet (Holographic Tomography Fan) */}
                 <div
-                  className="w-full h-1 bg-gradient-to-r from-transparent via-[#00f0ff]/90 to-transparent shadow-[0_0_16px_#00f0ff]"
+                  className="w-full h-28 -mt-28 pointer-events-none opacity-45 animate-pulse"
                   style={{
-                    position: 'absolute',
-                    top: `${timelineProgress}%`,
-                    transition: 'top 0.4s ease',
+                    background: 'linear-gradient(to top, rgba(0, 240, 255, 0.35) 0%, rgba(0, 240, 255, 0.08) 50%, transparent 100%)',
+                    maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+                    WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
                   }}
-                ></div>
+                >
+                  {/* Micro-raster holographic scanlines */}
+                  <div
+                    className="w-full h-full opacity-30"
+                    style={{
+                      backgroundImage: 'repeating-linear-gradient(0deg, rgba(0, 240, 255, 0.45) 0px, transparent 1px, transparent 3px)',
+                    }}
+                  />
+                </div>
+
+                {/* 2. Primary High-Intensity Laser Scanning Beam */}
+                <div className="relative w-full flex items-center justify-center">
+                  {/* Outer Wide Diffuse Cyan Laser Glow */}
+                  <div className="absolute w-full h-4 bg-gradient-to-r from-transparent via-[#00f0ff]/60 to-transparent blur-sm animate-scan-pulse" />
+
+                  {/* Intense Core Laser Blade (Cyan + White Hot Core) */}
+                  <div className="relative w-full h-[2.5px] bg-gradient-to-r from-transparent via-[#00f0ff] via-[#ffffff] to-transparent shadow-[0_0_16px_#00f0ff,0_0_32px_#00f0ff,0_0_48px_rgba(0,240,255,0.8)]" />
+
+                  {/* 3. Left Tactical HUD Scan Tag */}
+                  <div className="absolute left-6 -top-5.5 flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#090e1b]/95 border border-[#00f0ff]/60 text-[9px] font-mono-telemetry text-[#00f0ff] shadow-[0_0_12px_rgba(0,240,255,0.4)]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-ping" />
+                    <span className="font-bold tracking-wider">ENGINE SCAN // ACTIVE</span>
+                  </div>
+
+                  {/* 4. Right Tactical Telemetry Coordinate Tag */}
+                  <div className="absolute right-6 -top-5.5 hidden sm:flex items-center gap-2 px-2 py-0.5 rounded bg-[#090e1b]/95 border border-[#00f0ff]/60 text-[9px] font-mono-telemetry text-[#7df4ff] shadow-[0_0_12px_rgba(0,240,255,0.4)]">
+                    <span>TOMOGRAPHY</span>
+                    <span className="text-[#849495]">•</span>
+                    <span className="text-[#00f0ff] font-bold">40Hz // Z-SWEEP</span>
+                  </div>
+                </div>
+
+                {/* 5. Secondary Downward Ambient Scatter Reflection */}
+                <div
+                  className="w-full h-10 pointer-events-none opacity-25"
+                  style={{
+                    background: 'linear-gradient(to bottom, rgba(0, 240, 255, 0.35) 0%, transparent 100%)',
+                    maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
+                    WebkitMaskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
+                  }}
+                />
               </div>
-            )}
+            </div>
 
             {/* INTERACTIVE COMPONENT HOTSPOTS & LABELS */}
             {currentHotspots.map(hotspot => {
@@ -463,11 +518,14 @@ export const Section1DigitalTwin: React.FC = () => {
             className="relative w-full h-full flex items-center justify-center p-4 transition-transform duration-300 ease-out"
             style={{ transform: `scale(${zoomLevel})` }}
           >
-            {/* Underlying Engine Blueprint */}
-            <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9nSnI54G1zXINMfqrMSkfsTwQLVFm7Hd852eOEyMKlBmHZZUY_cECExFKCCY7GWCtyfQGy4TZ_j3d4QYTCTxUTwac0CUjVshT8mqndlRX75QZnqeMYE3BCfG76NpwUb3porcXyhbqRsgQbSF16jyZwNUmILzFF3VokuifHUxeNBe8mcyVUruNd6E3tbZkSCw8kVx5GEk-1-KMxRmlTVp8JPWqv_gu0pRwbiAtOclx2SwBfB7qjA7U"
-              alt="Thermal Engine 3D Digital Twin"
-              className="w-full h-full max-h-[500px] object-contain filter invert contrast-125 opacity-70"
+            {/* Dynamic Thermal Engine 3D Digital Twin (Replaces static image) */}
+            <DynamicEngineTwin
+              zoomLevel={zoomLevel}
+              isThermalMode={true}
+              rpm={telemetry.rpm || 2450}
+              activeHotspotId={activeHotspotId}
+              onRotationChange={(yaw, pitch) => setEngineOrientation({ yaw, pitch })}
+              className="w-full h-full max-h-[500px]"
             />
 
             {/* High-Contrast Thermal Heatmap Overlay */}

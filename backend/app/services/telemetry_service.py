@@ -98,9 +98,18 @@ class TelemetryService:
         return record
 
     def get_latest(self, db: Session, engine_id: str) -> Optional[Telemetry]:
-        return db.query(Telemetry).filter(
+        record = db.query(Telemetry).filter(
             Telemetry.engine_id == engine_id
         ).order_by(Telemetry.id.desc()).first()
+        if record:
+            return record
+        from backend.app.services.engine_service import engine_service
+        resolved = engine_service.get_by_id(db, engine_id)
+        if resolved and resolved.id != engine_id:
+            return db.query(Telemetry).filter(
+                Telemetry.engine_id == resolved.id
+            ).order_by(Telemetry.id.desc()).first()
+        return None
 
 
     def get_history(

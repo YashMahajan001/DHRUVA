@@ -7,7 +7,9 @@ import { Calendar, Ban, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
 import { ReticleCorner } from '../common/ReticleCorner';
 
 export const SortieTimeline: React.FC = () => {
-  const { setSelectedEngineId, openModal, showToast } = useMission();
+  const { engines, setSelectedEngineId, openModal, showToast } = useMission();
+  const eng01 = engines.find((e) => e.id === 'eng-01');
+  const eng02 = engines.find((e) => e.id === 'eng-02');
 
   const timeMarkers = [
     'T+00h',
@@ -82,12 +84,14 @@ export const SortieTimeline: React.FC = () => {
             <div
               onClick={(e) => {
                 e.stopPropagation();
-                showToast('SORTIE #771', 'Stratospheric Patrol sortie active. Remaining flight time: 24.0 hours.', 'flight_takeoff');
+                const remainMins = eng01?.currentMission.remainingFlightTimeMinutes ?? 0;
+                const remainHrs = (remainMins / 60).toFixed(1);
+                showToast('SORTIE #771', `${eng01?.currentMission.missionType || 'Patrol'} sortie active. Remaining flight time: ${remainHrs} hours.`, 'flight_takeoff');
               }}
               className="h-full w-2/5 bg-[#0053db]/80 hover:bg-[#0053db] transition-colors rounded border border-[#b4c5ff]/40 text-[10px] font-telemetry text-[#dee2f5] px-2.5 flex items-center justify-between shadow-sm"
             >
-              <span>SORTIE #771 - PATROL</span>
-              <span className="font-bold">24h FLIGHT</span>
+              <span>SORTIE #{eng01?.currentMission.id.split('-')[1] || '771'} - {eng01?.currentMission.missionType || 'PATROL'}</span>
+              <span className="font-bold">{((eng01?.currentMission.remainingFlightTimeMinutes ?? 0) / 60).toFixed(0)}h FLIGHT</span>
             </div>
             {/* Standby buffer */}
             <div className="h-full w-1/4 ml-2 bg-[#252a38]/40 rounded flex items-center justify-center font-telemetry text-[9px] text-[#849495]">
@@ -120,11 +124,13 @@ export const SortieTimeline: React.FC = () => {
             <div
               onClick={(e) => {
                 e.stopPropagation();
-                showToast('SORTIE #772', 'Cargo Relay flight active. Approaching inspection window at T+4.5H.', 'flight_takeoff');
+                const remainMins = eng02?.currentMission.remainingFlightTimeMinutes ?? 0;
+                const remainHrs = (remainMins / 60).toFixed(1);
+                showToast('SORTIE #772', `${eng02?.currentMission.missionType || 'Cargo Relay'} flight active. Approaching inspection window at T+${remainHrs}H.`, 'flight_takeoff');
               }}
               className="h-full w-1/6 bg-[#0053db]/80 rounded border border-[#b4c5ff]/40 text-[10px] font-telemetry text-[#dee2f5] px-2 flex items-center justify-center"
             >
-              SORTIE #772
+              SORTIE #{eng02?.currentMission.id.split('-')[1] || '772'}
             </div>
             {/* Required Inspection Window before T+50h */}
             <div

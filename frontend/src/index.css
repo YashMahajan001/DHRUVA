@@ -126,3 +126,34 @@
 .animate-radar {
   animation: radar-sweep 4s linear infinite;
 }
+
+@keyframes engine-scan-sweep {
+  0% {
+    top: 6%;
+  }
+  50% {
+    top: 86%;
+  }
+  100% {
+    top: 6%;
+  }
+}
+
+@keyframes scanline-pulse {
+  0%, 100% {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.8)) drop-shadow(0 0 25px rgba(0, 240, 255, 0.4));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 16px rgba(0, 240, 255, 1)) drop-shadow(0 0 35px rgba(0, 240, 255, 0.7));
+  }
+}
+
+.animate-engine-scan {
+  animation: engine-scan-sweep 4s ease-in-out infinite;
+}
+
+.animate-scan-pulse {
+  animation: scanline-pulse 2s ease-in-out infinite;
+}

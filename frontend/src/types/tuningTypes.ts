@@ -15,7 +15,7 @@ export type MissionPhase =
 
 export type MapProfile = 'eco' | 'linear' | 'aggr';
 
-export type CandidateId = 'alpha' | 'beta' | 'gamma';
+export type CandidateId = 'alpha' | 'beta' | 'gamma' | 'custom';
 
 export interface TelemetryPoint {
   timestamp: number;

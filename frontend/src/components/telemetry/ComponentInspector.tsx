@@ -1,5 +1,6 @@
 import React from 'react';
 import { useMissionDashboard } from '../../context/EngineDetailsContext';
+import { Download, Activity, CheckCircle2, AlertTriangle, ShieldAlert, Info, TrendingDown, Gauge } from 'lucide-react';
 
 export const ComponentInspector: React.FC = () => {
   const {
@@ -163,26 +164,26 @@ export const ComponentInspector: React.FC = () => {
   const fftMulti = stressSimulationActive ? 1.3 : 1.0;
 
   return (
-    <div className="xl:col-span-4 flex flex-col gap-unit-md select-none">
+    <div className="xl:col-span-4 flex flex-col gap-4 select-none">
       {/* COMPONENT HEALTH CARD */}
-      <div className="bg-surface-container-low/95 p-unit-lg rounded shadow-xl flex flex-col gap-unit-md relative overflow-hidden border border-outline-variant/20">
-        <div className="flex items-center justify-between">
+      <div className="bg-[#161b29]/95 p-5 rounded-xl shadow-xl flex flex-col gap-4 relative overflow-hidden border border-[#3b494b]/30">
+        <div className="flex items-start justify-between gap-2">
           <div className="flex flex-col">
-            <span className="font-label-micro text-label-micro text-outline tracking-wider uppercase">
+            <span className="font-mono text-[9px] text-[#849495] tracking-wider uppercase font-semibold">
               SUBSYSTEM TELEMETRY
             </span>
-            <h2 id="inspector-name" className="font-headline-sm text-headline-sm text-on-surface font-bold">
+            <h2 id="inspector-name" className="font-['Space_Grotesk'] text-lg text-[#dee2f5] font-bold mt-0.5">
               {selectedSubsystem.name}
             </h2>
           </div>
           <div
             id="inspector-badge"
-            className={`px-unit-sm py-1 rounded font-label-tactical text-label-tactical uppercase font-bold border transition-colors ${
+            className={`px-2.5 py-1 rounded-lg font-mono text-[10px] uppercase font-bold border transition-colors shrink-0 ${
               stressSimulationActive
-                ? 'bg-error-container text-on-error-container border-error/50 animate-pulse'
+                ? 'bg-red-500/20 text-red-400 border-red-500/40 animate-pulse'
                 : currentHealth < 85
-                ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                : 'bg-primary/10 text-primary border-primary/30'
+                ? 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+                : 'bg-[#00f0ff]/15 text-[#00f0ff] border-[#00f0ff]/30'
             }`}
           >
             {stressSimulationActive
@@ -192,14 +193,14 @@ export const ComponentInspector: React.FC = () => {
         </div>
 
         {/* HEALTH PROGRESS GAUGE */}
-        <div className="flex flex-col gap-1">
-          <div className="flex justify-between font-label-micro text-label-micro">
-            <span className="text-outline uppercase">INTEGRITY MATRIX CONFIDENCE</span>
-            <span id="inspector-conf-score" className="text-primary font-bold font-mono">
+        <div className="flex flex-col gap-1.5 bg-[#090e1b]/70 p-3 rounded-lg border border-[#3b494b]/20">
+          <div className="flex justify-between items-center font-mono text-[10px]">
+            <span className="text-[#849495] uppercase font-semibold">INTEGRITY MATRIX CONFIDENCE</span>
+            <span id="inspector-conf-score" className="text-[#00f0ff] font-bold">
               {selectedSubsystem.confidence}
             </span>
           </div>
-          <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+          <div className="w-full bg-[#303443] h-2 rounded-full overflow-hidden">
             <div
               id="inspector-bar"
               className={`h-full transition-all duration-500 shadow-[0_0_8px_rgba(0,240,255,0.3)] ${
@@ -207,30 +208,30 @@ export const ComponentInspector: React.FC = () => {
                   ? 'bg-red-500'
                   : currentHealth < 85
                   ? 'bg-amber-400'
-                  : 'bg-primary'
+                  : 'bg-[#00f0ff]'
               }`}
               style={{ width: `${currentHealth}%` }}
-            ></div>
+            />
           </div>
         </div>
 
         {/* DYNAMIC KEY TELEMETRY PAIRS */}
-        <div id="inspector-metrics" className="grid grid-cols-2 gap-unit-xs">
+        <div id="inspector-metrics" className="grid grid-cols-2 gap-2.5">
           {dynamicParams.map((p, idx) => (
-            <div key={idx} className="bg-surface-container p-unit-sm rounded border border-outline-variant/10">
-              <span className="font-label-micro text-label-micro text-outline uppercase block truncate">
+            <div key={idx} className="bg-[#090e1b]/80 p-3 rounded-lg border border-[#3b494b]/20 flex flex-col justify-between">
+              <span className="font-mono text-[9px] text-[#849495] uppercase font-semibold block truncate">
                 {p.label}
               </span>
               <span
-                className={`font-telemetry-num-md text-telemetry-num-md font-bold block ${
-                  p.isWarning ? 'text-red-400' : 'text-on-surface'
+                className={`font-mono text-base font-bold block my-1 ${
+                  p.isWarning ? 'text-red-400' : 'text-[#dee2f5]'
                 }`}
               >
                 {p.val}
               </span>
               <span
-                className={`font-label-micro text-label-micro block mt-0.5 truncate ${
-                  p.isWarning ? 'text-red-400' : 'text-primary-fixed'
+                className={`font-mono text-[9px] block truncate font-medium ${
+                  p.isWarning ? 'text-red-400' : 'text-[#00dbe9]'
                 }`}
               >
                 {p.note}
@@ -240,17 +241,17 @@ export const ComponentInspector: React.FC = () => {
         </div>
 
         {/* COMPONENT DEGRADATION HISTORICAL TREND */}
-        <div className="bg-surface-container p-unit-sm rounded flex flex-col gap-1 border border-outline-variant/10">
+        <div className="bg-[#090e1b]/80 p-3 rounded-lg flex flex-col gap-2 border border-[#3b494b]/20">
           <div className="flex items-center justify-between">
-            <span className="font-label-micro text-label-micro text-outline uppercase">
+            <span className="font-mono text-[9px] text-[#849495] uppercase font-semibold">
               DEGRADATION TREND (LAST 50H)
             </span>
-            <span className="font-label-micro text-label-micro text-primary font-mono">
+            <span className="font-mono text-[10px] text-[#00f0ff] font-bold px-1.5 py-0.5 rounded bg-[#00f0ff]/10 border border-[#00f0ff]/20">
               -0.4% DELTA
             </span>
           </div>
           {/* MINI SVG SPARKLINE CHART */}
-          <div className="w-full h-12 flex items-end">
+          <div className="w-full h-12 flex items-end pt-1">
             <svg className="w-full h-full" viewBox="0 0 200 40" preserveAspectRatio="none">
               <path
                 d="M0,8 L20,9 L40,12 L60,11 L80,15 L100,14 L120,18 L140,19 L160,22 L180,24 L200,26"
@@ -267,37 +268,33 @@ export const ComponentInspector: React.FC = () => {
         </div>
 
         {/* DETECTED MICRO-ANOMALIES & DIAGNOSTIC LOG */}
-        <div className="flex flex-col gap-unit-xs">
+        <div className="flex flex-col gap-1.5">
           <div className="flex items-center justify-between">
-            <span className="font-label-micro text-label-micro text-outline uppercase">
+            <span className="font-mono text-[9px] text-[#849495] uppercase font-semibold">
               MICRO-FAULT DETECTION LOG
             </span>
-            <span className="font-label-micro text-label-micro text-on-surface-variant font-mono">
+            <span className="font-mono text-[9px] text-[#00dbe9] font-semibold">
               AUTO-EVAL
             </span>
           </div>
-          <div id="inspector-fault-list" className="flex flex-col gap-1">
+          <div id="inspector-fault-list" className="flex flex-col gap-1.5">
             {selectedSubsystem.faults.map((fault) => (
               <div
                 key={fault.id}
-                className="p-unit-xs bg-surface-container rounded flex items-start gap-unit-xs border border-outline-variant/10"
+                className="p-2.5 bg-[#090e1b]/80 rounded-lg flex items-start gap-2.5 border border-[#3b494b]/20"
               >
-                <span
-                  className={`material-symbols-outlined text-xs mt-0.5 ${
-                    fault.icon === 'warning'
-                      ? 'text-secondary-fixed'
-                      : fault.icon === 'error'
-                      ? 'text-red-400'
-                      : 'text-primary'
-                  }`}
-                >
-                  {fault.icon}
-                </span>
+                {fault.icon === 'warning' ? (
+                  <AlertTriangle className="w-3.5 h-3.5 text-[#f59e0b] shrink-0 mt-0.5" />
+                ) : fault.icon === 'error' ? (
+                  <ShieldAlert className="w-3.5 h-3.5 text-red-400 shrink-0 mt-0.5" />
+                ) : (
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#00f0ff] shrink-0 mt-0.5" />
+                )}
                 <div className="flex flex-col">
-                  <span className="font-label-tactical text-label-tactical text-on-surface">
+                  <span className="font-mono text-xs font-bold text-[#dee2f5]">
                     {fault.title}
                   </span>
-                  <span className="font-label-micro text-label-micro text-outline">
+                  <span className="font-mono text-[10px] text-[#849495] mt-0.5">
                     {fault.desc}
                   </span>
                 </div>
@@ -307,52 +304,54 @@ export const ComponentInspector: React.FC = () => {
         </div>
 
         {/* TACTICAL COMMAND ACTIONS */}
-        <div className="pt-unit-xs flex gap-unit-xs">
+        <div className="pt-1 flex gap-2">
           <button
             onClick={exportSubsystemLogs}
-            className="flex-1 py-unit-xs bg-surface-container-high hover:bg-surface-bright text-primary font-label-tactical text-label-tactical uppercase rounded transition-colors text-center border border-outline-variant/30 cursor-pointer"
+            className="flex-1 py-2 px-3 bg-[#252a38] hover:bg-[#303443] text-[#dee2f5] font-mono text-[10px] font-bold uppercase tracking-wider rounded-lg transition-colors text-center border border-[#3b494b]/40 cursor-pointer flex items-center justify-center gap-1.5"
           >
-            Export Log
+            <Download className="w-3 h-3 text-[#00f0ff]" />
+            <span>EXPORT LOG</span>
           </button>
           <button
             onClick={toggleStressSimulation}
-            className={`flex-1 py-unit-xs font-label-tactical text-label-tactical font-bold uppercase rounded shadow-sm transition-all text-center cursor-pointer ${
+            className={`flex-1 py-2 px-3 font-mono text-[10px] font-bold uppercase tracking-wider rounded-lg shadow-sm transition-all text-center cursor-pointer flex items-center justify-center gap-1.5 ${
               stressSimulationActive
                 ? 'bg-red-500 text-white animate-pulse shadow-[0_0_12px_rgba(239,68,68,0.5)]'
-                : 'bg-primary-container text-on-primary-container hover:opacity-90'
+                : 'bg-[#00f0ff] text-[#00363a] hover:bg-[#7df4ff]'
             }`}
           >
-            {stressSimulationActive ? 'Normalize Test' : 'Simulate Stress'}
+            <Activity className="w-3 h-3" />
+            <span>{stressSimulationActive ? 'NORMALIZE TEST' : 'SIMULATE STRESS'}</span>
           </button>
         </div>
       </div>
 
       {/* ACOUSTIC FREQUENCY SPECTRUM / FFT MINI-DOCK */}
-      <div className="bg-surface-container-low/95 p-unit-md rounded shadow-xl flex flex-col gap-unit-xs border border-outline-variant/20">
+      <div className="bg-[#161b29]/95 p-4 rounded-xl shadow-xl flex flex-col gap-2 border border-[#3b494b]/30">
         <div className="flex items-center justify-between">
-          <span className="font-label-micro text-label-micro text-outline uppercase">
+          <span className="font-mono text-[10px] text-[#849495] uppercase font-semibold">
             FFT VIBRATION SPECTRUM
           </span>
-          <span className="font-label-micro text-label-micro text-primary font-mono">
+          <span className="font-mono text-[10px] text-[#00f0ff] font-bold">
             PEAK: {telemetry.vibrationPeakHz.toFixed(1)} Hz
           </span>
         </div>
-        <div className="h-20 w-full flex items-end justify-between gap-[2px] bg-surface-container p-1 rounded">
+        <div className="h-16 w-full flex items-end justify-between gap-1.5 bg-[#090e1b] p-2 rounded-lg border border-[#3b494b]/20">
           {baseFftBars.map((val, i) => {
             const dynamicHeight = Math.min(100, Math.max(10, Math.round(val * fftMulti + (Math.sin(i + Date.now() * 0.002) * 8))));
             return (
               <div
                 key={i}
-                className="w-full bg-primary rounded-t transition-all duration-300"
+                className="w-full bg-[#00f0ff] rounded-t transition-all duration-300"
                 style={{
                   height: `${dynamicHeight}%`,
-                  opacity: i === 3 ? 1 : 0.2 + (i / 12) * 0.6
+                  opacity: i === 3 ? 1 : 0.25 + (i / 12) * 0.55
                 }}
-              ></div>
+              />
             );
           })}
         </div>
-        <div className="flex justify-between font-label-micro text-label-micro text-outline font-mono">
+        <div className="flex justify-between font-mono text-[9px] text-[#849495] px-1">
           <span>0 Hz (1X)</span>
           <span>125 Hz (Harmonic)</span>
           <span>500 Hz</span>

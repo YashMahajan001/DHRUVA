@@ -102,7 +102,7 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
   return (
     <div
       id="digital-twin-hud-container"
-      className={`relative w-full rounded-xl overflow-hidden bg-[#090e1b] border border-[#3b494b]/40 shadow-2xl flex flex-col justify-between p-4 transition-all duration-300 ${
+      className={`relative w-full rounded-xl overflow-hidden bg-[#090e1b] border border-[#3b494b]/20 shadow-xl flex flex-col justify-between p-6 transition-all duration-300 ${
         isExpanded
           ? 'fixed inset-4 z-50 bg-[#090e1b]/98'
           : 'min-h-[440px] md:min-h-[500px]'
@@ -145,7 +145,7 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
       {/* Top HUD Controls & Tactical Mode Switcher */}
       <div className="relative z-30 flex items-center justify-between gap-2 pb-2">
         {/* Camera Info Callout */}
-        <div className="font-mono text-[9px] text-[#00f0ff]/80 tracking-widest leading-relaxed">
+        <div className="font-mono text-xs text-[#00f0ff]/80 tracking-widest leading-relaxed hidden md:block">
           [HUD.CAM_AFT_MALE_01]
           <br />
           FOV: {mission.fovDegrees || 84}° // FLIR INFRARED ACTIVE
@@ -154,10 +154,10 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
         </div>
 
         {/* Tactical View Mode Switcher & Asset Replacement Tools */}
-        <div className="flex items-center gap-1.5 bg-[#161b29]/90 p-1 rounded border border-[#3b494b]/40 backdrop-blur-md">
+        <div className="flex items-center gap-1.5 bg-[#161b29]/90 p-1.5 rounded border border-[#3b494b]/30 backdrop-blur-md">
           <button
             onClick={() => onChangeViewMode('schematic')}
-            className={`px-2 py-0.5 rounded font-mono text-[10px] uppercase transition-colors flex items-center gap-1 ${
+            className={`px-3 py-1 rounded font-mono text-xs uppercase transition-colors flex items-center gap-1.5 ${
               viewMode === 'schematic'
                 ? 'bg-[#00f0ff] text-[#00363a] font-bold shadow-[0_0_8px_rgba(0,240,255,0.4)]'
                 : 'text-[#b9cacb] hover:text-[#dee2f5]'
@@ -170,7 +170,7 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
 
           <button
             onClick={() => onChangeViewMode('uav_feed')}
-            className={`px-2 py-0.5 rounded font-mono text-[10px] uppercase transition-colors flex items-center gap-1 ${
+            className={`px-3 py-1 rounded font-mono text-xs uppercase transition-colors flex items-center gap-1.5 ${
               viewMode === 'uav_feed'
                 ? 'bg-[#00f0ff] text-[#00363a] font-bold shadow-[0_0_8px_rgba(0,240,255,0.4)]'
                 : 'text-[#b9cacb] hover:text-[#dee2f5]'
@@ -184,7 +184,7 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
           {/* Replace Asset / Custom Video Button */}
           <button
             onClick={onOpenAssetModal}
-            className="px-2 py-0.5 rounded font-mono text-[10px] uppercase text-[#00f0ff] hover:bg-[#252a38] border border-[#00f0ff]/30 transition-colors flex items-center gap-1"
+            className="px-3 py-1 rounded font-mono text-xs uppercase text-[#00f0ff] hover:bg-[#252a38] border border-[#00f0ff]/30 transition-colors flex items-center gap-1.5"
             title="Replace visual with custom UAV video / image asset"
           >
             <Upload className="w-3 h-3" />
@@ -202,7 +202,7 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
         </div>
 
         {/* Top-Right Spatial Callout */}
-        <div className="text-right font-mono text-[9px] text-[#00f0ff]/80 tracking-widest leading-relaxed">
+        <div className="text-right font-mono text-xs text-[#00f0ff]/80 tracking-widest leading-relaxed hidden md:block">
           AZ: {engine.twinState?.azimuth || 114}° // EL: {engine.twinState?.elevation || -12.4}°
           <br />
           SYNC: {engine.twinState?.syntheticTwinId || 'SYNTHETIC TWIN D-04'}
@@ -398,22 +398,22 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
           </svg>
 
           {/* Interactive Floating Sensor Badges */}
-          <div className="absolute top-2 left-4 bg-[#161b29]/90 border border-[#3b494b]/40 px-2.5 py-1 rounded shadow-lg backdrop-blur-md text-left">
-            <span className="font-mono text-[9px] text-[#849495] block">NODE N-1A [CHT]</span>
+          <div className="absolute top-2 left-4 bg-[#161b29]/90 border border-[#3b494b]/30 px-3 py-1.5 rounded shadow-lg backdrop-blur-md text-left">
+            <span className="font-mono text-xs text-[#849495] block">NODE N-1A [CHT]</span>
             <span className="font-mono text-sm font-bold text-[#00f0ff]">
               {Math.round(c1)} °C
             </span>
           </div>
 
-          <div className="absolute top-2 right-4 bg-[#161b29]/90 border border-[#3b494b]/40 px-2.5 py-1 rounded shadow-lg backdrop-blur-md text-right">
-            <span className="font-mono text-[9px] text-[#849495] block">NODE N-2B [EGT]</span>
+          <div className="absolute top-2 right-4 bg-[#161b29]/90 border border-[#3b494b]/30 px-3 py-1.5 rounded shadow-lg backdrop-blur-md text-right">
+            <span className="font-mono text-xs text-[#849495] block">NODE N-2B [EGT]</span>
             <span className="font-mono text-sm font-bold text-[#00f0ff]">
               {Math.round(engine.telemetry?.egt || 690)} °C
             </span>
           </div>
 
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-[#161b29]/90 border border-[#3b494b]/40 px-3 py-1 rounded shadow-lg backdrop-blur-md text-center whitespace-nowrap">
-            <span className="font-mono text-[9px] text-[#849495] block">CRANK TURBINE BEARING VIB</span>
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-[#161b29]/90 border border-[#3b494b]/30 px-4 py-2 rounded shadow-lg backdrop-blur-md text-center whitespace-nowrap">
+            <span className="font-mono text-xs text-[#849495] block">CRANK TURBINE BEARING VIB</span>
             <span
               className={`font-mono text-sm font-bold ${
                 (engine.telemetry?.vibration || 2.1) > 4.0
@@ -436,7 +436,7 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
       </div>
 
       {/* Integrated Live Engine Health circle HUD widget over the twin */}
-      <div className="relative z-20 flex flex-wrap items-center justify-between gap-4 bg-[#252a38]/85 border border-[#3b494b]/40 backdrop-blur-xl p-3.5 rounded-lg shadow-lg">
+      <div className="relative z-20 flex flex-wrap items-center justify-between gap-4 bg-[#252a38]/85 border border-[#3b494b]/20 backdrop-blur-xl p-5 rounded-lg shadow-lg">
         {/* Big Health Dial Indicator */}
         <div className="flex items-center gap-3.5">
           <div className="relative w-20 h-20 flex items-center justify-center">
@@ -465,7 +465,7 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
               >
                 {healthVal}%
               </span>
-              <span className="font-mono text-[8px] text-[#849495] uppercase tracking-wider">
+              <span className="font-mono text-[10px] text-[#849495] uppercase tracking-wider">
                 HEALTH
               </span>
             </div>
@@ -484,10 +484,10 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
                 {engine.status || 'HEALTHY // OPTIMAL'}
               </span>
             </div>
-            <span className="font-mono text-[10px] text-[#b9cacb]">
+            <span className="font-mono text-xs text-[#b9cacb]">
               MODEL: {engine.model || 'LYCOMING O-320 PROPULSION SYSTEM'}
             </span>
-            <span className="font-mono text-[10px] text-[#849495]">
+            <span className="font-mono text-xs text-[#849495]">
               ESTIMATED REMAINING USEFUL LIFE:{' '}
               <span className="text-[#00f0ff] font-bold font-mono">
                 {engine.rul || 184} HRS
@@ -497,8 +497,8 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
         </div>
 
         {/* Live Animated Canvas Waveform (Combustion Oscilloscope) */}
-        <div className="flex-1 min-w-[220px] max-w-sm flex flex-col gap-1">
-          <div className="flex justify-between items-center font-mono text-[10px] text-[#b9cacb]">
+        <div className="flex-1 min-w-[220px] max-w-sm flex flex-col gap-2">
+          <div className="flex justify-between items-center font-mono text-xs text-[#b9cacb]">
             <span>CYLINDER HARMONIC SENSOR [CH-01]</span>
             <span className="text-[#00f0ff] font-bold font-mono">
               {(engine.telemetry?.harmonicFreq || 124.8).toFixed(1)} Hz
@@ -512,8 +512,8 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
       </div>
 
       {/* Bottom HUD Reticle Footer Info */}
-      <div className="relative z-20 flex justify-between items-end pt-2 text-[#849495] font-mono text-[9px]">
-        <div>TARGET LOCK: {mission.targetLock || 'DISENGAGED // RECON MATRIX'}</div>
+      <div className="relative z-20 flex justify-between items-end pt-4 text-[#849495] font-mono text-xs">
+        <div className="hidden sm:block">TARGET LOCK: {mission.targetLock || 'DISENGAGED // RECON MATRIX'}</div>
         <div className="text-[#00f0ff] tracking-wider">
           FRAME REFRESH: {engine.twinState?.frameRefreshHz || 60}Hz // LATENCY: {engine.twinState?.latencyMs || 12}ms
         </div>

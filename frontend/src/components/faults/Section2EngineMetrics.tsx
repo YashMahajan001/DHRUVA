@@ -158,42 +158,42 @@ export const Section2EngineMetrics: React.FC = () => {
 
   return (
     <section id="section-2-engine-metrics" className="w-full">
-      {/* 8 Evenly Sized Compact KPI Cards with Exactly Aligned Heights */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-8 gap-3">
+      {/* 8 Evenly Sized Compact KPI Cards with High Legibility */}
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3">
         {metrics.map(m => {
           const Icon = m.icon;
           return (
             <div
               key={m.id}
               id={m.id}
-              className={`h-[102px] rounded-lg bg-[#161b29] border p-2.5 flex flex-col justify-between transition-all hover:border-[#00f0ff]/50 shadow-md ${m.state.border}`}
+              className={`min-h-[108px] rounded-xl bg-[#161b29]/95 border p-3 flex flex-col justify-between transition-all hover:border-[#00f0ff]/50 shadow-md ${m.state.border}`}
             >
-              {/* Top Row: Label & Micro Badge */}
+              {/* Top Row: Label & Status Badge */}
               <div className="flex items-center justify-between gap-1">
-                <span className="font-mono-telemetry text-[10px] text-[#849495] uppercase font-bold tracking-wider truncate">
+                <span className="font-mono text-[10px] text-slate-400 uppercase font-bold tracking-wider truncate">
                   {m.label}
                 </span>
-                <span className={`text-[8px] font-mono-telemetry font-bold px-1.5 py-0.2 rounded uppercase ${m.state.badge}`}>
+                <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded uppercase tracking-wider ${m.state.badge}`}>
                   {m.state.label}
                 </span>
               </div>
 
               {/* Middle Row: Primary Value & Icon */}
-              <div className="flex items-baseline justify-between gap-1">
-                <span className={`font-mono-telemetry font-bold text-lg sm:text-xl tracking-tight ${m.state.text}`}>
+              <div className="flex items-center justify-between gap-1 my-0.5">
+                <span className={`font-mono font-bold text-lg xl:text-xl tracking-tight ${m.state.text}`}>
                   {m.value}
                 </span>
-                <div className={`p-1 rounded ${m.state.bg} ${m.state.text}`}>
+                <div className={`p-1.5 rounded-lg ${m.state.bg} ${m.state.text}`}>
                   <Icon className="w-3.5 h-3.5" />
                 </div>
               </div>
 
               {/* Bottom Row: Subtext & Micro Delta */}
-              <div className="flex items-center justify-between text-[9px] font-mono-telemetry text-[#849495] pt-1 border-t border-[#3b494b]/30">
-                <span className="truncate max-w-[85px]">{m.subtext}</span>
-                <span className={`font-bold flex items-center ${m.isNegative ? 'text-[#ffb4ab]' : 'text-[#00f0ff]'}`}>
-                  {m.isNegative ? <ArrowUpRight className="w-2.5 h-2.5 inline" /> : <ArrowDownRight className="w-2.5 h-2.5 inline" />}
-                  {m.delta}
+              <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-1.5 border-t border-[#3b494b]/30">
+                <span className="truncate text-slate-400 max-w-[90px]">{m.subtext}</span>
+                <span className={`font-bold flex items-center gap-0.5 ${m.isNegative ? 'text-amber-400' : 'text-[#00f0ff]'}`}>
+                  {m.isNegative ? <ArrowUpRight className="w-3 h-3 inline" /> : <ArrowDownRight className="w-3 h-3 inline" />}
+                  <span>{m.delta}</span>
                 </span>
               </div>
             </div>

@@ -52,6 +52,7 @@ interface DashboardContextType {
   selectedCandidateId: CandidateId;
   activeCandidate: CandidateConfig;
   selectCandidate: (id: CandidateId) => void;
+  customTuneConfig: CandidateConfig;
 
   // Tuning Parameters
   tuning: TuningParameters;
@@ -241,59 +242,179 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     };
   }, [missions, selectedMissionId]);
 
+  // Compute custom tune config from live tuning parameters + telemetry + mission context
+  const customTuneConfig: CandidateConfig = useMemo(() => {
+    const alpha = CANDIDATE_CONFIGS[0]; // baseline for delta comparisons (fuel 32.5, CHT 178, loiter 10.5, RUL 184)
+
+    // 1. CHT Multi-Factor Thermodynamic Model
+    const lambdaDiff = tuning.lambda - 1.00;
+    const lambdaEffect = lambdaDiff >= 0 ? lambdaDiff * 48 : lambdaDiff * 34; // lean of stoich runs hotter
+    const timingEffect = (tuning.timingBtdc - 24.0) * 1.2; // advance adds head heat
+    const rpmEffect = (tuning.rpmCeiling - 2400) * 0.016; // continuous friction heat
+    const cowlEffect = (tuning.cowlShutterCht - 175) * 0.35; // higher threshold = opens later = hotter
+    const mapChtEffect = tuning.mapProfile === 'aggr' ? 3 : tuning.mapProfile === 'eco' ? -2 : 0;
+    const missionTempEffect = currentMission ? (currentMission.ambientTempC - (-34)) * 0.08 : 0;
+
+    const estCht = Math.round(178 + lambdaEffect + timingEffect + rpmEffect + cowlEffect + mapChtEffect + missionTempEffect);
+
+    // 2. Chamber Peak Pressure Model (bars)
+    const mapPressEffect = tuning.mapProfile === 'aggr' ? 2.1 : tuning.mapProfile === 'eco' ? -1.5 : 0;
+    const estPeakPress = parseFloat((72.4 + (tuning.timingBtdc - 24.0) * 1.6 + (tuning.rpmCeiling - 2400) * 0.006 + mapPressEffect).toFixed(1));
+
+    // 3. Detonation / Knock Probability Model
+    const knockBase = (tuning.timingBtdc - 25.5) * 0.07;
+    const knockLambda = tuning.lambda > 1.08 ? (tuning.lambda - 1.08) * 0.8 : 0;
+    const estKnock = Math.max(0, parseFloat((knockBase + knockLambda).toFixed(2)));
+
+    // 4. Fuel Burn Flow (L/h)
+    // Alpha nominal baseline is 32.5 L/h
+    const lambdaFuelEffect = (tuning.lambda - 1.00) * -28.0;
+    const rpmFuelEffect = (tuning.rpmCeiling - 2400) * 0.011;
+    const timingFuelEffect = (tuning.timingBtdc - 24.0) * -0.15;
+    const mapFuelEffect = tuning.mapProfile === 'eco' ? -0.9 : tuning.mapProfile === 'aggr' ? 1.4 : 0;
+    const fuelBurn = parseFloat(Math.max(16.0, 32.5 + lambdaFuelEffect + rpmFuelEffect + timingFuelEffect + mapFuelEffect).toFixed(1));
+
+    // 5. Fuel Delta vs Alpha baseline (32.5 L/h)
+    const fuelDelta = ((alpha.fuelBurnLh - fuelBurn) / alpha.fuelBurnLh * 100);
+    const fuelDeltaText = fuelDelta >= 0 
+      ? `+${fuelDelta.toFixed(1)}% ECON` 
+      : `+${Math.abs(fuelDelta).toFixed(1)}% BURN`;
+
+    // 6. Thermal Delta vs Alpha baseline (178°C)
+    const thermalDelta = estCht - alpha.thermalCht;
+    const thermalDeltaText = thermalDelta >= 0 ? `+${thermalDelta}°C` : `${thermalDelta}°C`;
+
+    // 7. Mechanical Wear Rate & Remaining Useful Life (RUL)
+    const chtPenalty = estCht > 190 ? (estCht - 190) * 3.5 + 8 : estCht > 182 ? (estCht - 182) * 1.2 : 0;
+    const rpmPenalty = tuning.rpmCeiling > 2450 ? (tuning.rpmCeiling - 2450) * 0.03 : 0;
+    const knockPenalty = estKnock > 0 ? estKnock * 35 : (tuning.timingBtdc > 26 ? (tuning.timingBtdc - 26) * 2.5 : 0);
+    const coolingBonus = (estCht < 178 && estCht >= 168) ? (178 - estCht) * 0.8 : 0;
+
+    const estRul = Math.max(40, Math.round(alpha.estRulHours - chtPenalty - rpmPenalty - knockPenalty + coolingBonus));
+    const rulDelta = ((estRul - alpha.estRulHours) / alpha.estRulHours * 100);
+    const rulDeltaText = rulDelta >= 0 ? `+${rulDelta.toFixed(1)}% DELTA` : `${rulDelta.toFixed(1)}% DELTA`;
+
+    let wearRate = 'Nominal (+0.01%/hr)';
+    if (estCht > 190 || estPeakPress > 85.0 || estKnock > 0.15) {
+      wearRate = 'HIGH WEAR // CRIT';
+    } else if (estCht > 185 || tuning.rpmCeiling > 2600) {
+      wearRate = '+0.04%/hr WEAR';
+    } else if (estCht > 180 || tuning.rpmCeiling > 2450) {
+      wearRate = '+0.02%/hr WEAR';
+    } else {
+      wearRate = '+0.01%/hr WEAR';
+    }
+
+    // 8. Normalized Mission Loiter Endurance
+    // Computed proportionally to Alpha's 10.5 hrs baseline capability
+    const loiterHours = parseFloat((alpha.missionLoiterHours * (alpha.fuelBurnLh / fuelBurn)).toFixed(1));
+    const loiterDelta = parseFloat((loiterHours - alpha.missionLoiterHours).toFixed(1));
+    const loiterDeltaText = loiterDelta >= 0 ? `+${loiterDelta.toFixed(1)} HRS` : `${loiterDelta.toFixed(1)} HRS`;
+
+    // 9. Aerodynamic & Structural Safety Envelope Check
+    const isChtSafe = estCht <= 190;
+    const isPressSafe = estPeakPress <= 85.0;
+    const isKnockSafe = estKnock < 0.25;
+    const envelopeValid = isChtSafe && isPressSafe && isKnockSafe;
+
+    let envelopeStatus = 'PASS // 100% VALID';
+    if (!isChtSafe) {
+      envelopeStatus = `FAIL: CHT ${estCht}°C > 190°C`;
+    } else if (!isPressSafe) {
+      envelopeStatus = `FAIL: PRESS ${estPeakPress} > 85.0 BAR`;
+    } else if (!isKnockSafe) {
+      envelopeStatus = `FAIL: DETONATION RISK (${estKnock})`;
+    }
+
+    return {
+      id: 'custom' as const,
+      name: 'Custom Tune',
+      subtitle: 'OPERATOR CALIBRATION BENCH OUTPUT',
+      tag: 'CUSTOM TUNE',
+      fuelBurnLh: fuelBurn,
+      fuelDeltaText,
+      thermalCht: estCht,
+      thermalDeltaText,
+      wearRate,
+      estRulHours: estRul,
+      rulDeltaText,
+      missionLoiterHours: loiterHours,
+      loiterDeltaText,
+      envelopeStatus,
+      envelopeValid,
+      lambda: tuning.lambda,
+      timing: tuning.timingBtdc,
+      rpm: tuning.rpmCeiling,
+      cowlCht: tuning.cowlShutterCht,
+    };
+  }, [tuning, currentMission]);
+
   const activeCandidate = useMemo(() => {
+    if (selectedCandidateId === 'custom') return customTuneConfig;
     return CANDIDATE_CONFIGS.find(c => c.id === selectedCandidateId) || CANDIDATE_CONFIGS[1];
-  }, [selectedCandidateId]);
+  }, [selectedCandidateId, customTuneConfig]);
 
   const unacknowledgedAlertsCount = useMemo(() => {
     return alerts.filter(a => !a.acknowledged).length;
   }, [alerts]);
 
-  // Update tuning handler
+  // Update tuning handler — auto-selects custom candidate seamlessly without toast spam
   const updateTuning = useCallback((params: Partial<TuningParameters>) => {
     setTuning(prev => {
       const next = { ...prev, ...params };
       telemetryService.updateTuning(next);
       return next;
     });
+    setSelectedCandidateId('custom');
   }, []);
 
   // Candidate selection
   const selectCandidate = useCallback((id: CandidateId) => {
     setSelectedCandidateId(id);
+
+    if (id === 'custom') {
+      showToast('Custom Tune Active', 'Configuration reflects current Calibration Bench parameters.');
+      return;
+    }
+
     const candidate = CANDIDATE_CONFIGS.find(c => c.id === id);
     if (!candidate) return;
 
-    // Apply setpoints
-    updateTuning({
+    // Apply setpoints directly without triggering candidate bounce
+    const newTuning: Partial<TuningParameters> = {
       lambda: candidate.lambda,
       timingBtdc: candidate.timing,
       rpmCeiling: candidate.rpm,
       cowlShutterCht: candidate.cowlCht,
+    };
+    setTuning(prev => {
+      const next = { ...prev, ...newTuning };
+      telemetryService.updateTuning(next);
+      return next;
     });
 
     if (id === 'alpha') {
       showToast('Loaded Baseline Factory Calibration', 'All setpoints restored to stock flight clearance manual.');
     } else if (id === 'beta') {
       showToast('Loaded Candidate Beta (AI Recommended)', 'Optimal endurance parameters armed for validation.');
-    } else if (id === 'gamma') {
-      showToast('Warning: High Lean Boundary Violation', 'Candidate Gamma exceeds thermal CHT safe criteria by +18°C.', true);
     }
-  }, [updateTuning, showToast]);
+  }, [showToast]);
 
   // Reset to Baseline
   const resetTuningToBaseline = useCallback(() => {
     setSelectedCandidateId('alpha');
-    updateTuning({
+    const baselineParams: TuningParameters = {
       lambda: 1.00,
       timingBtdc: 24.0,
       rpmCeiling: 2400,
       mapProfile: 'linear',
       cowlShutterCht: 175,
-    });
+    };
+    setTuning(baselineParams);
+    telemetryService.updateTuning(baselineParams);
     setIsProtocolVerified(false);
     showToast('Workspace Reset', 'All tunable registers set to STANAG nominal factory parameters.');
-  }, [updateTuning, showToast]);
+  }, [showToast]);
 
   // Run Simulation
   const runSimulation = useCallback(async () => {
@@ -302,7 +423,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     try {
       const result = await dhruvaaApi.runSimulation(tuning, selectedMissionId);
-      setSyntheticCycles(result.cycles);
+      setSyntheticCycles(prev => prev + result.cycles);
       setIsSimulating(false);
 
       if (result.passedEnvelope) {
@@ -370,6 +491,7 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         telemetry,
         telemetryHistory,
         candidates: CANDIDATE_CONFIGS,
+        customTuneConfig,
         selectedCandidateId,
         activeCandidate,
         selectCandidate,

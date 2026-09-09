@@ -159,9 +159,18 @@ class HealthService:
         )
 
     def get_latest_health(self, db: Session, engine_id: str) -> Optional[TwinState]:
-        return db.query(TwinState).filter(
+        record = db.query(TwinState).filter(
             TwinState.engine_id == engine_id
         ).order_by(TwinState.timestamp.desc(), TwinState.id.desc()).first()
+        if record:
+            return record
+        from backend.app.services.engine_service import engine_service
+        resolved = engine_service.get_by_id(db, engine_id)
+        if resolved and resolved.id != engine_id:
+            return db.query(TwinState).filter(
+                TwinState.engine_id == resolved.id
+            ).order_by(TwinState.timestamp.desc(), TwinState.id.desc()).first()
+        return None
 
     def get_health_history(self, db: Session, engine_id: str, limit: int = 50) -> List[TwinState]:
         return db.query(TwinState).filter(

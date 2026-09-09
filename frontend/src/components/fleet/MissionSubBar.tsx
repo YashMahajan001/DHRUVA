@@ -31,7 +31,7 @@ export const MissionSubBar: React.FC = () => {
                 AIRCRAFT TRACKED
               </span>
               <span className="font-telemetry-num-md text-[15px] text-[#00dbe9] font-mono">
-                0{fleetAggregate.aircraftTracked}{' '}
+                {String(fleetAggregate.aircraftTracked).padStart(2, '0')}{' '}
                 <span className="text-[10px] text-[#849495]">UAVs</span>
               </span>
             </div>
@@ -50,7 +50,7 @@ export const MissionSubBar: React.FC = () => {
                 SORTIES ACTIVE
               </span>
               <span className="font-telemetry-num-md text-[15px] text-[#dbfcff] font-mono">
-                0{fleetAggregate.sortiesActive}{' '}
+                {String(fleetAggregate.sortiesActive).padStart(2, '0')}{' '}
                 <span className="text-[10px] text-[#849495]">AIRBORNE</span>
               </span>
             </div>
@@ -72,7 +72,7 @@ export const MissionSubBar: React.FC = () => {
                 : 'text-[#b9cacb] hover:bg-[#252a38] hover:text-[#dee2f5]'
             }`}
           >
-            All Fleet ({fleet.length || 8})
+            All Fleet ({fleet.length})
           </button>
           <button
             id="filter-btn-healthy"

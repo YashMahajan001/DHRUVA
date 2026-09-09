@@ -1,7 +1,7 @@
 import React from 'react';
 import { Sliders, RotateCw, Activity, ArrowUpRight } from 'lucide-react';
 import { useDashboard } from '../../context/MissionTuningContext';
-import { MapProfile } from '../../types/tuningTypes';
+import { MapProfile, TuningParameters } from '../../types/tuningTypes';
 
 export const CalibrationBench: React.FC = () => {
   const { 
@@ -10,11 +10,18 @@ export const CalibrationBench: React.FC = () => {
     runSimulation, 
     isSimulating,
     currentMission,
-    telemetry 
+    telemetry,
+    selectCandidate,
+    selectedCandidateId,
   } = useDashboard();
 
+  // When user changes a slider or button, update tuning (auto-switches candidate to custom)
+  const handleSliderChange = (params: Partial<TuningParameters>) => {
+    updateTuning(params);
+  };
+
   const handleMapProfile = (profile: MapProfile) => {
-    updateTuning({ mapProfile: profile });
+    handleSliderChange({ mapProfile: profile });
   };
 
   return (
@@ -63,7 +70,7 @@ export const CalibrationBench: React.FC = () => {
                 max="1.15"
                 step="0.01"
                 value={tuning.lambda}
-                onChange={(e) => updateTuning({ lambda: parseFloat(e.target.value) })}
+                onChange={(e) => handleSliderChange({ lambda: parseFloat(e.target.value) })}
                 className="w-full accent-[#00f0ff] bg-[#303443] rounded h-1 cursor-pointer"
               />
               <div className="flex justify-between text-[#849495] font-mono text-[9px] uppercase">
@@ -90,7 +97,7 @@ export const CalibrationBench: React.FC = () => {
                 max="28"
                 step="0.5"
                 value={tuning.timingBtdc}
-                onChange={(e) => updateTuning({ timingBtdc: parseFloat(e.target.value) })}
+                onChange={(e) => handleSliderChange({ timingBtdc: parseFloat(e.target.value) })}
                 className="w-full accent-[#00f0ff] bg-[#303443] rounded h-1 cursor-pointer"
               />
               <div className="flex justify-between text-[#849495] font-mono text-[9px] uppercase">
@@ -117,7 +124,7 @@ export const CalibrationBench: React.FC = () => {
                 max="2800"
                 step="25"
                 value={tuning.rpmCeiling}
-                onChange={(e) => updateTuning({ rpmCeiling: parseInt(e.target.value) })}
+                onChange={(e) => handleSliderChange({ rpmCeiling: parseInt(e.target.value) })}
                 className="w-full accent-[#00f0ff] bg-[#303443] rounded h-1 cursor-pointer"
               />
               <div className="flex justify-between text-[#849495] font-mono text-[9px] uppercase">
@@ -189,7 +196,7 @@ export const CalibrationBench: React.FC = () => {
                 max="195"
                 step="1"
                 value={tuning.cowlShutterCht}
-                onChange={(e) => updateTuning({ cowlShutterCht: parseInt(e.target.value) })}
+                onChange={(e) => handleSliderChange({ cowlShutterCht: parseInt(e.target.value) })}
                 className="w-full accent-[#00f0ff] bg-[#303443] rounded h-1 cursor-pointer"
               />
               <div className="flex justify-between text-[#849495] font-mono text-[9px] uppercase">
@@ -256,13 +263,20 @@ export const CalibrationBench: React.FC = () => {
         </div>
 
         {/* Real-time Dynamic Telemetry Ticker */}
-        <div className="pt-1 flex items-center justify-between text-[10px] font-mono border-t border-[#3b494b]/20">
-          <span className="text-[#849495] flex items-center gap-1">
-            <Activity className="w-3 h-3 text-[#00f0ff] animate-pulse" /> LIVE TELEMETRY:
-          </span>
-          <span className="text-[#00f0ff] font-bold">
-            {telemetry.rpm} RPM | {telemetry.cht}°C | {telemetry.fuelFlow} L/h
-          </span>
+        <div className="pt-1 flex flex-col gap-0.5 text-[10px] font-mono border-t border-[#3b494b]/20">
+          <div className="flex items-center justify-between">
+            <span className="text-[#849495] flex items-center gap-1">
+              <Activity className="w-3 h-3 text-[#00f0ff] animate-pulse" /> LIVE TELEMETRY:
+            </span>
+            <span className="text-[#00f0ff] font-bold">
+              {telemetry.rpm} RPM | {telemetry.cht}°C | {telemetry.fuelFlow} L/h
+            </span>
+          </div>
+          <div className="flex items-center justify-between text-[9px] text-[#849495]">
+            <span>PEAK PRESS: <strong className="text-[#7df4ff]">{Math.max(...telemetry.cylinderPressure).toFixed(1)} bar</strong></span>
+            <span>VIB: <strong className="text-[#dee2f5]">{telemetry.vibration}g</strong></span>
+            <span>EGT: <strong className="text-[#f59e0b]">{telemetry.egt}°C</strong></span>
+          </div>
         </div>
       </div>
     </div>

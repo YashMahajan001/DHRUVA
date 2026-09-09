@@ -50,12 +50,14 @@ export const SafetyEnvelope: React.FC = () => {
     setInputQuestion('');
   };
 
-  // Peak pressure & CHT status calculation
+  // Peak pressure, CHT, vibration & oil safety calculation
   const peakPress = Math.max(...telemetry.cylinderPressure);
   const peakCht = telemetry.cht;
   const isPressSafe = peakPress <= 85.0;
   const isChtSafe = peakCht <= 190.0;
-  const allClear = isPressSafe && isChtSafe && activeCandidate.envelopeValid;
+  const isVibSafe = telemetry.vibration <= 0.35;
+  const isOilSafe = telemetry.oilPressure >= 45.0 && telemetry.oilPressure <= 80.0;
+  const allClear = isPressSafe && isChtSafe && isVibSafe && isOilSafe && activeCandidate.envelopeValid;
 
   return (
     <div id="safety-envelope-column" className="flex flex-col gap-3">
@@ -118,28 +120,28 @@ export const SafetyEnvelope: React.FC = () => {
                 </div>
               </div>
 
-              {/* Item 3: Oil Viscosity */}
+              {/* Item 3: Oil Scavenge & Pressure */}
               <div className="flex items-start gap-2.5 p-2 rounded bg-[#090e1b]/70 border border-[#3b494b]/20">
-                <CheckCircle2 className="w-4 h-4 text-[#00f0ff] mt-0.5 shrink-0" />
+                <CheckCircle2 className={`w-4 h-4 mt-0.5 shrink-0 ${isOilSafe ? 'text-[#00f0ff]' : 'text-[#ef4444]'}`} />
                 <div className="flex-1">
                   <span className="font-mono text-[11px] text-[#dee2f5] block font-medium">
-                    Oil Scavenge Viscosity
+                    Oil Scavenge &amp; Pressure
                   </span>
-                  <span className="font-mono text-[10px] text-[#b9cacb]">
-                    Validated across FL250 cold soaked oil path
+                  <span className={`font-mono text-[10px] ${isOilSafe ? 'text-[#00f0ff]' : 'text-[#ffb4ab]'}`}>
+                    {telemetry.oilPressure} psi / {telemetry.oilTemp}°C (FL250 Validated)
                   </span>
                 </div>
               </div>
 
-              {/* Item 4: Torsional Resonance */}
+              {/* Item 4: Torsional Resonance & Vibration */}
               <div className="flex items-start gap-2.5 p-2 rounded bg-[#090e1b]/70 border border-[#3b494b]/20">
-                <CheckCircle2 className="w-4 h-4 text-[#00f0ff] mt-0.5 shrink-0" />
+                <CheckCircle2 className={`w-4 h-4 mt-0.5 shrink-0 ${isVibSafe ? 'text-[#00f0ff]' : 'text-[#ef4444]'}`} />
                 <div className="flex-1">
                   <span className="font-mono text-[11px] text-[#dee2f5] block font-medium">
-                    Torsional Resonance Index
+                    Torsional Resonance &amp; Vibration
                   </span>
-                  <span className="font-mono text-[10px] text-[#b9cacb]">
-                    Cleared 1st &amp; 2nd order crankshaft nodes
+                  <span className={`font-mono text-[10px] ${isVibSafe ? 'text-[#00f0ff]' : 'text-[#ffb4ab]'}`}>
+                    Harmonic Index {telemetry.vibration}g &lt; 0.35g Limit
                   </span>
                 </div>
               </div>

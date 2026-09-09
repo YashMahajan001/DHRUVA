@@ -241,11 +241,11 @@ export const INITIAL_TELEMETRY: Telemetry = {
   lastUpdated: Date.now(),
 };
 
-// Generate 30 initial points for telemetry charts
-export function generateInitialTelemetryHistory(count = 30): TelemetryPoint[] {
+// Generate 1800 initial points for telemetry charts (1 hour at 2s interval)
+export function generateInitialTelemetryHistory(count = 1800): TelemetryPoint[] {
   const points: TelemetryPoint[] = [];
   const now = Date.now();
-  const stepMs = 5000; // 5 sec intervals
+  const stepMs = 2000; // 2 sec intervals
 
   for (let i = count - 1; i >= 0; i--) {
     const time = now - i * stepMs;

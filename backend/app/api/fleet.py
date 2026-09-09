@@ -150,7 +150,7 @@ def get_fleet_telemetry(engine_id: str, db: Session = Depends(get_db)):
             detail=f"No telemetry data found for engine '{engine_id}'.",
         )
     return FleetTelemetryResponse(
-        engine_id=record.engine_id,
+        engine_id=engine_id,
         timestamp=record.timestamp,
         rpm=record.rpm,
         temperature=record.temperature,
