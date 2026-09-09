@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { EngineProvider, useEngine } from './context/EngineContext';
 import { Sidebar } from './components/common/Sidebar';
 import { Header } from './components/common/Header';
@@ -46,6 +46,13 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       </main>
     </div>
   );
+};
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated } = useAuth();
+  if (!isAuthenticated) {
+    return <Navigate to="/entry" replace />;
+  }
+  return <>{children}</>;
 };
 
 export default function App() {

@@ -25,7 +25,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
     return {
-      isAuthenticated: true, // Default to authenticated for prototype demo ease, but can logout to view Login
+      isAuthenticated: false, // Default to unauthenticated to force Entry -> Login flow
       operatorId: 'CDR. V. SHASTRI [OP-7741]',
       stationRole: 'engineer',
       clearanceLevel: 'LEVEL 2 // CLASSIFIED FLIGHT ENVELOPE',
