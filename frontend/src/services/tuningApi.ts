@@ -18,39 +18,13 @@ class DhruvaaApiService {
   }
 
   public async getEngines(): Promise<EngineInstance[]> {
-    if (API_BASE_URL) {
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/engines`);
-        if (res.ok) {
-          const rawList = await res.json();
-          if (Array.isArray(rawList) && rawList.length > 0) {
-            return rawList.map((raw: any, idx: number) => {
-              const fb = this.engines[idx % this.engines.length] || INITIAL_ENGINES[0];
-              return {
-                ...fb,
-                id: raw.id || fb.id,
-                name: raw.name || fb.name,
-                model: raw.engine_model?.name || raw.name || fb.model,
-                totalFlightHours: raw.total_hours ?? fb.totalFlightHours,
-              };
-            });
-          }
-        }
-      } catch (err) {
-        console.warn('[Dhruvaa API] Remote endpoint unavailable, falling back to cached digital twin state:', err);
-      }
-    }
-    return Promise.resolve([...this.engines]);
-  }
-
-  public async getEngine(id: string): Promise<EngineInstance | null> {
-    if (API_BASE_URL) {
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/engines/${id}`);
-        if (res.ok) {
-          const raw = await res.json();
-          if (raw) {
-            const fb = this.engines.find(e => e.id.toLowerCase() === id.toLowerCase()) || this.engines[0];
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/engines`);
+      if (res.ok) {
+        const rawList = await res.json();
+        if (Array.isArray(rawList) && rawList.length > 0) {
+          return rawList.map((raw: any, idx: number) => {
+            const fb = this.engines[idx % this.engines.length] || INITIAL_ENGINES[0];
             return {
               ...fb,
               id: raw.id || fb.id,
@@ -58,36 +32,56 @@ class DhruvaaApiService {
               model: raw.engine_model?.name || raw.name || fb.model,
               totalFlightHours: raw.total_hours ?? fb.totalFlightHours,
             };
-          }
+          });
         }
-      } catch (err) {
-        console.warn('[Dhruvaa API] Remote endpoint unavailable, using local mock data:', err);
       }
+    } catch (err) {
+      console.warn('[Dhruvaa API] Remote endpoint unavailable, falling back to cached digital twin state:', err);
+    }
+    return Promise.resolve([...this.engines]);
+  }
+
+  public async getEngine(id: string): Promise<EngineInstance | null> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/engines/${id}`);
+      if (res.ok) {
+        const raw = await res.json();
+        if (raw) {
+          const fb = this.engines.find(e => e.id.toLowerCase() === id.toLowerCase()) || this.engines[0];
+          return {
+            ...fb,
+            id: raw.id || fb.id,
+            name: raw.name || fb.name,
+            model: raw.engine_model?.name || raw.name || fb.model,
+            totalFlightHours: raw.total_hours ?? fb.totalFlightHours,
+          };
+        }
+      }
+    } catch (err) {
+      console.warn('[Dhruvaa API] Remote endpoint unavailable, using local mock data:', err);
     }
     const found = this.engines.find(e => e.id.toLowerCase() === id.toLowerCase());
     return Promise.resolve(found ? { ...found } : null);
   }
 
   public async getMissions(): Promise<Mission[]> {
-    if (API_BASE_URL) {
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/missions`);
-        if (res.ok) {
-          const rawList = await res.json();
-          if (Array.isArray(rawList) && rawList.length > 0) {
-            return rawList.map((raw: any, idx: number) => {
-              const fb = this.missions[idx % this.missions.length] || INITIAL_MISSIONS[0];
-              return {
-                ...fb,
-                ...raw,
-                id: raw.id || fb.id,
-              };
-            });
-          }
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/missions`);
+      if (res.ok) {
+        const rawList = await res.json();
+        if (Array.isArray(rawList) && rawList.length > 0) {
+          return rawList.map((raw: any, idx: number) => {
+            const fb = this.missions[idx % this.missions.length] || INITIAL_MISSIONS[0];
+            return {
+              ...fb,
+              ...raw,
+              id: raw.id || fb.id,
+            };
+          });
         }
-      } catch (err) {
-        console.warn('[Dhruvaa API] Remote endpoint unavailable, using local mock data:', err);
       }
+    } catch (err) {
+      console.warn('[Dhruvaa API] Remote endpoint unavailable, using local mock data:', err);
     }
     return Promise.resolve([...this.missions]);
   }
@@ -112,13 +106,11 @@ class DhruvaaApiService {
   }
 
   public async getActiveAlerts(): Promise<FaultEvent[]> {
-    if (API_BASE_URL) {
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/alerts`);
-        if (res.ok) return await res.json();
-      } catch (err) {
-        console.warn('[Dhruvaa API] Remote endpoint unavailable, using local mock data:', err);
-      }
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/alerts`);
+      if (res.ok) return await res.json();
+    } catch (err) {
+      console.warn('[Dhruvaa API] Remote endpoint unavailable, using local mock data:', err);
     }
     return Promise.resolve([...this.alerts]);
   }

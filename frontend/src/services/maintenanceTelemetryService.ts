@@ -543,7 +543,7 @@ export function simulateEngineTelemetryTick(engine: EngineInstance, elapsedSec: 
  */
 export const TelemetryService = {
   isExternalApiConfigured(): boolean {
-    return Boolean(API_BASE_URL && API_BASE_URL.length > 0);
+    return true;
   },
 
   getApiBaseUrl(): string {

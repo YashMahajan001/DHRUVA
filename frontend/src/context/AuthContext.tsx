@@ -25,7 +25,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
     return {
-      isAuthenticated: false, // Default to unauthenticated to force Entry -> Login flow
+      isAuthenticated: true, // Login page removed, default to authenticated operator session
       operatorId: 'CDR. V. SHASTRI [OP-7741]',
       stationRole: 'engineer',
       clearanceLevel: 'LEVEL 2 // CLASSIFIED FLIGHT ENVELOPE',

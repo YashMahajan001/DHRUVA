@@ -19,3 +19,7 @@ data/synthetic/**/*.json
 !data/synthetic/**/.gitkeep
 !data/synthetic/missions/sample_cooling_o320_60s.csv
 !data/synthetic/missions/sample_cooling_o320_60s.json
+*.mp4
+*.avi
+*.mov
+*.mkv

@@ -29,13 +29,13 @@ const FaultDiagnosticsContent: React.FC = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#0e1320] text-[#dee2f5] p-4 sm:p-6 lg:p-8 tactical-grid">
+    <div className="w-full min-h-screen bg-[#0e1320] text-[#dee2f5] p-3.5 sm:p-4 lg:p-5 tactical-grid">
       {/* Subtle Aerospace Glow Elements */}
       <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-[#00f0ff]/5 rounded-full blur-3xl pointer-events-none -z-10" />
       <div className="absolute bottom-10 left-10 w-[500px] h-[500px] bg-[#ffb4ab]/5 rounded-full blur-3xl pointer-events-none -z-10" />
 
       {/* MAIN CONTENT CONTAINER */}
-      <div className="w-full flex flex-col gap-6 max-w-[1440px] mx-auto">
+      <div className="w-full flex flex-col gap-4 sm:gap-4.5 max-w-[1536px] mx-auto">
         {/* Mission Operational Info HUD Bar */}
         <MissionInfoBar />
 

@@ -21,9 +21,9 @@ const FleetMonitoringContent: React.FC = () => {
       <MissionSubBar />
 
       {/* Main Command Tactical Grid */}
-      <div className="p-4 sm:p-6 grid grid-cols-1 xl:grid-cols-12 gap-6">
+      <div className="p-3.5 sm:p-4 lg:p-5 grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4.5">
         {/* LEFT & CENTER: Airspace Spatial Theatre Radar + Matrix Cards + Telemetry Inspector */}
-        <div className="xl:col-span-8 flex flex-col gap-6">
+        <div className="lg:col-span-7 xl:col-span-8 flex flex-col gap-3.5 sm:gap-4.5">
           {/* Spatial Radar Viewport or Digital Twin Visual */}
           {viewMode === 'radar' ? (
             <SpatialRadarView />
@@ -39,7 +39,7 @@ const FleetMonitoringContent: React.FC = () => {
         </div>
 
         {/* RIGHT FLANK: Fleet Aggregate Telemetry & AI Tactical Advisory */}
-        <div className="xl:col-span-4 flex flex-col gap-6">
+        <div className="lg:col-span-5 xl:col-span-4 flex flex-col gap-3.5 sm:gap-4.5">
           {/* Fleet Metrics Aggregate Panel */}
           <FleetMetricsAggregate />
 

@@ -39,7 +39,7 @@ export class DHRUVAA_ApiService {
   }
 
   public isUsingRemoteApi(): boolean {
-    return Boolean(API_BASE_URL && API_BASE_URL.trim().length > 0);
+    return true;
   }
 
   // REST endpoints with fallback to local aerospace simulation

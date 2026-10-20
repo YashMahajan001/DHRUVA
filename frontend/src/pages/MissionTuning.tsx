@@ -19,20 +19,20 @@ const MissionTuningContent: React.FC = () => {
       <StatusBanner />
 
       {/* Main Workspace Canvas */}
-      <div className="p-4 space-y-4 max-w-[1920px] mx-auto w-full">
+      <div className="p-3.5 sm:p-4 lg:p-5 space-y-3.5 sm:space-y-4 max-w-[1920px] mx-auto w-full">
         {/* Top Workspace Header & Flight Profile Console */}
         <FlightProfileConsole />
 
         {/* Primary Three-Tier Tactical Workspace Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-stretch">
-          {/* LEFT PANEL: Parameter Calibration Bench (3 COLS) */}
-          <div className="xl:col-span-3 flex flex-col">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4 items-stretch">
+          {/* LEFT PANEL: Parameter Calibration Bench */}
+          <div className="lg:col-span-5 xl:col-span-3 flex flex-col">
             <CalibrationBench />
           </div>
 
-          {/* CENTER PANEL: Candidate Configuration Comparator (6 COLS) */}
-          <div className="xl:col-span-6 flex flex-col gap-3">
-            <div className="bg-[#161b29]/90 border border-[#3b494b]/30 rounded-xl p-5 shadow-lg flex-1 flex flex-col justify-between">
+          {/* CENTER PANEL: Candidate Configuration Comparator */}
+          <div className="lg:col-span-7 xl:col-span-6 flex flex-col gap-3">
+            <div className="bg-[#161b29]/90 border border-[#3b494b]/30 rounded-xl p-4 sm:p-5 shadow-lg flex-1 flex flex-col justify-between">
               <div className="space-y-4">
                 {/* Candidate Configuration Comparator Cards */}
                 <ConfigurationComparator />
@@ -46,8 +46,8 @@ const MissionTuningContent: React.FC = () => {
             </div>
           </div>
 
-          {/* RIGHT PANEL: Safety Validation Envelope & AI Copilot (3 COLS) */}
-          <div className="xl:col-span-3 flex flex-col">
+          {/* RIGHT PANEL: Safety Validation Envelope & AI Copilot */}
+          <div className="lg:col-span-12 xl:col-span-3 flex flex-col">
             <SafetyEnvelope />
           </div>
         </div>

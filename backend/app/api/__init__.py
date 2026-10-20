@@ -12,6 +12,7 @@ from backend.app.api.alerts import router as alerts_router
 from backend.app.api.subsystems import router as subsystems_router
 from backend.app.api.agent import router as agent_router
 from backend.app.api.fleet import router as fleet_router
+from backend.app.api.auto import router as auto_router
 
 api_router = APIRouter()
 
@@ -30,6 +31,13 @@ api_router.include_router(alerts_router)
 api_router.include_router(subsystems_router)
 api_router.include_router(agent_router)
 api_router.include_router(fleet_router)
+
+# Dhruva Auto Engineering Foundation (Phase 1)
+api_router.include_router(auto_router)
+
+# Dhruva Aero Aircraft Engine Digital Twin & Health Monitoring (Phase 3)
+from backend.app.api.aero import router as aero_router
+api_router.include_router(aero_router)
 
 
 # ── Singular /mission route ────────────────────────────────────────────────────

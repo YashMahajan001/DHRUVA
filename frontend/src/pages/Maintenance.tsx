@@ -22,7 +22,7 @@ const MaintenanceContent: React.FC = () => {
       <CommandHeader />
 
       {/* Main Content Body */}
-      <main className="flex-1 p-4 lg:p-6 flex flex-col gap-6 max-w-[1720px] w-full mx-auto">
+      <main className="flex-1 p-3.5 sm:p-4 lg:p-5 flex flex-col gap-4 sm:gap-4.5 max-w-[1720px] w-full mx-auto">
         {/* Row 1: KPI Cards */}
         <section aria-label="Key Performance Indicators">
           <MetricKpiCards />
@@ -34,9 +34,9 @@ const MaintenanceContent: React.FC = () => {
         </section>
 
         {/* Row 3: Two-Column Aerospace Operational Command Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4.5 items-start">
           {/* Left Column: Priority Queue & Diagnostics */}
-          <div className="xl:col-span-7 flex flex-col gap-6">
+          <div className="lg:col-span-7 flex flex-col gap-3.5 sm:gap-4.5">
             <section aria-label="Maintenance Priority Queue">
               <PriorityQueue />
             </section>
@@ -55,7 +55,7 @@ const MaintenanceContent: React.FC = () => {
           </div>
 
           {/* Right Column: Digital Twin Hologram & AI Diagnostic Advisor */}
-          <div className="xl:col-span-5 flex flex-col gap-6 xl:sticky xl:top-20">
+          <div className="lg:col-span-5 flex flex-col gap-3.5 sm:gap-4.5 lg:sticky lg:top-20">
             <section aria-label="Digital Twin Cutaway Viewport">
               <DigitalTwinCutaway />
             </section>

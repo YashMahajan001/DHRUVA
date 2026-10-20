@@ -1,6 +1,7 @@
 /**
  * DHRUVAA - Central API Transport Layer
- * Provides seamless bridge between local mock simulation and live FastAPI / WebSocket backend
+ * Provides seamless bridge between local digital twin simulation and live FastAPI / WebSocket backend.
+ * Always attempts real live API calls first, falling back safely only on network/endpoint error.
  */
 
 export const API_BASE_URL: string =
@@ -9,9 +10,7 @@ export const API_BASE_URL: string =
     (import.meta.env.VITE_API_BASE_URL as string)) ||
   '';
 
-export const isLiveBackendAvailable = (): boolean => {
-  return Boolean(API_BASE_URL && API_BASE_URL.trim().length > 0);
-};
+export const isLiveBackendAvailable = (): boolean => true;
 
 export class ApiClient {
   private baseUrl: string;
@@ -25,11 +24,10 @@ export class ApiClient {
   }
 
   public isLive(): boolean {
-    return isLiveBackendAvailable();
+    return true;
   }
 
   public async get<T>(endpoint: string, fallbackData: T): Promise<T> {
-    if (!this.isLive()) return fallbackData;
     try {
       const res = await fetch(`${this.baseUrl}${endpoint}`);
       if (res.ok) {
@@ -42,7 +40,6 @@ export class ApiClient {
   }
 
   public async post<T, B = unknown>(endpoint: string, body: B, fallbackData: T): Promise<T> {
-    if (!this.isLive()) return fallbackData;
     try {
       const res = await fetch(`${this.baseUrl}${endpoint}`, {
         method: 'POST',

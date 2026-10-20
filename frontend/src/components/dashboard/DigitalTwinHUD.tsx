@@ -102,10 +102,10 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
   return (
     <div
       id="digital-twin-hud-container"
-      className={`relative w-full rounded-xl overflow-hidden bg-[#090e1b] border border-[#3b494b]/20 shadow-xl flex flex-col justify-between p-6 transition-all duration-300 ${
+      className={`relative w-full rounded-xl overflow-hidden bg-[#090e1b] border border-[#3b494b]/20 shadow-xl flex flex-col justify-between p-4 sm:p-5 transition-all duration-300 ${
         isExpanded
           ? 'fixed inset-4 z-50 bg-[#090e1b]/98'
-          : 'min-h-[440px] md:min-h-[500px]'
+          : 'min-h-[400px] md:min-h-[460px]'
       }`}
     >
       {/* Background Visual Asset Layer (Custom video/image or default Stitch UAV flight backdrop) */}
@@ -436,10 +436,10 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
       </div>
 
       {/* Integrated Live Engine Health circle HUD widget over the twin */}
-      <div className="relative z-20 flex flex-wrap items-center justify-between gap-4 bg-[#252a38]/85 border border-[#3b494b]/20 backdrop-blur-xl p-5 rounded-lg shadow-lg">
+      <div className="relative z-20 flex flex-wrap items-center justify-between gap-3 bg-[#252a38]/85 border border-[#3b494b]/20 backdrop-blur-xl p-3.5 sm:p-4 rounded-lg shadow-lg">
         {/* Big Health Dial Indicator */}
-        <div className="flex items-center gap-3.5">
-          <div className="relative w-20 h-20 flex items-center justify-center">
+        <div className="flex items-center gap-3">
+          <div className="relative w-16 h-16 sm:w-18 sm:h-18 flex items-center justify-center shrink-0">
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
               <path
                 className="text-[#303443]"
@@ -460,12 +460,12 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
               <span
-                className="font-mono text-xl font-bold leading-none"
+                className="font-mono text-lg sm:text-xl font-bold leading-none"
                 style={{ color: engine.statusColor || '#00f0ff' }}
               >
                 {healthVal}%
               </span>
-              <span className="font-mono text-[10px] text-[#849495] uppercase tracking-wider">
+              <span className="font-mono text-[9px] text-[#849495] uppercase tracking-wider">
                 HEALTH
               </span>
             </div>
@@ -474,20 +474,20 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
               <span
-                className="w-2.5 h-2.5 rounded-full"
+                className="w-2 h-2 rounded-full"
                 style={{ backgroundColor: engine.statusColor || '#10b981' }}
               ></span>
               <span
-                className="font-display text-base font-bold uppercase tracking-wide"
+                className="font-display text-sm sm:text-base font-bold uppercase tracking-wide"
                 style={{ color: engine.statusColor === '#ef4444' ? '#ffb4ab' : engine.statusColor === '#f59e0b' ? '#f59e0b' : '#dee2f5' }}
               >
                 {engine.status || 'HEALTHY // OPTIMAL'}
               </span>
             </div>
-            <span className="font-mono text-xs text-[#b9cacb]">
+            <span className="font-mono text-[11px] text-[#b9cacb]">
               MODEL: {engine.model || 'LYCOMING O-320 PROPULSION SYSTEM'}
             </span>
-            <span className="font-mono text-xs text-[#849495]">
+            <span className="font-mono text-[11px] text-[#849495]">
               ESTIMATED REMAINING USEFUL LIFE:{' '}
               <span className="text-[#00f0ff] font-bold font-mono">
                 {engine.rul || 184} HRS
@@ -497,8 +497,8 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
         </div>
 
         {/* Live Animated Canvas Waveform (Combustion Oscilloscope) */}
-        <div className="flex-1 min-w-[220px] max-w-sm flex flex-col gap-2">
-          <div className="flex justify-between items-center font-mono text-xs text-[#b9cacb]">
+        <div className="flex-1 min-w-[200px] max-w-sm flex flex-col gap-1.5">
+          <div className="flex justify-between items-center font-mono text-[11px] text-[#b9cacb]">
             <span>CYLINDER HARMONIC SENSOR [CH-01]</span>
             <span className="text-[#00f0ff] font-bold font-mono">
               {(engine.telemetry?.harmonicFreq || 124.8).toFixed(1)} Hz
@@ -506,13 +506,13 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
           </div>
           <canvas
             ref={oscCanvasRef}
-            className="w-full h-12 bg-[#090e1b] rounded border border-[#3b494b]/30"
+            className="w-full h-10 bg-[#090e1b] rounded border border-[#3b494b]/30"
           ></canvas>
         </div>
       </div>
 
       {/* Bottom HUD Reticle Footer Info */}
-      <div className="relative z-20 flex justify-between items-end pt-4 text-[#849495] font-mono text-xs">
+      <div className="relative z-20 flex justify-between items-end pt-2 text-[#849495] font-mono text-xs">
         <div className="hidden sm:block">TARGET LOCK: {mission.targetLock || 'DISENGAGED // RECON MATRIX'}</div>
         <div className="text-[#00f0ff] tracking-wider">
           FRAME REFRESH: {engine.twinState?.frameRefreshHz || 60}Hz // LATENCY: {engine.twinState?.latencyMs || 12}ms

@@ -43,39 +43,37 @@ class TelemetryService {
 
   // REST API Methods (with mock fallback or remote fetch)
   async getFleet(): Promise<EngineInstance[]> {
-    if (API_BASE_URL) {
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/fleet`);
-        if (res.ok) {
-          const data = await res.json();
-          let rawList: any[] = [];
-          if (Array.isArray(data)) {
-            rawList = data;
-          } else if (data && Array.isArray(data.engines)) {
-            rawList = data.engines;
-          }
-
-          if (rawList.length > 0) {
-            return rawList.map((raw: any, index: number) => {
-              const fallback = this.fleet[index % this.fleet.length] || INITIAL_FLEET[0];
-              const healthScore = typeof raw.health_score === 'number' ? raw.health_score : (raw.healthPercentage ?? fallback.healthPercentage);
-              const healthStatus = raw.health_status || (healthScore > 85 ? 'NOMINAL' : healthScore > 70 ? 'WARNING' : 'CRITICAL');
-              return {
-                ...fallback,
-                id: raw.engine_id || raw.id || fallback.id,
-                callsign: raw.name || fallback.callsign,
-                tacticalName: raw.name || fallback.tacticalName,
-                healthPercentage: healthScore,
-                healthStatus: healthStatus as any,
-                statusLabel: `${healthStatus} // ${Math.round(healthScore)}%`,
-                rulHours: raw.total_hours ? Math.max(0, 1900 - raw.total_hours) : fallback.rulHours,
-              };
-            });
-          }
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/fleet`);
+      if (res.ok) {
+        const data = await res.json();
+        let rawList: any[] = [];
+        if (Array.isArray(data)) {
+          rawList = data;
+        } else if (data && Array.isArray(data.engines)) {
+          rawList = data.engines;
         }
-      } catch (err) {
-        console.warn('Remote API failed, falling back to local simulation:', err);
+
+        if (rawList.length > 0) {
+          return rawList.map((raw: any, index: number) => {
+            const fallback = this.fleet[index % this.fleet.length] || INITIAL_FLEET[0];
+            const healthScore = typeof raw.health_score === 'number' ? raw.health_score : (raw.healthPercentage ?? fallback.healthPercentage);
+            const healthStatus = raw.health_status || (healthScore > 85 ? 'NOMINAL' : healthScore > 70 ? 'WARNING' : 'CRITICAL');
+            return {
+              ...fallback,
+              id: raw.engine_id || raw.id || fallback.id,
+              callsign: raw.name || fallback.callsign,
+              tacticalName: raw.name || fallback.tacticalName,
+              healthPercentage: healthScore,
+              healthStatus: healthStatus as any,
+              statusLabel: `${healthStatus} // ${Math.round(healthScore)}%`,
+              rulHours: raw.total_hours ? Math.max(0, 1900 - raw.total_hours) : fallback.rulHours,
+            };
+          });
+        }
       }
+    } catch (err) {
+      console.warn('Remote API failed, falling back to local simulation:', err);
     }
     return this.fleet;
   }
@@ -86,37 +84,31 @@ class TelemetryService {
   }
 
   async getTelemetry(id: string): Promise<Telemetry> {
-    if (API_BASE_URL) {
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/telemetry/${id}`);
-        if (res.ok) return await res.json();
-      } catch (err) {
-        console.warn('Remote API failed, falling back to local simulation:', err);
-      }
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/telemetry/${id}`);
+      if (res.ok) return await res.json();
+    } catch (err) {
+      console.warn('Remote API failed, falling back to local simulation:', err);
     }
     return this.telemetryData[id] || this.telemetryData['uav-01'];
   }
 
   async getTwinState(id: string): Promise<TwinState> {
-    if (API_BASE_URL) {
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/twin/${id}`);
-        if (res.ok) return await res.json();
-      } catch (err) {
-        console.warn('Remote API failed, falling back to local simulation:', err);
-      }
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/twin/${id}`);
+      if (res.ok) return await res.json();
+    } catch (err) {
+      console.warn('Remote API failed, falling back to local simulation:', err);
     }
     return this.twinStates[id] || this.twinStates['uav-01'];
   }
 
   async getAlerts(): Promise<FaultEvent[]> {
-    if (API_BASE_URL) {
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/alerts`);
-        if (res.ok) return await res.json();
-      } catch (err) {
-        console.warn('Remote API failed, falling back to local simulation:', err);
-      }
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/alerts`);
+      if (res.ok) return await res.json();
+    } catch (err) {
+      console.warn('Remote API failed, falling back to local simulation:', err);
     }
     return this.alerts;
   }

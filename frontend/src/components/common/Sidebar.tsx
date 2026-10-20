@@ -11,6 +11,7 @@ import {
   Terminal,
   Wrench,
   Shield,
+  Layers,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -40,7 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside
       id="aerospace-sidebar"
-      className="fixed left-0 top-0 h-full w-20 bg-[#090e1b]/95 backdrop-blur-xl border-r border-[#3b494b]/15 z-50 flex flex-col justify-between items-center py-4"
+      className="hidden md:flex fixed left-0 top-0 h-full w-20 bg-[#090e1b]/95 backdrop-blur-xl border-r border-[#3b494b]/15 z-50 flex-col justify-between items-center py-4"
     >
       <div className="flex flex-col items-center gap-4 w-full">
         {/* Terminal Emblem Top */}
@@ -89,21 +90,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </nav>
       </div>
 
-      {/* Bottom Controls: Auth gateway button & Telemetry TX/RX Beacon */}
+      {/* Bottom Controls: Switch Engine Platform & Telemetry TX/RX Beacon */}
       <div className="flex flex-col items-center gap-3 w-full px-1">
         <div className="relative group w-full flex justify-center">
           <button
-            id="nav-btn-security"
-            onClick={() => navigate('/login')}
+            id="nav-btn-switch-engine"
+            onClick={() => navigate('/')}
             className={`flex items-center justify-center w-12 h-12 rounded transition-all ${
-              location.pathname === '/login'
+              location.pathname === '/' || location.pathname === '/select-engine' || location.pathname === '/engines'
                 ? 'bg-[#00f0ff] text-[#00363a] shadow-[0_0_8px_rgba(0,240,255,0.2)]'
-                : 'text-[#b9cacb] hover:bg-[#1a1f2d] hover:text-[#dee2f5]'
+                : 'text-[#00f0ff]/80 hover:bg-[#1a1f2d] hover:text-[#00f0ff] border border-[#00f0ff]/20 hover:border-[#00f0ff]/50'
             }`}
-            title="Tactical Security Clearance Gateway"
-            aria-label="Security"
+            title="Switch Engine Platform (Drone / Aeroplane / Automobile)"
+            aria-label="Switch Engine Platform"
           >
-            <Shield className="w-5 h-5" />
+            <Layers className="w-5 h-5" />
           </button>
         </div>
 

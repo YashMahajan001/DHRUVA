@@ -21,23 +21,23 @@ const MissionSimulationContent: React.FC = () => {
       <TopControlStrip />
 
       {/* 3-Column Tactical Command Bench */}
-      <div className="w-full grid grid-cols-1 xl:grid-cols-12 gap-4 p-4 bg-[#0e1320] flex-1">
-        {/* LEFT COLUMN: Bench Config & Fault Injection (3 cols) */}
-        <aside className="xl:col-span-3 flex flex-col gap-4">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4 p-3.5 sm:p-4 bg-[#0e1320] flex-1">
+        {/* LEFT COLUMN: Bench Config & Fault Injection */}
+        <aside className="lg:col-span-4 xl:col-span-3 flex flex-col gap-3.5 sm:gap-4">
           <TwinSpecCard />
           <ProfileCalibrationCard />
           <FaultInjectionCard />
         </aside>
 
-        {/* CENTER COLUMN: Tactical Map & Profile Visualizer (6 cols) */}
-        <section className="xl:col-span-6 flex flex-col gap-4">
+        {/* CENTER COLUMN: Tactical Map & Profile Visualizer */}
+        <section className="lg:col-span-8 xl:col-span-6 flex flex-col gap-3.5 sm:gap-4">
           <TacticalMapCard />
           <TelemetryChartCard />
           <TwinCutawayCard />
         </section>
 
-        {/* RIGHT COLUMN: Telemetry & Predictive Metrics (3 cols) */}
-        <aside className="xl:col-span-3 flex flex-col gap-4">
+        {/* RIGHT COLUMN: Telemetry & Predictive Metrics */}
+        <aside className="lg:col-span-12 xl:col-span-3 grid grid-cols-1 md:grid-cols-3 xl:grid-cols-1 gap-3.5 sm:gap-4">
           <PredictedHealthCard />
           <ThermalMatrixCard />
           <FluidicsCard />

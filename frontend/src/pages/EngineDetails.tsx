@@ -21,7 +21,7 @@ const EngineDetailsInner: React.FC = () => {
   }, [id, selectEngine]);
 
   return (
-    <div className="flex flex-col w-full min-h-screen bg-[#0e1320] text-[#dee2f5] p-4 lg:p-6 space-y-6">
+    <div className="flex flex-col w-full min-h-screen bg-[#0e1320] text-[#dee2f5] p-3.5 sm:p-4 lg:p-5 space-y-4 lg:space-y-4.5">
       {/* Top Telemetry Strip */}
       <TopTelemetryStrip />
 
@@ -29,13 +29,13 @@ const EngineDetailsInner: React.FC = () => {
       <MissionSummaryBar />
 
       {/* Main Interactive 3D Twin Viewport & Component Inspector */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 min-h-[640px]">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-3.5 lg:gap-4.5 min-h-[540px] xl:min-h-[580px]">
         <DigitalTwinViewport />
         <ComponentInspector />
       </div>
 
       {/* Bottom Telemetry Waveform & Anomaly Isolation Matrix */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 pb-8">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-3.5 lg:gap-4.5 pb-6">
         <TelemetryWaveformChart />
         <AnomalyBayesianTree />
       </div>

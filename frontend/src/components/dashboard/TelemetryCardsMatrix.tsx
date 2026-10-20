@@ -31,15 +31,15 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
   return (
     <div className="flex flex-col gap-1.5 w-full">
       {/* 6 Primary Telemetry Metric Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
         {/* Metric 1: RPM */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-4 rounded flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
+        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-3 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
           <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
             <span>CORE SPEED</span>
             <span className="text-[#10b981] font-bold">OK</span>
           </div>
           <div className="my-1">
-            <span className="font-mono text-xl md:text-2xl font-bold text-[#dee2f5] block tracking-tight">
+            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] block tracking-tight">
               {rpm}
             </span>
             <span className="font-mono text-[9px] text-[#849495]">RPM (LIMIT 2700)</span>
@@ -54,7 +54,7 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
 
         {/* Metric 2: CHT */}
         <div
-          className={`p-4 rounded flex flex-col justify-between border transition-colors ${
+          className={`p-3 rounded-lg flex flex-col justify-between border transition-colors ${
             cht > 210
               ? 'bg-[#93000a]/20 border-[#ffb4ab]/40'
               : 'bg-[#252a38]/70 border-[#3b494b]/20 hover:border-[#00f0ff]/40'
@@ -66,7 +66,7 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
           </div>
           <div className="my-1">
             <span
-              className={`font-mono text-xl md:text-2xl font-bold block tracking-tight ${
+              className={`font-mono text-lg md:text-xl font-bold block tracking-tight ${
                 cht > 210 ? 'text-[#ffdad6]' : 'text-[#dee2f5]'
               }`}
             >
@@ -85,13 +85,13 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
         </div>
 
         {/* Metric 3: EGT */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-4 rounded flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
+        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-3 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
           <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
             <span>EGT EXHAUST</span>
             <span className="text-[#10b981] font-bold">NOM</span>
           </div>
           <div className="my-1">
-            <span className="font-mono text-xl md:text-2xl font-bold text-[#dee2f5] block tracking-tight">
+            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] block tracking-tight">
               {egt}
             </span>
             <span className="font-mono text-[9px] text-[#849495]">°C (WARN &gt;760)</span>
@@ -105,13 +105,13 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
         </div>
 
         {/* Metric 4: Oil Pressure */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-4 rounded flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
+        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-3 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
           <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
             <span>OIL PRESSURE</span>
             <span className={`font-bold ${oilStatus.color}`}>{oilStatus.text}</span>
           </div>
           <div className="my-1">
-            <span className="font-mono text-xl md:text-2xl font-bold text-[#dee2f5] block tracking-tight">
+            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] block tracking-tight">
               {oilPress}
             </span>
             <span className="font-mono text-[9px] text-[#849495]">PSI (60-90 NOM)</span>
@@ -127,13 +127,13 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
         </div>
 
         {/* Metric 5: Fuel Flow */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-4 rounded flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
+        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-3 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
           <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
             <span>FUEL CONSUMPTION</span>
             <span className="text-[#10b981] font-bold">OPT</span>
           </div>
           <div className="my-1">
-            <span className="font-mono text-xl md:text-2xl font-bold text-[#dee2f5] block tracking-tight">
+            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] block tracking-tight">
               {fuelFlow}
             </span>
             <span className="font-mono text-[9px] text-[#849495]">L/HR (CRUISE)</span>
@@ -148,7 +148,7 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
 
         {/* Metric 6: Vibration RMS */}
         <div
-          className={`p-4 rounded flex flex-col justify-between border transition-colors ${
+          className={`p-3 rounded-lg flex flex-col justify-between border transition-colors ${
             parseFloat(vib) > 4.0
               ? 'bg-[#93000a]/20 border-[#ffb4ab]/40'
               : parseFloat(vib) > 3.0
@@ -162,7 +162,7 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
           </div>
           <div className="my-1">
             <span
-              className={`font-mono text-xl md:text-2xl font-bold block tracking-tight ${
+              className={`font-mono text-lg md:text-xl font-bold block tracking-tight ${
                 parseFloat(vib) > 4.0 ? 'text-[#ffb4ab]' : parseFloat(vib) > 3.0 ? 'text-[#f59e0b]' : 'text-[#dee2f5]'
               }`}
             >
