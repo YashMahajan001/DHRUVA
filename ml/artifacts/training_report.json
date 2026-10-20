@@ -1,9 +1,10 @@
 {
-  "source": "data/ synthetic CSVs",
-  "rows": 7200,
+  "source": "ml fixtures + data/ synthetic CSVs",
+  "rows": 940,
+  "dataset_csv": "data\\processed\\trained_dataset.csv",
   "models": {
-    "anomaly": "D:\\DHRUVA-1\\ml\\artifacts\\anomaly_isolation_forest.joblib",
-    "fault": "D:\\DHRUVA-1\\ml\\artifacts\\fault_classifier.joblib",
-    "rul": "D:\\DHRUVA-1\\ml\\artifacts\\rul_model.joblib"
+    "anomaly": "C:\\Users\\niran\\OneDrive\\Desktop\\DHRUVA\\ml\\artifacts\\anomaly_isolation_forest.joblib",
+    "fault": "C:\\Users\\niran\\OneDrive\\Desktop\\DHRUVA\\ml\\artifacts\\fault_classifier.joblib",
+    "rul": "C:\\Users\\niran\\OneDrive\\Desktop\\DHRUVA\\ml\\artifacts\\rul_model.joblib"
   }
 }

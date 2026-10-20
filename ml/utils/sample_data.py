@@ -21,6 +21,7 @@ from ml.schema import TELEMETRY_CSV_COLUMNS, TWIN_CSV_COLUMNS
 TELEMETRY_CSV_GLOBS = (
     "data/synthetic/faults/**/*.csv",
     "data/synthetic/healthy/**/*.csv",
+    "data/synthetic/missions/**/*.csv",
 )
 
 # Explicitly excluded — the Digital Twin CSV has a different schema.

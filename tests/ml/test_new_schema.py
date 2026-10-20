@@ -202,8 +202,8 @@ def test_load_twin_dataset_returns_twin_schema():
 # ---------------------------------------------------------------------------
 
 def _has_csvs() -> bool:
-    from pathlib import Path
-    return any(Path("data").glob("synthetic/**/*.csv"))
+    data = load_external_dataset()
+    return data is not None and not data.empty
 
 
 def test_run_inference_on_csv_telemetry():

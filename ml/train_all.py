@@ -12,6 +12,8 @@ import logging
 from pathlib import Path
 from typing import Any
 
+import pandas as pd
+
 from ml.anomaly_detection.train import train_anomaly_detector
 from ml.config import ANOMALY_MODEL_PATH, FAULT_MODEL_PATH, RUL_MODEL_PATH
 from ml.data_processing.cleaning import clean_telemetry
@@ -63,13 +65,19 @@ def _fit_and_report(
 
 
 def main() -> None:
-    dataset = load_external_dataset()
-    source = "data/ synthetic CSVs"
-    if dataset is None or dataset.empty:
-        dataset = make_training_dataset()
+    external = load_external_dataset()
+    fixtures = make_training_dataset()
+    if external is not None and not external.empty:
+        dataset = pd.concat([fixtures, external], ignore_index=True)
+        source = "ml fixtures + data/ synthetic CSVs"
+    else:
+        dataset = fixtures
         source = "ml fixtures"
     print(f"Training on {len(dataset)} rows from {source}")
-    print(f"Dataset columns: {len(dataset.columns)}")
+    processed_csv_path = Path("data/processed/trained_dataset.csv")
+    processed_csv_path.parent.mkdir(parents=True, exist_ok=True)
+    dataset.to_csv(processed_csv_path, index=False)
+    print(f"Saved complete training dataset ({len(dataset)} rows) to {processed_csv_path}")
 
     print("anomaly ->", train_anomaly_detector(dataset))
     print("fault    ->", train_fault_classifier(dataset))
@@ -83,6 +91,7 @@ def main() -> None:
     summary = {
         "source": source,
         "rows": int(len(dataset)),
+        "dataset_csv": str(processed_csv_path),
         "models": {
             "anomaly": str(ANOMALY_MODEL_PATH),
             "fault": str(FAULT_MODEL_PATH),
