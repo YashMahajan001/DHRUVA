@@ -90,6 +90,7 @@ def clean_telemetry(df: pd.DataFrame) -> pd.DataFrame:
     cleaned = _drop_duplicates(cleaned)
     cleaned = _flag_range_violations(cleaned)
     cleaned = _handle_missing(cleaned, original_sensors=original_sensors)
+    cleaned = _detect_frozen_sensors(cleaned)
 
     if "fault_label" in cleaned.columns:
         cleaned["fault_label"] = (
@@ -105,11 +106,14 @@ def clean_telemetry(df: pd.DataFrame) -> pd.DataFrame:
         cleaned["mission_phase"] = cleaned["mission_phase"].astype("string").fillna("unknown").str.lower()
     if "sensor_status" in cleaned.columns:
         cleaned["sensor_status"] = cleaned["sensor_status"].astype("string").fillna("OK").str.upper()
+        if cleaned.get("sensor_frozen_flag", False).any():
+            cleaned.loc[cleaned["sensor_frozen_flag"], "sensor_status"] = "FROZEN_SENSOR"
 
     cleaned["data_valid"] = ~(
         cleaned.get("timestamp_invalid", False)
         | cleaned.get("range_invalid", False)
         | (cleaned.get("missing_sensor_count", 0) > 3)
+        | cleaned.get("sensor_frozen_flag", False)
     )
     return cleaned.reset_index(drop=True)
 
@@ -192,4 +196,40 @@ def _drop_duplicates(df: pd.DataFrame) -> pd.DataFrame:
     dropped = before - len(df)
     if dropped:
         logger.info("Dropped %s duplicate telemetry rows", dropped)
+    return df
+
+
+def _detect_frozen_sensors(df: pd.DataFrame, min_samples: int = 5) -> pd.DataFrame:
+    """Detect constant/frozen telemetry signals over consecutive samples when engine is active."""
+    df["sensor_frozen_flag"] = False
+    if len(df) < min_samples:
+        return df
+
+    sensor_candidates = ["rpm", "cht", "egt", "oil_pressure", "fuel_flow"]
+    frozen_detected = pd.Series(False, index=df.index)
+
+    group_keys = [c for c in ("engine_id",) if c in df.columns]
+    for col in sensor_candidates:
+        if col not in df.columns:
+            continue
+        try:
+            if group_keys:
+                stds = df.groupby(group_keys)[col].transform(
+                    lambda s: s.rolling(min_samples, min_periods=min_samples).std()
+                )
+                means = df.groupby(group_keys)[col].transform(
+                    lambda s: s.rolling(min_samples, min_periods=min_samples).mean()
+                )
+            else:
+                stds = df[col].rolling(min_samples, min_periods=min_samples).std()
+                means = df[col].rolling(min_samples, min_periods=min_samples).mean()
+
+            is_frozen = (stds < 1e-6) & (means > 1.0) & stds.notna()
+            if is_frozen.any():
+                frozen_detected = frozen_detected | is_frozen
+                df.loc[is_frozen, f"{col}_frozen"] = True
+        except Exception:
+            continue
+
+    df["sensor_frozen_flag"] = frozen_detected
     return df

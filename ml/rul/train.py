@@ -98,8 +98,10 @@ def predict_rul(
         return {
             "hours": round(hours, 2),
             "uncertainty_hours": _uncertainty(health_index, anomaly_score),
+            "uncertainty_type": "heuristic_spread",
             "method": "gradient_boosting",
             "note": "Prototype/demo estimate, not a certified aviation RUL.",
+            "interval_coverage_note": "Uncertainty spread reflects degradation level; not an independently calibrated 95% conformal prediction interval.",
             "status_hint": health_from_index(health_index),
         }
     if health_index is None:

@@ -355,3 +355,29 @@ def test_gate_g_nan_parameter_rejection(client):
     }
     resp = client.post("/api/v1/aero/simulate/step", json=bad_payload)
     assert resp.status_code == 422
+
+
+# =============================================================================
+# GATE H: CONSTRAINT-AWARE SAFETY PRECEDENCE & PERSISTENCE
+# =============================================================================
+
+def test_gate_h_constraint_aware_health_precedence(client):
+    """Verify critical physical breaches (temperature exceedance) cannot be masked by ML scores."""
+    critical_payload = {
+        "engine_id": "ENG001",
+        "timestamp": "2026-10-21T00:30:00Z",
+        "rpm": 2450.0,
+        "temperature": 275.0,  # exceeds max 240.0C limit
+        "oil_pressure": 45.0,
+        "fuel_flow": 14.0,
+        "altitude": 3000.0,
+        "throttle": 60.0
+    }
+    resp = client.post("/api/v1/telemetry", json=critical_payload)
+    assert resp.status_code == 201
+    eval_res = resp.json()["twin_evaluation"]
+    # Physical safety constraint MUST cap the health score to <= 45 and force CRITICAL status
+    assert eval_res["health_score"] <= 45.0
+    assert eval_res["health_status"] == "CRITICAL"
+    assert eval_res["anomaly"] is True
+

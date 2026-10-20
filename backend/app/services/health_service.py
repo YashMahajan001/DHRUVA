@@ -99,15 +99,23 @@ class HealthService:
             ml_health = float(ml_result["health_index"])
             health_score = (health_score * 0.5) + (ml_health * 0.5)
 
+        # Enforce critical constraint precedence: physical safety envelope violations cannot be masked by ML
+        has_critical_physics_breach = (
+            telemetry_record.temperature > max_temp
+            or telemetry_record.oil_pressure < 20.0
+            or telemetry_record.rpm > (max_rpm * 1.05)
+        )
+        if has_critical_physics_breach:
+            health_score = min(health_score, 45.0)
 
         health_score = max(5.0, min(100.0, health_score))
 
-        if health_score >= 80.0:
-            health_status = "GOOD"
-        elif health_score >= 50.0:
-            health_status = "WARNING"
-        else:
+        if has_critical_physics_breach or health_score < 50.0:
             health_status = "CRITICAL"
+        elif health_score >= 80.0:
+            health_status = "GOOD"
+        else:
+            health_status = "WARNING"
 
         # Calculate estimated RUL (Remaining Useful Life in hours)
         base_tbo = 2000.0 # Time Between Overhauls

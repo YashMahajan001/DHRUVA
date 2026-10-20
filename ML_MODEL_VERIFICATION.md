@@ -138,12 +138,15 @@ ml/artifacts/
   ```python
   {
       "hours": float,                   # Predicted remaining useful life in hours
-      "uncertainty_hours": float        # 95% confidence standard deviation bounds
+      "uncertainty_hours": float,       # Degradation-based heuristic spread (empirically covers 53.2% of test points)
+      "uncertainty_type": str,          # "heuristic_spread"
+      "interval_coverage_note": str     # Explicit disclaimer that spread is not a calibrated 95% conformal interval
   }
   ```
 - **Runtime Verification Evidence**:
-  - Nominal baseline: `{'hours': 88.32, 'uncertainty_hours': 6.96}`.
-  - Active cooling degradation sequence: `{'hours': 69.99, 'uncertainty_hours': 8.91}` (RUL monotonically decreases by 18.33 operating hours under confirmed thermal degradation).
+  - Nominal baseline: `{'hours': 88.32, 'uncertainty_hours': 6.96, 'uncertainty_type': 'heuristic_spread'}`.
+  - Active cooling degradation sequence: `{'hours': 69.99, 'uncertainty_hours': 8.91}` (RUL monotonically decreases under confirmed thermal degradation).
+  - Measured Evaluation: MAE = 7.71 hours, RMSE = 11.03 hours on leakage-safe temporal test split. Empirical interval coverage = 53.2% with mean interval half-width of 5.75 hours.
 
 ---
 

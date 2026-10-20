@@ -60,3 +60,17 @@ def test_duplicate_rows_dropped():
 def test_telemetry_to_frame_accepts_dict():
     frame = telemetry_to_frame({"rpm": 1000})
     assert len(frame) == 1
+
+
+def test_frozen_sensor_detection():
+    # 6 samples where cht is frozen at 180.0 while engine is running at 2400 rpm
+    rows = [
+        {"timestamp": f"2026-01-01T00:00:0{i}Z", "engine_id": "E1", "rpm": 2400.0 + i, "cht": 180.0, "egt": 720.0 + i}
+        for i in range(6)
+    ]
+    df = pd.DataFrame(rows)
+    cleaned = clean_telemetry(df)
+    assert "sensor_frozen_flag" in cleaned.columns
+    assert cleaned["sensor_frozen_flag"].iloc[-1]
+    assert cleaned["sensor_status"].iloc[-1] == "FROZEN_SENSOR"
+    assert not cleaned["data_valid"].iloc[-1]
