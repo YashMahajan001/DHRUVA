@@ -53,7 +53,7 @@ export const AeroAnalysisView: React.FC = () => {
             </span>
           </div>
           <p className="text-xs font-mono text-[#94a3b8] mt-1">
-            Component-level health monitoring, physical failure attribution, and interactive 3D inspection.
+            Component health, failure attribution & 3D inspection.
           </p>
         </div>
 
@@ -83,7 +83,7 @@ export const AeroAnalysisView: React.FC = () => {
           {/* Quick Subsystem Selector Buttons */}
           <div className="p-3.5 rounded-2xl bg-[#0b1329]/80 backdrop-blur-xl border border-[#38bdf8]/20 shadow-xl">
             <span className="text-[10px] font-mono text-[#94a3b8] uppercase tracking-wider block mb-2">
-              SELECT COMPONENT TO ISOLATE & INSPECT:
+              Inspect Component:
             </span>
             <div className="flex flex-wrap gap-1.5 font-mono text-xs">
               {components.map((comp) => {

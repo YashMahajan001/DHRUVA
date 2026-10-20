@@ -73,7 +73,7 @@ export const SafetyEnvelope: React.FC = () => {
               <div className="flex items-center gap-2">
                 <ShieldCheck className="text-[#00f0ff] w-4 h-4" />
                 <h3 className="font-['Space_Grotesk'] text-base font-bold text-[#dee2f5] uppercase tracking-wider">
-                  SAFETY ENVELOPE
+                  Safety Envelope
                 </h3>
               </div>
               <span 
@@ -84,12 +84,12 @@ export const SafetyEnvelope: React.FC = () => {
                     : 'bg-[#93000a] text-[#ffdad6] border border-[#ffb4ab]/40 animate-pulse'
                 }`}
               >
-                {allClear ? 'ALL CLEAR' : 'LIMIT EXCEEDED'}
+                {allClear ? 'Clear' : 'Exceeded'}
               </span>
             </div>
 
-            <p className="text-xs text-[#b9cacb] mb-3 leading-relaxed">
-              Dynamic aerospace bounds enforced by Digital Twin physics engine.
+            <p className="text-xs text-[#b9cacb] mb-3">
+              Physics-enforced operational bounds.
             </p>
 
             {/* Checklist Items */}
@@ -157,11 +157,11 @@ export const SafetyEnvelope: React.FC = () => {
               <div className="flex items-center gap-1.5">
                 <Brain className="text-[#00f0ff] w-4 h-4" />
                 <span className="font-mono text-[11px] text-[#00f0ff] uppercase font-bold tracking-wider">
-                  AI RATIONALE MATRIX // COPILOT
+                  AI Rationale · Copilot
                 </span>
               </div>
               <span className="font-mono text-[9px] text-[#849495] font-semibold">
-                CONF: {copilotResult.confidenceScore}%
+                Conf: {copilotResult.confidenceScore}%
               </span>
             </div>
 
@@ -220,7 +220,7 @@ export const SafetyEnvelope: React.FC = () => {
                 type="text"
                 value={inputQuestion}
                 onChange={(e) => setInputQuestion(e.target.value)}
-                placeholder="Query AI engineering copilot..."
+                placeholder="Query engineering copilot..."
                 className="flex-1 bg-[#161b29] text-[#dee2f5] font-mono text-[11px] px-2.5 py-1.5 rounded border border-[#3b494b]/40 focus:outline-none focus:border-[#00f0ff] placeholder-[#849495]"
               />
               <button
@@ -268,24 +268,24 @@ export const SafetyEnvelope: React.FC = () => {
             type="button"
             onClick={confirmAndExportToFadec}
             disabled={!isProtocolVerified || isExportingFadec}
-            className={`w-full py-3 px-4 rounded-lg font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${
+            className={`w-full py-2.5 px-4 rounded-lg font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${
               isProtocolVerified && !isExportingFadec
                 ? 'bg-[#00f0ff] text-[#00363a] shadow-[0_0_16px_rgba(0,240,255,0.4)] hover:bg-[#7df4ff] cursor-pointer'
                 : 'bg-[#303443] text-[#849495] cursor-not-allowed border border-[#3b494b]/30'
             }`}
           >
             <PlaneTakeoff className={`w-4 h-4 ${isExportingFadec ? 'animate-bounce' : ''}`} />
-            {isExportingFadec ? 'EXPORTING TO FADEC BUFFER...' : 'CONFIRM & EXPORT TO FADEC'}
+            {isExportingFadec ? 'Exporting...' : 'Confirm & Export to FADEC'}
           </button>
 
           <button
             id="resetBaselineBtn"
             type="button"
             onClick={resetTuningToBaseline}
-            className="w-full py-2 px-3 rounded font-mono text-[10px] text-[#b9cacb] hover:text-[#dee2f5] hover:bg-[#252a38] transition-colors uppercase tracking-wider flex items-center justify-center gap-1.5 border border-transparent hover:border-[#3b494b]/30 cursor-pointer"
+            className="w-full py-1.5 px-3 rounded font-mono text-[10px] text-[#b9cacb] hover:text-[#dee2f5] hover:bg-[#252a38] transition-colors uppercase tracking-wider flex items-center justify-center gap-1.5 border border-transparent hover:border-[#3b494b]/30 cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            RESET WORKSPACE TO BASELINE
+            Reset to Baseline
           </button>
         </div>
       </div>
@@ -293,16 +293,16 @@ export const SafetyEnvelope: React.FC = () => {
       {/* OPERATOR SESSION CONSOLE STATUS */}
       <div 
         id="operator-session-console"
-        className="bg-[#161b29]/90 border border-[#3b494b]/30 rounded-xl p-3.5 flex items-center justify-between text-[#b9cacb] select-none shadow-md"
+        className="bg-[#161b29]/90 border border-[#3b494b]/30 rounded-xl p-3 flex items-center justify-between text-[#b9cacb] select-none shadow-md"
       >
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-[#00f0ff] animate-ping" />
           <span className="font-mono text-[9px] uppercase tracking-wider text-[#dee2f5] font-medium">
-            SESSION: L2-OPS-410 // UTC 14:28:09
+            Session L2-OPS-410 · UTC 14:28:09
           </span>
         </div>
         <span className="font-mono text-[10px] text-[#00f0ff] uppercase font-bold tracking-widest">
-          TX READY
+          TX Ready
         </span>
       </div>
     </div>

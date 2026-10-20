@@ -25,18 +25,18 @@ export const ConfigurationComparator: React.FC = () => {
           <div className="flex items-center gap-2">
             <ArrowLeftRight className="text-[#00f0ff] w-4 h-4" />
             <h2 className="font-['Space_Grotesk'] text-base font-bold text-[#dee2f5] uppercase tracking-wider">
-              CANDIDATE CONFIGURATION COMPARATOR
+              Candidate Configuration Comparator
             </h2>
           </div>
-          <p className="text-xs text-[#b9cacb] leading-relaxed">
-            Multi-objective Pareto comparison across brake specific fuel consumption, thermal envelope, and airframe persistence.
+          <p className="text-xs text-[#b9cacb]">
+            Pareto comparison · Fuel burn, thermal envelope & persistence.
           </p>
         </div>
         <span 
           id="synthetic-cycles-counter"
           className="font-mono text-[9px] text-[#849495] uppercase self-start sm:self-center font-semibold bg-[#090e1b]/60 px-2 py-0.5 rounded border border-[#3b494b]/20"
         >
-          SYNTHETIC RUNS: {syntheticCycles.toLocaleString()} CYCLES
+          {syntheticCycles.toLocaleString()} cycles
         </span>
       </div>
 
@@ -85,18 +85,18 @@ export const ConfigurationComparator: React.FC = () => {
               </div>
               <div className="bg-[#161b29]/70 p-1.5 rounded flex justify-between items-center text-xs">
                 <span className="font-mono text-[9px] text-[#849495] uppercase">Est. RUL</span>
-                <span className="font-mono font-bold text-[#dee2f5]">{alpha.estRulHours} hrs</span>
+                <span className="font-mono font-bold text-[#dee2f5]">{alpha.estRulHours} h</span>
               </div>
               <div className="bg-[#161b29]/70 p-1.5 rounded flex justify-between items-center text-xs">
                 <span className="font-mono text-[9px] text-[#849495] uppercase">Mission Loiter</span>
-                <span className="font-mono font-bold text-[#dee2f5]">{alpha.missionLoiterHours} hrs</span>
+                <span className="font-mono font-bold text-[#dee2f5]">{alpha.missionLoiterHours} h</span>
               </div>
             </div>
           </div>
 
           <div className="mt-4 pt-2 border-t border-[#3b494b]/20">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-mono text-[9px] text-[#849495] uppercase">ENVELOPE STATUS</span>
+              <span className="font-mono text-[9px] text-[#849495] uppercase">Envelope</span>
               <span className="font-mono text-[9px] px-1.5 py-0.5 rounded bg-[#1a1f2d] text-[#7df4ff] uppercase font-bold">
                 {alpha.envelopeStatus}
               </span>
@@ -114,7 +114,7 @@ export const ConfigurationComparator: React.FC = () => {
                   : 'bg-[#252a38] hover:bg-[#303443] text-[#dee2f5]'
               }`}
             >
-              {selectedCandidateId === 'alpha' ? 'ACTIVE CANDIDATE' : 'SELECT FOR REVIEW'}
+              {selectedCandidateId === 'alpha' ? 'Active' : 'Select'}
             </button>
           </div>
         </div>
@@ -130,10 +130,10 @@ export const ConfigurationComparator: React.FC = () => {
           {/* AI Recommended Tactical Floating Pill */}
           <div 
             id="ai-recommended-badge"
-            className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#00f0ff] text-[#00363a] font-mono text-[9px] font-bold px-3 py-0.5 rounded-full shadow-[0_0_12px_rgba(0,240,255,0.5)] tracking-widest uppercase flex items-center gap-1 select-none"
+            className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#00f0ff] text-[#00363a] font-mono text-[9px] font-bold px-3 py-0.5 rounded-full shadow-[0_0_12px_rgba(0,240,255,0.5)] tracking-wider uppercase flex items-center gap-1 select-none"
           >
             <Sparkles className="w-3 h-3 text-[#00363a]" />
-            AI RECOMMENDED // ADVISORY
+            AI Recommended
           </div>
 
           <div className="space-y-2 pt-2">
@@ -179,7 +179,7 @@ export const ConfigurationComparator: React.FC = () => {
               <div className="bg-[#090e1b]/80 p-1.5 rounded flex justify-between items-center text-xs">
                 <span className="font-mono text-[9px] text-[#849495] uppercase">Est. RUL</span>
                 <div className="text-right">
-                  <span className="font-mono font-bold text-[#dee2f5]">{beta.estRulHours} hrs</span>
+                  <span className="font-mono font-bold text-[#dee2f5]">{beta.estRulHours} h</span>
                   <span className="font-mono text-[9px] text-[#849495] block">{beta.rulDeltaText}</span>
                 </div>
               </div>
@@ -187,7 +187,7 @@ export const ConfigurationComparator: React.FC = () => {
               <div className="bg-[#090e1b]/80 p-1.5 rounded flex justify-between items-center text-xs">
                 <span className="font-mono text-[9px] text-[#849495] uppercase">Mission Loiter</span>
                 <div className="text-right">
-                  <span className="font-mono font-bold text-[#00f0ff]">{beta.missionLoiterHours} hrs</span>
+                  <span className="font-mono font-bold text-[#00f0ff]">{beta.missionLoiterHours} h</span>
                   <span className="font-mono text-[9px] text-[#00f0ff] block font-semibold">{beta.loiterDeltaText}</span>
                 </div>
               </div>
@@ -196,7 +196,7 @@ export const ConfigurationComparator: React.FC = () => {
 
           <div className="mt-4 pt-2 border-t border-[#3b494b]/20">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-mono text-[9px] text-[#849495] uppercase">SAFETY ENVELOPE</span>
+              <span className="font-mono text-[9px] text-[#849495] uppercase">Envelope</span>
               <span className="font-mono text-[9px] px-1.5 py-0.5 rounded bg-[#00f0ff]/20 text-[#00f0ff] font-bold uppercase">
                 {beta.envelopeStatus}
               </span>
@@ -214,7 +214,7 @@ export const ConfigurationComparator: React.FC = () => {
                   : 'bg-[#252a38] hover:bg-[#303443] text-[#dee2f5]'
               }`}
             >
-              {selectedCandidateId === 'beta' ? 'ACTIVE CANDIDATE SELECTED' : 'SELECT FOR REVIEW'}
+              {selectedCandidateId === 'beta' ? 'Active' : 'Select'}
             </button>
           </div>
         </div>
@@ -231,10 +231,10 @@ export const ConfigurationComparator: React.FC = () => {
         >
           {/* Custom Tune Floating Pill */}
           <div 
-            className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#a78bfa] text-[#1a0a3e] font-mono text-[9px] font-bold px-3 py-0.5 rounded-full shadow-[0_0_10px_rgba(167,139,250,0.4)] tracking-widest uppercase flex items-center gap-1 select-none"
+            className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#a78bfa] text-[#1a0a3e] font-mono text-[9px] font-bold px-3 py-0.5 rounded-full shadow-[0_0_10px_rgba(167,139,250,0.4)] tracking-wider uppercase flex items-center gap-1 select-none"
           >
             <Wrench className="w-3 h-3" />
-            CALIBRATION BENCH OUTPUT
+            Calibration Bench
           </div>
 
           <div className="space-y-2 pt-2">
@@ -295,7 +295,7 @@ export const ConfigurationComparator: React.FC = () => {
               <div className="bg-[#090e1b]/80 p-1.5 rounded flex justify-between items-center text-xs">
                 <span className="font-mono text-[9px] text-[#849495] uppercase">Est. RUL</span>
                 <div className="text-right">
-                  <span className="font-mono font-bold text-[#dee2f5]">{custom.estRulHours} hrs</span>
+                  <span className="font-mono font-bold text-[#dee2f5]">{custom.estRulHours} h</span>
                   <span className={`font-mono text-[9px] block ${
                     custom.estRulHours >= alpha.estRulHours ? 'text-[#10b981]' : 'text-[#f59e0b]'
                   }`}>{custom.rulDeltaText}</span>
@@ -305,7 +305,7 @@ export const ConfigurationComparator: React.FC = () => {
               <div className="bg-[#090e1b]/80 p-1.5 rounded flex justify-between items-center text-xs">
                 <span className="font-mono text-[9px] text-[#849495] uppercase">Mission Loiter</span>
                 <div className="text-right">
-                  <span className="font-mono font-bold text-[#c4b5fd]">{custom.missionLoiterHours} hrs</span>
+                  <span className="font-mono font-bold text-[#c4b5fd]">{custom.missionLoiterHours} h</span>
                   <span className={`font-mono text-[9px] block font-semibold ${
                     custom.missionLoiterHours >= alpha.missionLoiterHours ? 'text-[#10b981]' : 'text-[#f59e0b]'
                   }`}>{custom.loiterDeltaText}</span>
@@ -316,7 +316,7 @@ export const ConfigurationComparator: React.FC = () => {
 
           <div className="mt-4 pt-2 border-t border-[#3b494b]/20">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-mono text-[9px] text-[#849495] uppercase">SAFETY ENVELOPE</span>
+              <span className="font-mono text-[9px] text-[#849495] uppercase">Envelope</span>
               <span className={`font-mono text-[9px] px-1.5 py-0.5 rounded font-bold uppercase ${
                 custom.envelopeValid
                   ? 'bg-[#10b981]/20 text-[#10b981]'
@@ -338,7 +338,7 @@ export const ConfigurationComparator: React.FC = () => {
                   : 'bg-[#252a38] hover:bg-[#303443] text-[#dee2f5]'
               }`}
             >
-              {selectedCandidateId === 'custom' ? 'CUSTOM TUNE ACTIVE' : 'SELECT CUSTOM TUNE'}
+              {selectedCandidateId === 'custom' ? 'Active' : 'Select'}
             </button>
           </div>
         </div>

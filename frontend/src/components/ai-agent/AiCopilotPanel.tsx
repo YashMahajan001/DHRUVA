@@ -31,47 +31,51 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
     setInputValue('');
   };
 
+  const [expandedDetails, setExpandedDetails] = useState<Record<string, boolean>>({});
+
+  const toggleDetails = (id: string) => {
+    setExpandedDetails(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
   const sampleQueries = [
-    'Why is Engine 02 showing a warning?',
-    'Simulate this engine for high-altitude ISR',
-    'What maintenance is recommended?',
-    'Compare Engine 01 vs Engine 04',
-    'Why is engine health decreasing?',
-    'What is the current RUL?',
-    'Why is CHT increasing?',
-    'Are there any active faults?',
+    'Engine 02 warning?',
+    'High-altitude ISR sim',
+    'Maintenance plan',
+    'Compare ENG-01 vs 04',
   ];
 
   return (
     <div
       id="ai-copilot-panel"
-      className="bg-[#161b29] border border-[#3b494b]/20 p-5 rounded-xl shadow-lg flex flex-col h-[480px]"
+      className="bg-[#161b29] border border-[#3b494b]/20 p-4 rounded-xl shadow-lg flex flex-col h-[480px]"
     >
       {/* Copilot Header */}
-      <div className="flex items-start justify-between pb-3 mb-3 bg-[#1a1f2d]/60 border border-[#3b494b]/15 p-3 rounded">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded bg-[#00f0ff] text-[#00363a] flex items-center justify-center font-bold shadow-[0_0_10px_rgba(0,240,255,0.4)]">
-            <Bot className="w-5 h-5" />
+      <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-[#3b494b]/20">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded bg-[#00f0ff] text-[#00363a] flex items-center justify-center font-bold shadow-[0_0_10px_rgba(0,240,255,0.4)]">
+            <Bot className="w-4 h-4" />
           </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-display text-base font-bold text-[#dee2f5] leading-tight">
-                AI COPILOT
-              </span>
-              <span className="font-mono text-[10px] bg-[#00f0ff]/15 text-[#00f0ff] border border-[#00f0ff]/30 px-2 py-0.5 rounded font-semibold">
-                DHRUVAA LLM-AERO v3
-              </span>
-            </div>
-            <p className="font-mono text-xs text-[#849495] tracking-tight">
-              Autonomous Aero-Engine Diagnostics &amp; Advisory Agent
-            </p>
+          <div className="flex items-center gap-2">
+            <span className="font-display text-sm font-bold text-[#dee2f5] tracking-wide">
+              AI COPILOT
+            </span>
+            <span className="font-mono text-[9px] bg-[#00f0ff]/15 text-[#00f0ff] border border-[#00f0ff]/30 px-1.5 py-0.2 rounded font-semibold">
+              LLM-AERO v3
+            </span>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Advisory Notice */}
+          <span className="font-mono text-[10px] text-[#849495] flex items-center gap-1 bg-[#090e1b] px-2 py-0.5 rounded border border-[#3b494b]/20">
+            <span className="text-[#00dbe9] font-semibold">Advisory mode</span>
+            <span>·</span>
+            <span>Read-only</span>
+          </span>
+
           <button
             onClick={onClearChat}
-            className="text-[#849495] hover:text-[#00f0ff] p-1 rounded hover:bg-[#252a38] transition-colors"
+            className="text-[#849495] hover:text-[#00f0ff] p-1 rounded hover:bg-[#252a38] transition-colors cursor-pointer"
             title="Reset Chat Session"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -80,22 +84,14 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
         </div>
       </div>
 
-      {/* Advisory Notice */}
-      <div className="bg-[#090e1b]/70 border border-[#3b494b]/15 px-3 py-1.5 rounded text-xs font-mono text-[#849495] flex items-center justify-between mb-3">
-        <span className="text-[#00dbe9] flex items-center gap-1">
-          <Sparkles className="w-3 h-3" /> ADVISORY ENGINE
-        </span>
-        <span>READ-ONLY TELEMETRY LINK // NO DIRECT FADEC OVERRIDE</span>
-      </div>
-
       {/* Quick Prompts Chips Bar */}
-      <div className="flex flex-wrap gap-1 mb-2 max-h-16 overflow-y-auto pr-1">
+      <div className="flex flex-wrap gap-1 mb-2.5">
         {sampleQueries.map((query, idx) => (
           <button
             key={idx}
             onClick={() => onSendQuery(query)}
             disabled={isThinking}
-            className="font-mono text-xs px-3 py-1.5 rounded bg-[#252a38] hover:bg-[#00f0ff] hover:text-[#00363a] text-[#b9cacb] border border-[#3b494b]/20 transition-colors text-left disabled:opacity-50"
+            className="font-mono text-[11px] px-2.5 py-1 rounded bg-[#252a38] hover:bg-[#00f0ff] hover:text-[#00363a] text-[#b9cacb] border border-[#3b494b]/30 transition-colors text-left disabled:opacity-50 cursor-pointer"
           >
             {query}
           </button>
@@ -105,7 +101,7 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
       {/* Live Agentic Chat Window with Tool Outputs */}
       <div
         ref={chatScrollRef}
-        className="flex-1 overflow-y-auto pr-2 flex flex-col gap-4 font-sans text-xs"
+        className="flex-1 overflow-y-auto pr-1 flex flex-col gap-3 font-sans text-xs"
       >
         {messages.map((msg) => {
           const isUser = msg.sender === 'USER';
@@ -116,67 +112,78 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
                 key={msg.id}
                 className="bg-[#00f0ff]/15 border border-[#00f0ff]/30 self-end p-2.5 rounded-lg max-w-[85%] text-right"
               >
-                <span className="font-mono text-xs text-[#00dbe9] block font-semibold">
-                  CDR. V. SHASTRI
+                <span className="font-mono text-[10px] text-[#00dbe9] block font-semibold">
+                  OPERATOR
                 </span>
-                <span className="text-[#dbfcff] font-medium">{msg.text}</span>
+                <span className="text-[#dbfcff] font-medium text-xs">{msg.text}</span>
               </div>
             );
           }
 
+          const isExpanded = !!expandedDetails[msg.id];
+
           return (
             <div
               key={msg.id}
-              className="bg-[#252a38]/85 border border-[#3b494b]/20 p-4 rounded-lg flex flex-col gap-2 shadow-md"
+              className="bg-[#252a38]/85 border border-[#3b494b]/20 p-3 rounded-lg flex flex-col gap-2 shadow-sm"
             >
-              <div className="flex items-center justify-between text-[#849495] font-mono text-xs">
-                <span className="text-[#00f0ff] font-bold tracking-wider">
-                  {msg.reasoningChain ? 'AGENTIC REASONING CHAIN' : 'SYSTEM OBSERVATION'}
+              <div className="flex items-center justify-between text-[#849495] font-mono text-[10px]">
+                <span className="text-[#00f0ff] font-semibold tracking-wider">
+                  {msg.reasoningChain ? 'DIAGNOSTIC SYNTHESIS' : 'SYSTEM OBSERVATION'}
                 </span>
-                <span className="text-[#00dbe9]">{msg.timestamp}</span>
+                <span className="text-[#849495]">{msg.timestamp}</span>
               </div>
 
-              {msg.text && <p className="text-[#dee2f5] leading-relaxed">{msg.text}</p>}
+              {msg.text && <p className="text-[#dee2f5] leading-relaxed text-xs">{msg.text}</p>}
 
               {msg.reasoningChain && (
-                <div className="text-xs leading-relaxed flex flex-col gap-2 pt-2">
-                  <div>
-                    <span className="text-[#849495] uppercase text-[10px] font-mono block font-bold">
-                      1. Observation
-                    </span>
-                    <p className="text-[#dee2f5]">{msg.reasoningChain.observation}</p>
+                <div className="text-xs flex flex-col gap-1.5 pt-1">
+                  {/* Finding */}
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-[#849495] font-mono font-bold text-[10px] uppercase shrink-0">Finding:</span>
+                    <span className="text-[#dee2f5]">{msg.reasoningChain.observation}</span>
                   </div>
 
-                  <div>
-                    <span className="text-[#849495] uppercase text-[10px] font-mono block font-bold">
-                      2. Evidence &amp; Telemetry Correlation
-                    </span>
-                    <p className="text-[#7df4ff] font-mono text-xs bg-[#090e1b] p-2 rounded border border-[#3b494b]/20">
+                  {/* Evidence */}
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-[#849495] font-mono font-bold text-[10px] uppercase shrink-0">Evidence:</span>
+                    <span className="text-[#7df4ff] font-mono text-[11px] bg-[#090e1b] px-1.5 py-0.5 rounded border border-[#3b494b]/30">
                       {msg.reasoningChain.evidence}
-                    </p>
+                    </span>
                   </div>
 
-                  <div>
-                    <span className="text-[#849495] uppercase text-[10px] font-mono block font-bold">
-                      3. Digital Twin Analysis
-                    </span>
-                    <p className="text-[#dee2f5]">{msg.reasoningChain.analysis}</p>
-                  </div>
-
-                  <div>
-                    <span className="text-[#849495] uppercase text-[10px] font-mono block font-bold">
-                      4. Action Recommendation
-                    </span>
-                    <p className="text-[#10b981] font-semibold">
+                  {/* Action */}
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-[#10b981] font-mono font-bold text-[10px] uppercase shrink-0">Action:</span>
+                    <span className="text-[#dee2f5] font-medium">
                       {msg.reasoningChain.recommendation}
-                    </p>
+                    </span>
                   </div>
 
-                  <div className="mt-2 pt-3 border-t border-[#3b494b]/20 flex justify-between items-center text-[10px] text-[#849495] font-mono">
-                    <span className="text-[#00f0ff] font-semibold">
-                      {msg.reasoningChain.envelope}
-                    </span>
-                    <span className="text-[#10b981] font-bold">CLEARANCE: GRANTED</span>
+                  {/* On-demand Details */}
+                  {isExpanded && (
+                    <div className="mt-1.5 pt-2 border-t border-[#3b494b]/30 flex flex-col gap-1.5 bg-[#090e1b]/60 p-2 rounded">
+                      <div>
+                        <span className="text-[#849495] font-mono text-[9px] uppercase font-bold block">
+                          Twin Analysis:
+                        </span>
+                        <p className="text-[#b9cacb] text-[11px] mt-0.5">{msg.reasoningChain.analysis}</p>
+                      </div>
+                      <div className="flex items-center justify-between text-[10px] font-mono text-[#849495] pt-1">
+                        <span>Envelope: <strong className="text-[#00f0ff]">{msg.reasoningChain.envelope}</strong></span>
+                        <span className="text-[#10b981] font-semibold">Clearance: Granted</span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="pt-1 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() => toggleDetails(msg.id)}
+                      className="font-mono text-[10px] text-[#00f0ff] hover:underline cursor-pointer"
+                    >
+                      {isExpanded ? 'Hide details ▴' : 'Show details ▾'}
+                    </button>
                   </div>
                 </div>
               )}

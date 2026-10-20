@@ -33,16 +33,16 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
       {/* 6 Primary Telemetry Metric Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
         {/* Metric 1: RPM */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-3 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
-          <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
-            <span>CORE SPEED</span>
-            <span className="text-[#10b981] font-bold">OK</span>
+        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-2.5 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
+          <div className="flex justify-between items-center text-[#849495] font-mono text-[11px]">
+            <span>RPM</span>
+            <span className="text-[#10b981] font-bold text-[10px]">Normal</span>
           </div>
           <div className="my-1">
-            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] block tracking-tight">
-              {rpm}
+            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] tracking-tight">
+              {rpm.toLocaleString()}
             </span>
-            <span className="font-mono text-[9px] text-[#849495]">RPM (LIMIT 2700)</span>
+            <span className="font-mono text-[10px] text-[#849495] ml-1">rpm</span>
           </div>
           <div className="w-full bg-[#303443] h-1 rounded overflow-hidden">
             <div
@@ -54,25 +54,25 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
 
         {/* Metric 2: CHT */}
         <div
-          className={`p-3 rounded-lg flex flex-col justify-between border transition-colors ${
+          className={`p-2.5 rounded-lg flex flex-col justify-between border transition-colors ${
             cht > 210
               ? 'bg-[#93000a]/20 border-[#ffb4ab]/40'
               : 'bg-[#252a38]/70 border-[#3b494b]/20 hover:border-[#00f0ff]/40'
           }`}
         >
-          <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
-            <span>CHT MAX</span>
-            <span className={`font-bold ${chtStatus.color}`}>{chtStatus.text}</span>
+          <div className="flex justify-between items-center text-[#849495] font-mono text-[11px]">
+            <span>CHT</span>
+            <span className={`font-bold text-[10px] ${chtStatus.color}`}>{chtStatus.text}</span>
           </div>
           <div className="my-1">
             <span
-              className={`font-mono text-lg md:text-xl font-bold block tracking-tight ${
+              className={`font-mono text-lg md:text-xl font-bold tracking-tight ${
                 cht > 210 ? 'text-[#ffdad6]' : 'text-[#dee2f5]'
               }`}
             >
               {cht}
             </span>
-            <span className="font-mono text-[9px] text-[#849495]">°C (WARN &gt;210)</span>
+            <span className="font-mono text-[10px] text-[#849495] ml-1">°C</span>
           </div>
           <div className="w-full bg-[#303443] h-1 rounded overflow-hidden">
             <div
@@ -85,16 +85,16 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
         </div>
 
         {/* Metric 3: EGT */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-3 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
-          <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
-            <span>EGT EXHAUST</span>
-            <span className="text-[#10b981] font-bold">NOM</span>
+        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-2.5 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
+          <div className="flex justify-between items-center text-[#849495] font-mono text-[11px]">
+            <span>EGT</span>
+            <span className="text-[#10b981] font-bold text-[10px]">Normal</span>
           </div>
           <div className="my-1">
-            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] block tracking-tight">
+            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] tracking-tight">
               {egt}
             </span>
-            <span className="font-mono text-[9px] text-[#849495]">°C (WARN &gt;760)</span>
+            <span className="font-mono text-[10px] text-[#849495] ml-1">°C</span>
           </div>
           <div className="w-full bg-[#303443] h-1 rounded overflow-hidden">
             <div
@@ -105,16 +105,16 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
         </div>
 
         {/* Metric 4: Oil Pressure */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-3 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
-          <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
-            <span>OIL PRESSURE</span>
-            <span className={`font-bold ${oilStatus.color}`}>{oilStatus.text}</span>
+        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-2.5 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
+          <div className="flex justify-between items-center text-[#849495] font-mono text-[11px]">
+            <span>Oil pressure</span>
+            <span className={`font-bold text-[10px] ${oilStatus.color}`}>{oilStatus.text}</span>
           </div>
           <div className="my-1">
-            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] block tracking-tight">
+            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] tracking-tight">
               {oilPress}
             </span>
-            <span className="font-mono text-[9px] text-[#849495]">PSI (60-90 NOM)</span>
+            <span className="font-mono text-[10px] text-[#849495] ml-1">psi</span>
           </div>
           <div className="w-full bg-[#303443] h-1 rounded overflow-hidden">
             <div
@@ -127,16 +127,16 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
         </div>
 
         {/* Metric 5: Fuel Flow */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-3 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
-          <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
-            <span>FUEL CONSUMPTION</span>
-            <span className="text-[#10b981] font-bold">OPT</span>
+        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-2.5 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
+          <div className="flex justify-between items-center text-[#849495] font-mono text-[11px]">
+            <span>Fuel flow</span>
+            <span className="text-[#10b981] font-bold text-[10px]">Optimal</span>
           </div>
           <div className="my-1">
-            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] block tracking-tight">
+            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] tracking-tight">
               {fuelFlow}
             </span>
-            <span className="font-mono text-[9px] text-[#849495]">L/HR (CRUISE)</span>
+            <span className="font-mono text-[10px] text-[#849495] ml-1">L/h</span>
           </div>
           <div className="w-full bg-[#303443] h-1 rounded overflow-hidden">
             <div
@@ -148,7 +148,7 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
 
         {/* Metric 6: Vibration RMS */}
         <div
-          className={`p-3 rounded-lg flex flex-col justify-between border transition-colors ${
+          className={`p-2.5 rounded-lg flex flex-col justify-between border transition-colors ${
             parseFloat(vib) > 4.0
               ? 'bg-[#93000a]/20 border-[#ffb4ab]/40'
               : parseFloat(vib) > 3.0
@@ -156,19 +156,19 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
               : 'bg-[#252a38]/70 border-[#3b494b]/20 hover:border-[#00f0ff]/40'
           }`}
         >
-          <div className="flex justify-between items-center text-[#849495] font-mono text-xs">
-            <span>VIBRATION RMS</span>
-            <span className={`font-bold ${vibStatus.color}`}>{vibStatus.text}</span>
+          <div className="flex justify-between items-center text-[#849495] font-mono text-[11px]">
+            <span>Vibration</span>
+            <span className={`font-bold text-[10px] ${vibStatus.color}`}>{vibStatus.text}</span>
           </div>
           <div className="my-1">
             <span
-              className={`font-mono text-lg md:text-xl font-bold block tracking-tight ${
+              className={`font-mono text-lg md:text-xl font-bold tracking-tight ${
                 parseFloat(vib) > 4.0 ? 'text-[#ffb4ab]' : parseFloat(vib) > 3.0 ? 'text-[#f59e0b]' : 'text-[#dee2f5]'
               }`}
             >
               {vib}
             </span>
-            <span className="font-mono text-[9px] text-[#849495]">MM/S (&lt;4.5 MAX)</span>
+            <span className="font-mono text-[10px] text-[#849495] ml-1">mm/s</span>
           </div>
           <div className="w-full bg-[#303443] h-1 rounded overflow-hidden">
             <div
@@ -185,9 +185,9 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
       <div className="flex justify-end">
         <button
           onClick={() => setShowSecondary((prev) => !prev)}
-          className="text-[#849495] hover:text-[#00f0ff] font-mono text-xs flex items-center gap-1.5 uppercase tracking-wider py-1 px-3 mt-2 rounded hover:bg-[#161b29] transition-colors"
+          className="text-[#849495] hover:text-[#00f0ff] font-mono text-[11px] flex items-center gap-1.5 py-1 px-2.5 mt-1 rounded hover:bg-[#161b29] transition-colors cursor-pointer"
         >
-          <span>{showSecondary ? 'Hide Secondary Telemetry' : 'Auxiliary Bus & Electrical Telemetry (Battery, Alternator, Oil Temp)'}</span>
+          <span>{showSecondary ? 'Hide auxiliary' : 'Auxiliary bus (4)'}</span>
           {showSecondary ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
         </button>
       </div>
@@ -197,57 +197,58 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 border-t border-[#3b494b]/20">
           <div className="bg-[#161b29]/90 border border-[#3b494b]/30 p-2 rounded flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Thermometer className="w-4 h-4 text-[#f59e0b]" />
+              <Thermometer className="w-3.5 h-3.5 text-[#f59e0b]" />
               <div>
-                <span className="text-[9px] font-mono text-[#849495] block">OIL TEMPERATURE</span>
-                <span className="font-mono text-sm font-bold text-[#dee2f5]">
+                <span className="text-[9px] font-mono text-[#849495] block">Oil temp</span>
+                <span className="font-mono text-xs font-bold text-[#dee2f5]">
                   {telemetry?.oilTemperature || 85} °C
                 </span>
               </div>
             </div>
-            <span className="font-mono text-[9px] text-[#10b981]">NOMINAL</span>
+            <span className="font-mono text-[9px] text-[#10b981]">Normal</span>
           </div>
 
           <div className="bg-[#161b29]/90 border border-[#3b494b]/30 p-2 rounded flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Battery className="w-4 h-4 text-[#00f0ff]" />
+              <Battery className="w-3.5 h-3.5 text-[#00f0ff]" />
               <div>
-                <span className="text-[9px] font-mono text-[#849495] block">BATTERY BUS</span>
-                <span className="font-mono text-sm font-bold text-[#dee2f5]">
+                <span className="text-[9px] font-mono text-[#849495] block">Battery</span>
+                <span className="font-mono text-xs font-bold text-[#dee2f5]">
                   {(telemetry?.batteryVoltage || 28.2).toFixed(1)} V
                 </span>
               </div>
             </div>
-            <span className="font-mono text-[9px] text-[#10b981]">28V DUAL</span>
+            <span className="font-mono text-[9px] text-[#10b981]">28 V</span>
           </div>
 
           <div className="bg-[#161b29]/90 border border-[#3b494b]/30 p-2 rounded flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-[#00dbe9]" />
+              <Zap className="w-3.5 h-3.5 text-[#00dbe9]" />
               <div>
-                <span className="text-[9px] font-mono text-[#849495] block">ALTERNATOR LOAD</span>
-                <span className="font-mono text-sm font-bold text-[#dee2f5]">
+                <span className="text-[9px] font-mono text-[#849495] block">Alternator</span>
+                <span className="font-mono text-xs font-bold text-[#dee2f5]">
                   {(telemetry?.alternatorCurrent || 44.5).toFixed(1)} A
                 </span>
               </div>
             </div>
-            <span className="font-mono text-[9px] text-[#10b981]">LOAD 62%</span>
+            <span className="font-mono text-[9px] text-[#10b981]">62% load</span>
           </div>
 
           <div className="bg-[#161b29]/90 border border-[#3b494b]/30 p-2 rounded flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Gauge className="w-4 h-4 text-[#7df4ff]" />
+              <Gauge className="w-3.5 h-3.5 text-[#7df4ff]" />
               <div>
-                <span className="text-[9px] font-mono text-[#849495] block">MANIFOLD PRESSURE</span>
-                <span className="font-mono text-sm font-bold text-[#dee2f5]">
-                  {(telemetry?.manifoldPressure || 24.8).toFixed(1)} in-Hg
+                <span className="text-[9px] font-mono text-[#849495] block">Manifold</span>
+                <span className="font-mono text-xs font-bold text-[#dee2f5]">
+                  {(telemetry?.manifoldPressure || 24.8).toFixed(1)} inHg
                 </span>
               </div>
             </div>
-            <span className="font-mono text-[9px] text-[#10b981]">BOOST OK</span>
+            <span className="font-mono text-[9px] text-[#10b981]">Normal</span>
           </div>
         </div>
       )}
     </div>
   );
 };
+

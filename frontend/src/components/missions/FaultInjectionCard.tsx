@@ -18,7 +18,7 @@ export const FaultInjectionCard: React.FC = () => {
         <div className="flex items-center gap-1.5">
           <AlertTriangle className="w-4 h-4 text-[#ef4444]" />
           <span className="font-mono-telemetry text-xs text-[#dee2f5] uppercase tracking-wider font-semibold">
-            SYNTHETIC FAULT INJECTION
+            Fault Injection
           </span>
         </div>
         <span className={`font-mono-telemetry text-[9px] px-1.5 py-0.5 rounded uppercase font-bold ${
@@ -26,12 +26,12 @@ export const FaultInjectionCard: React.FC = () => {
             ? 'bg-[#93000a] text-[#ffdad6] border border-[#ffb4ab]/40 animate-pulse' 
             : 'bg-[#1a1f2d] text-[#849495]'
         }`}>
-          {activeFaultsCount > 0 ? `${activeFaultsCount} ACTIVE LAB` : 'LAB STANDBY'}
+          {activeFaultsCount > 0 ? `${activeFaultsCount} Active` : 'Standby'}
         </span>
       </div>
 
-      <p className="font-sans text-xs text-[#b9cacb] leading-relaxed">
-        Stress-test real-time twin prediction models by introducing subsystem anomalies:
+      <p className="font-sans text-xs text-[#b9cacb]">
+        Simulate subsystem anomaly impacts:
       </p>
 
       {/* Fault Injection Checkbox List */}

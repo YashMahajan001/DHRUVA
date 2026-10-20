@@ -52,65 +52,65 @@ export const AutoAnalysisView: React.FC = () => {
     block: {
       name: 'Engine Block & Cylinder Bores',
       subsystem: 'Structural / Crankcase',
-      function: 'Houses pistons, combustion chambers, cylinder liners, and integral coolant galleries.',
+      function: 'Houses pistons, liners & coolant galleries.',
       telemetrySignals: ['Coolant Temp', 'Bore Distortion Strain', 'Vibration (Crankcase)'],
       healthMetric: 'Thermal fatigue cycle envelope',
-      designLimit: 'Max bore temperature 125°C',
+      designLimit: 'Max bore temp 125°C',
     },
     pistons: {
       name: 'Pistons & Connecting Rods',
       subsystem: 'Power Assembly',
-      function: 'Transfers high-pressure combustion gas work from crown to crankshaft journal via H-beam rods.',
+      function: 'Transfers combustion force to crankshaft.',
       telemetrySignals: ['Engine RPM', 'Brake Torque', 'Brake Power', 'Peak Cylinder Pressure'],
-      healthMetric: 'Piston ring pack micro-welding & pin bore clearance',
+      healthMetric: 'Ring pack wear & pin bore clearance',
       designLimit: `Redline ${currentEngine ? currentEngine.operating_limits.redline_rpm : 6800} RPM`,
     },
     crankshaft: {
       name: 'Forged Steel Crankshaft & Counterweights',
       subsystem: 'Reciprocating / Rotational',
-      function: 'Converts reciprocating piston motion into continuous shaft torque driving the flywheel.',
+      function: 'Converts reciprocating motion to shaft torque.',
       telemetrySignals: ['Shaft Speed (RPM)', 'Torsional Deflection', 'Instantaneous Torque'],
-      healthMetric: 'Journal hydrodynamic oil film thickness',
+      healthMetric: 'Hydrodynamic oil film thickness',
       designLimit: 'Torsional resonance at 7,400 RPM',
     },
     valvetrain: {
       name: 'DOHC Valvetrain, Camshafts & Timing Chain',
       subsystem: 'Air Induction & Gas Exchange',
-      function: 'Controls precision lift and timing of intake and exhaust poppet valves with dual variable valve timing.',
+      function: 'Controls valve lift and timing with dual VVT.',
       telemetrySignals: ['Cam Phaser Angle', 'Intake Air Mass', 'Exhaust Gas Temp (EGT)'],
-      healthMetric: 'Cam follower hydraulic lash & chain tensioner travel',
+      healthMetric: 'Hydraulic lash & chain tensioner travel',
       designLimit: 'Valve spring seat pressure 650 N',
     },
     cooling: {
       name: 'Front Cooling Radiator Core & Electric Fan',
       subsystem: 'Thermal Management',
-      function: 'Rejects rejected engine heat flux to atmosphere through cross-flow aluminum core and 7-blade fan.',
+      function: 'Heat rejection via cross-flow aluminum core.',
       telemetrySignals: ['Coolant Temp', 'Fan Duty Cycle', 'Core Delta-T'],
-      healthMetric: 'Heat exchanger thermal rejection effectiveness',
+      healthMetric: 'Thermal rejection effectiveness',
       designLimit: `Max coolant temp ${currentEngine ? currentEngine.operating_limits.max_coolant_temp_c : 105}°C`,
     },
     transmission: {
       name: 'Transaxle Gearbox, Shafts & Differential',
       subsystem: 'Drivetrain Transmission',
-      function: 'Multi-ratio gear reduction, synchronizer engagement, and differential torque split to half-shafts.',
+      function: 'Gear reduction and differential torque split.',
       telemetrySignals: ['Output Speed', 'Shaft Torque', 'Gearbox Oil Temp'],
-      healthMetric: 'Synchronizer ring brass friction coefficient & gear tooth contact wear',
+      healthMetric: 'Sync ring friction & gear tooth contact wear',
       designLimit: `Max input torque ${currentEngine ? currentEngine.specifications.peak_torque_nm * 1.3 : 450} Nm`,
     },
     fuel: {
       name: 'High-Pressure Direct Fuel Injection Rail',
       subsystem: 'Fuel Metering',
-      function: 'Pressurizes and atomizes liquid fuel directly into combustion chamber up to 350 bar.',
+      function: 'Direct fuel atomization up to 350 bar.',
       telemetrySignals: ['Fuel Flow Rate (L/h)', 'Air-Fuel Ratio (AFR)', 'Rail Pressure (bar)'],
-      healthMetric: 'Piezo injector nozzle spray pattern uniformity',
+      healthMetric: 'Nozzle spray pattern uniformity',
       designLimit: 'Target AFR 12.8 (WOT)',
     },
     turbo: {
       name: 'Twin-Scroll Turbocharger & Wastegate',
       subsystem: 'Forced Induction',
-      function: 'Recovers exhaust enthalpy to drive compressor wheel, boosting intake air charge density.',
+      function: 'Exhaust enthalpy recovery for intake boost.',
       telemetrySignals: ['Boost Pressure (bar)', 'Manifold Absolute Pressure', 'EGT (°C)'],
-      healthMetric: 'Compressor surge margin & turbine journal shaft bearing clearance',
+      healthMetric: 'Surge margin & shaft bearing clearance',
       designLimit: `Max boost ${currentEngine ? currentEngine.operating_limits.max_manifold_pressure_bar : 2.5} bar`,
     },
   };
@@ -137,7 +137,7 @@ export const AutoAnalysisView: React.FC = () => {
             </span>
           </div>
           <p className="text-xs md:text-sm text-[#849495] mt-1 font-mono">
-            Interactive kinematic cutaway visualization, component inspection, root-cause fault hypotheses & degradation wear tracking.
+            Kinematic cutaway, component inspection & fault hypotheses.
           </p>
         </div>
 

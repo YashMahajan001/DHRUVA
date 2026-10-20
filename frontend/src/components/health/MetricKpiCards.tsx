@@ -32,7 +32,7 @@ export const MetricKpiCards: React.FC = () => {
         <div className="flex items-center justify-between">
           <span className="font-telemetry text-[9px] text-red-400 uppercase tracking-widest font-bold flex items-center gap-1">
             <ShieldAlert className="w-3 h-3 text-red-400" />
-            CRITICAL DISPATCH
+            Critical Dispatch
           </span>
           <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
         </div>
@@ -47,7 +47,7 @@ export const MetricKpiCards: React.FC = () => {
         </div>
 
         <div className="flex items-center justify-between text-[#b9cacb] font-body text-xs border-t border-[#3b494b]/20 pt-2">
-          <span>Target Grounding: IMMEDIATE</span>
+          <span>Grounding: IMMEDIATE</span>
           <span className="font-tactical text-[11px] text-red-400 font-bold">{criticalEngine ? `${criticalEngine.rulHours}h RUL` : '—'}</span>
         </div>
       </div>
@@ -64,7 +64,7 @@ export const MetricKpiCards: React.FC = () => {
         <div className="flex items-center justify-between">
           <span className="font-telemetry text-[9px] text-amber-300 uppercase tracking-widest font-bold flex items-center gap-1">
             <AlertTriangle className="w-3 h-3 text-amber-400" />
-            IMPENDING WARNINGS
+            Warnings
           </span>
           <AlertTriangle className="w-4 h-4 text-amber-400" />
         </div>
@@ -79,7 +79,7 @@ export const MetricKpiCards: React.FC = () => {
         </div>
 
         <div className="flex items-center justify-between text-[#b9cacb] font-body text-xs border-t border-[#3b494b]/20 pt-2">
-          <span>Thermal Decay Delta: {warningEngine ? `+${warningEngine.twinState.thermalDecayDeltaPercent}%` : '—'}</span>
+          <span>Thermal Decay: {warningEngine ? `+${warningEngine.twinState.thermalDecayDeltaPercent}%` : '—'}</span>
           <span className="font-tactical text-[11px] text-amber-300 font-bold">{warningEngine ? `${warningEngine.rulHours}h RUL` : '—'}</span>
         </div>
       </div>
@@ -90,7 +90,7 @@ export const MetricKpiCards: React.FC = () => {
         <div className="flex items-center justify-between">
           <span className="font-telemetry text-[9px] text-[#00dbe9] uppercase tracking-widest font-bold flex items-center gap-1">
             <Hourglass className="w-3 h-3 text-[#00f0ff]" />
-            FLEET MTBUR BENCHMARK
+            Fleet MTBUR
           </span>
           <Hourglass className="w-4 h-4 text-[#00f0ff]" />
         </div>
@@ -100,7 +100,7 @@ export const MetricKpiCards: React.FC = () => {
             {fleetMtbur}
           </span>
           <span className="font-headline text-lg text-[#b9cacb] font-semibold">
-            HRS
+            h
           </span>
           <span className="ml-auto text-emerald-400 font-tactical text-[11px] flex items-center font-bold">
             {fleetMtbur > 450 ? `+${fleetMtbur - 450}h vs Q3` : `${fleetMtbur - 450}h vs Q3`}
@@ -109,7 +109,7 @@ export const MetricKpiCards: React.FC = () => {
 
         <div className="flex items-center justify-between text-[#b9cacb] font-body text-xs border-t border-[#3b494b]/20 pt-2">
           <span>Unscheduled Removals</span>
-          <span className="font-tactical text-[11px] text-[#00f0ff] font-bold">TARGET: 450h</span>
+          <span className="font-tactical text-[11px] text-[#00f0ff] font-bold">Target: 450h</span>
         </div>
       </div>
 
@@ -119,7 +119,7 @@ export const MetricKpiCards: React.FC = () => {
         <div className="flex items-center justify-between">
           <span className="font-telemetry text-[9px] text-[#00dbe9] uppercase tracking-widest font-bold flex items-center gap-1">
             <Cpu className="w-3 h-3 text-[#00f0ff]" />
-            TWIN PREDICTIVE FIDELITY
+            Twin Fidelity
           </span>
           <Cpu className="w-4 h-4 text-[#00f0ff]" />
         </div>
@@ -135,7 +135,7 @@ export const MetricKpiCards: React.FC = () => {
 
         <div className="flex items-center justify-between text-[#b9cacb] font-body text-xs border-t border-[#3b494b]/20 pt-2">
           <span>RUL Error Band</span>
-          <span className="font-tactical text-[11px] text-[#dee2f5] font-bold">±{rulErrorBand} FLIGHT HRS</span>
+          <span className="font-tactical text-[11px] text-[#dee2f5] font-bold">±{rulErrorBand} h</span>
         </div>
       </div>
     </div>

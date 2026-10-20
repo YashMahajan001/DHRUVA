@@ -37,8 +37,8 @@ export const SubsystemsHealth: React.FC<SubsystemsHealthProps> = ({
         <span className="font-display text-base font-bold text-[#dee2f5] uppercase tracking-wide">
           Subsystems Health
         </span>
-        <span className="font-mono text-[9px] text-[#00f0ff] font-bold tracking-widest uppercase">
-          {syncStatus || 'TWIN SYNCED'}
+        <span className="font-mono text-[9px] text-[#00f0ff] font-bold tracking-wider uppercase">
+          {syncStatus || 'Synced'}
         </span>
       </div>
 
@@ -60,7 +60,7 @@ export const SubsystemsHealth: React.FC<SubsystemsHealthProps> = ({
         {/* Cooling & Baffle Airflow */}
         <div>
           <div className="flex justify-between font-mono text-[10px] mb-1">
-            <span className="text-[#b9cacb]">Cooling &amp; Baffle Airflow</span>
+            <span className="text-[#b9cacb]">Cooling &amp; Baffles</span>
             <span className={`font-bold ${coolingStyle.text}`}>{cooling}%</span>
           </div>
           <div className="w-full bg-[#303443] h-1.5 rounded overflow-hidden">
@@ -74,7 +74,7 @@ export const SubsystemsHealth: React.FC<SubsystemsHealthProps> = ({
         {/* Lubrication & Sump */}
         <div>
           <div className="flex justify-between font-mono text-[10px] mb-1">
-            <span className="text-[#b9cacb]">Lubrication &amp; Sump</span>
+            <span className="text-[#b9cacb]">Lubrication</span>
             <span className={`font-bold ${lubStyle.text}`}>{lub}%</span>
           </div>
           <div className="w-full bg-[#303443] h-1.5 rounded overflow-hidden">
@@ -88,7 +88,7 @@ export const SubsystemsHealth: React.FC<SubsystemsHealthProps> = ({
         {/* Ignition / Electrical */}
         <div>
           <div className="flex justify-between font-mono text-[10px] mb-1">
-            <span className="text-[#b9cacb]">Dual Magnetos &amp; Spark</span>
+            <span className="text-[#b9cacb]">Ignition &amp; Spark</span>
             <span className={`font-bold ${elecStyle.text}`}>{elec}%</span>
           </div>
           <div className="w-full bg-[#303443] h-1.5 rounded overflow-hidden">
@@ -102,7 +102,7 @@ export const SubsystemsHealth: React.FC<SubsystemsHealthProps> = ({
 
       <div className="bg-[#252a38]/60 border border-[#3b494b]/30 p-1.5 rounded text-center mt-2">
         <span className="font-mono text-[9px] text-[#849495] tracking-wide font-semibold">
-          AUTONOMOUS DIAGNOSTIC CONFIDENCE: {(confidence || 98.4).toFixed(1)}%
+          Confidence: {(confidence || 98.4).toFixed(1)}%
         </span>
       </div>
     </div>

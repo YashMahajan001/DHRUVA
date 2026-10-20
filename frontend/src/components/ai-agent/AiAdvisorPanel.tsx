@@ -35,43 +35,43 @@ export const AiAdvisorPanel: React.FC = () => {
       {/* Panel Top Bar with Mode Switcher */}
       <div className="flex items-center justify-between pb-2 border-b border-[#3b494b]/30">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-[#00f0ff]" />
-          <h2 className="font-headline text-lg text-[#dee2f5] uppercase tracking-wide font-semibold">
-            AI DIAGNOSTIC ADVISOR
+          <Sparkles className="w-4 h-4 text-[#00f0ff]" />
+          <h2 className="font-headline text-base text-[#dee2f5] uppercase tracking-wide font-semibold">
+            Diagnostic Advisor
           </h2>
         </div>
         <div className="flex items-center gap-2">
           <div className="flex rounded bg-[#161b29] border border-[#3b494b]/30 p-0.5">
             <button
               onClick={() => setActiveTab('inference')}
-              className={`px-2 py-0.5 rounded font-telemetry text-[9px] uppercase transition-all ${
+              className={`px-2 py-0.5 rounded font-telemetry text-[9px] uppercase transition-all cursor-pointer ${
                 activeTab === 'inference'
                   ? 'bg-[#00f0ff] text-[#00363a] font-bold'
                   : 'text-[#b9cacb] hover:text-[#dee2f5]'
               }`}
             >
-              SYNTHETIC INFERENCE
+              Inference
             </button>
             <button
               onClick={() => setActiveTab('copilot')}
-              className={`px-2 py-0.5 rounded font-telemetry text-[9px] uppercase transition-all flex items-center gap-1 ${
+              className={`px-2 py-0.5 rounded font-telemetry text-[9px] uppercase transition-all flex items-center gap-1 cursor-pointer ${
                 activeTab === 'copilot'
                   ? 'bg-[#00f0ff] text-[#00363a] font-bold'
                   : 'text-[#b9cacb] hover:text-[#dee2f5]'
               }`}
             >
               <Bot className="w-3 h-3" />
-              <span>AI COPILOT</span>
+              <span>Copilot</span>
             </button>
           </div>
           <span className="px-2 py-0.5 rounded font-telemetry text-[9px] bg-[#00f0ff]/10 text-[#00f0ff] border border-[#00f0ff]/30 uppercase hidden sm:inline-block font-semibold">
-            MODEL: AERO-TWIN-V4
+            Advisory mode
           </span>
         </div>
       </div>
 
       {/* Main Panel Content Container */}
-      <div className="p-4 rounded bg-[#090e1b]/90 border border-[#00f0ff]/30 flex flex-col gap-4 relative overflow-hidden shadow-[0_0_20px_rgba(0,240,255,0.08)]">
+      <div className="p-3.5 rounded bg-[#090e1b]/90 border border-[#00f0ff]/30 flex flex-col gap-3 relative overflow-hidden shadow-[0_0_20px_rgba(0,240,255,0.08)]">
         <ReticleCorner color="#00f0ff" size={6} />
 
         {/* Ambient Background Graphic */}
@@ -82,83 +82,74 @@ export const AiAdvisorPanel: React.FC = () => {
         {activeTab === 'inference' ? (
           <>
             {/* Active Alert Header Block */}
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded bg-[#00f0ff]/20 border border-[#00f0ff]/50 flex items-center justify-center shrink-0">
-                <Flame className="w-4 h-4 text-[#00f0ff]" />
+            <div className="flex items-start gap-2.5">
+              <div className="w-7 h-7 rounded bg-[#00f0ff]/20 border border-[#00f0ff]/50 flex items-center justify-center shrink-0">
+                <Flame className="w-3.5 h-3.5 text-[#00f0ff]" />
               </div>
               <div className="flex flex-col">
-                <span className="font-telemetry text-[9px] text-[#00f0ff] uppercase tracking-widest font-bold">
-                  SYNTHETIC INFERENCE // ACTIVE ALERT
+                <span className="font-telemetry text-[9px] text-[#00f0ff] uppercase tracking-wider font-bold">
+                  Inference finding
                 </span>
-                <h3 className="font-headline text-base sm:text-lg text-[#dee2f5] font-bold leading-tight">
+                <h3 className="font-headline text-sm text-[#dee2f5] font-bold leading-tight">
                   {isEng03
-                    ? '"Ultrasonic micro-spalling accelerating on Engine 03 bearing."'
+                    ? 'Ultrasonic micro-spalling accelerating on Engine 03 bearing.'
                     : isEng01
-                    ? '"All propulsion telemetry nominal on Engine 01."'
-                    : '"Cooling degradation is accelerating on Engine 02."'}
+                    ? 'All propulsion telemetry nominal on Engine 01.'
+                    : 'Cooling degradation accelerating on Engine 02.'}
                 </h3>
               </div>
             </div>
 
             {/* Corroborating Evidence Matrix */}
-            <div className="flex flex-col gap-1.5 bg-[#161b29]/80 p-3 rounded border border-[#3b494b]/20">
+            <div className="flex flex-col gap-1 bg-[#161b29]/80 p-2.5 rounded border border-[#3b494b]/20">
               <span className="font-telemetry text-[9px] text-[#849495] tracking-wider uppercase font-bold">
-                CORROBORATING EVIDENCE MATRIX
+                Evidence
               </span>
 
               {isEng03 ? (
                 <>
-                  <div className="flex items-center justify-between py-1 border-b border-[#3b494b]/20">
+                  <div className="flex items-center justify-between py-0.5 border-b border-[#3b494b]/20">
                     <span className="font-body text-xs text-[#b9cacb]">Ultrasonic Spall Peak</span>
-                    <span className="font-telemetry text-sm text-red-400 font-bold">+19 dB @ 2.45 kHz</span>
+                    <span className="font-telemetry text-xs text-red-400 font-bold">+19 dB @ 2.45 kHz</span>
                   </div>
-                  <div className="flex items-center justify-between py-1 border-b border-[#3b494b]/20">
+                  <div className="flex items-center justify-between py-0.5 border-b border-[#3b494b]/20">
                     <span className="font-body text-xs text-[#b9cacb]">Harmonic Vibration</span>
-                    <span className="font-telemetry text-sm text-red-400 font-bold">{currentVib} mm/s (CRITICAL)</span>
+                    <span className="font-telemetry text-xs text-red-400 font-bold">{currentVib} mm/s</span>
                   </div>
-                  <div className="flex items-center justify-between py-1">
-                    <span className="font-body text-xs text-[#b9cacb]">Main Gallery Oil Press</span>
-                    <span className="font-tactical text-[11px] text-red-400 font-bold">{selectedEngine.telemetry.oilPressure} PSI (-22 PSI)</span>
+                  <div className="flex items-center justify-between py-0.5">
+                    <span className="font-body text-xs text-[#b9cacb]">Oil Pressure</span>
+                    <span className="font-telemetry text-xs text-red-400 font-bold">{selectedEngine.telemetry.oilPressure} psi</span>
                   </div>
-                  <p className="font-body text-[11px] text-[#849495] italic mt-1 leading-snug">
-                    Acoustic harmonics verify surface spalling on bearing race #2. Friction is generating metal micro-particulates into scavenger pump.
-                  </p>
                 </>
               ) : isEng01 ? (
                 <>
-                  <div className="flex items-center justify-between py-1 border-b border-[#3b494b]/20">
+                  <div className="flex items-center justify-between py-0.5 border-b border-[#3b494b]/20">
                     <span className="font-body text-xs text-[#b9cacb]">CHT Balance Delta</span>
-                    <span className="font-telemetry text-sm text-emerald-400 font-bold">±1.8°C (Nominal)</span>
+                    <span className="font-telemetry text-xs text-emerald-400 font-bold">±1.8 °C</span>
                   </div>
-                  <div className="flex items-center justify-between py-1 border-b border-[#3b494b]/20">
-                    <span className="font-body text-xs text-[#b9cacb]">Cooling Airflow Efficiency</span>
-                    <span className="font-telemetry text-sm text-emerald-400 font-bold">99.8% Nominal</span>
+                  <div className="flex items-center justify-between py-0.5 border-b border-[#3b494b]/20">
+                    <span className="font-body text-xs text-[#b9cacb]">Cooling Efficiency</span>
+                    <span className="font-telemetry text-xs text-emerald-400 font-bold">99.8%</span>
                   </div>
-                  <div className="flex items-center justify-between py-1">
-                    <span className="font-body text-xs text-[#b9cacb]">Thermal/Fuel Ratio Match</span>
-                    <span className="font-tactical text-[11px] text-emerald-400 font-bold">MATCH (0.99)</span>
+                  <div className="flex items-center justify-between py-0.5">
+                    <span className="font-body text-xs text-[#b9cacb]">Thermal/Fuel Match</span>
+                    <span className="font-telemetry text-xs text-emerald-400 font-bold">0.99</span>
                   </div>
-                  <p className="font-body text-[11px] text-[#849495] italic mt-1 leading-snug">
-                    Synthetic twin baseline models match active physical sensor telemetry across all 4 combustion chambers with 99.4% cross-correlation.
-                  </p>
                 </>
               ) : (
                 <>
-                  <div className="flex items-center justify-between py-1 border-b border-[#3b494b]/20">
-                    <span className="font-body text-xs text-[#b9cacb]">CHT Trend vs Baseline</span>
-                    <span className="font-telemetry text-sm text-amber-300 font-bold">+14% ({currentCht}°C)</span>
+                  <div className="flex items-center justify-between py-0.5 border-b border-[#3b494b]/20">
+                    <span className="font-body text-xs text-[#b9cacb]">CHT vs Baseline</span>
+                    <span className="font-telemetry text-xs text-amber-300 font-bold">+14% ({currentCht} °C)</span>
                   </div>
-                  <div className="flex items-center justify-between py-1 border-b border-[#3b494b]/20">
-                    <span className="font-body text-xs text-[#b9cacb]">Cooling Efficiency (last 15h)</span>
-                    <span className="font-telemetry text-sm text-red-400 font-bold">-8% Decay</span>
+                  <div className="flex items-center justify-between py-0.5 border-b border-[#3b494b]/20">
+                    <span className="font-body text-xs text-[#b9cacb]">Cooling Efficiency</span>
+                    <span className="font-telemetry text-xs text-red-400 font-bold">-8%</span>
                   </div>
-                  <div className="flex items-center justify-between py-1">
-                    <span className="font-body text-xs text-[#b9cacb]">Thermal/Fuel Ratio Match</span>
-                    <span className="font-tactical text-[11px] text-amber-300 font-bold">MISMATCH (0.72)</span>
+                  <div className="flex items-center justify-between py-0.5">
+                    <span className="font-body text-xs text-[#b9cacb]">Thermal/Fuel Match</span>
+                    <span className="font-telemetry text-xs text-amber-300 font-bold">0.72</span>
                   </div>
-                  <p className="font-body text-[11px] text-[#849495] italic mt-1 leading-snug">
-                    Thermal model reports fuel flow density is nominal, but cylinder head heat rejection coefficient has fallen beneath laminar flow thresholds.
-                  </p>
                 </>
               )}
             </div>

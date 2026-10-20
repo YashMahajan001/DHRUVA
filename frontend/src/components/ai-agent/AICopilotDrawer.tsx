@@ -46,54 +46,47 @@ export const AICopilotDrawer: React.FC = () => {
   return (
     <div className="fixed inset-y-0 right-0 w-full sm:w-[460px] bg-surface-container-lowest/95 backdrop-blur-2xl border-l border-primary/30 z-50 flex flex-col shadow-2xl animate-in slide-in-from-right duration-300 select-none">
       {/* Drawer Header */}
-      <div className="p-4 bg-surface-container border-b border-outline-variant/30 flex items-center justify-between">
+      <div className="p-3.5 bg-surface-container border-b border-outline-variant/30 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded bg-primary/10 border border-primary/40 flex items-center justify-center text-primary shadow-[0_0_10px_rgba(0,240,255,0.2)]">
+          <div className="w-7 h-7 rounded bg-primary/10 border border-primary/40 flex items-center justify-center text-primary shadow-[0_0_10px_rgba(0,240,255,0.2)]">
             <Bot className="w-4 h-4" />
           </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <span className="font-headline-sm text-sm text-on-surface font-bold uppercase">
-                DHRUVAA AI COPILOT
-              </span>
-              <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-primary-container text-on-primary-container font-bold">
-                ENGINEERING
-              </span>
-            </div>
-            <span className="text-[10px] font-mono text-outline">
-              SYNTHETIC TWIN ADVISORY ENGINE
+          <div className="flex items-center gap-2">
+            <span className="font-display text-sm text-on-surface font-bold uppercase tracking-wide">
+              AI COPILOT
+            </span>
+            <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-primary-container text-on-primary-container font-bold">
+              ADVISORY
             </span>
           </div>
         </div>
 
-        <button
-          onClick={() => setIsCopilotOpen(false)}
-          className="p-1.5 text-outline hover:text-on-surface rounded hover:bg-surface-container-high transition-colors cursor-pointer"
-          title="Close Copilot Panel"
-        >
-          <X className="w-5 h-5" />
-        </button>
-      </div>
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[10px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+            Read-only
+          </span>
 
-      {/* Advisory Mandatory Notice */}
-      <div className="bg-amber-500/10 border-b border-amber-500/20 px-3 py-1.5 flex items-center gap-2 text-[10px] font-mono text-amber-300">
-        <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
-        <span>
-          ADVISORY ONLY: Model inference must never directly modify mechanical parameters or override FADEC.
-        </span>
+          <button
+            onClick={() => setIsCopilotOpen(false)}
+            className="p-1 text-outline hover:text-on-surface rounded hover:bg-surface-container-high transition-colors cursor-pointer"
+            title="Close Copilot Panel"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {/* Live Telemetry Grounding Bar */}
-      <div className="bg-surface-container-low px-3 py-2 border-b border-outline-variant/20 flex items-center justify-between text-[10px] font-mono">
-        <span className="text-outline">TELEMETRY GROUNDING:</span>
+      <div className="bg-surface-container-low px-3 py-1.5 border-b border-outline-variant/20 flex items-center justify-between text-[10px] font-mono">
+        <span className="text-outline">ENG-01:</span>
         <div className="flex items-center gap-2">
-          <span className="text-primary font-bold">{telemetry.rpm} RPM</span>
-          <span className="text-outline">|</span>
-          <span className="text-primary font-bold">{telemetry.chtAvg}°C</span>
-          <span className="text-outline">|</span>
-          <span className="text-primary font-bold">{selectedEngine.healthScore}% HLT</span>
-          <span className="text-outline">|</span>
-          <span className="text-primary font-bold">{selectedEngine.rulHours}h RUL</span>
+          <span className="text-primary font-bold">{telemetry.rpm} rpm</span>
+          <span className="text-outline">·</span>
+          <span className="text-primary font-bold">{telemetry.chtAvg} °C</span>
+          <span className="text-outline">·</span>
+          <span className="text-primary font-bold">{selectedEngine.healthScore}% health</span>
+          <span className="text-outline">·</span>
+          <span className="text-primary font-bold">{selectedEngine.rulHours} h RUL</span>
         </div>
       </div>
 

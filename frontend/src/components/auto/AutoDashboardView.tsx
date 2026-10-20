@@ -107,7 +107,7 @@ export const AutoDashboardView: React.FC = () => {
             </span>
           </div>
           <p className="text-xs md:text-sm text-[#849495] mt-1 font-mono">
-            Deterministic powertrain physics, real-time closed-loop telemetry & operating boundary monitoring.
+            Powertrain physics & real-time telemetry.
           </p>
         </div>
       </div>
@@ -329,10 +329,10 @@ export const AutoDashboardView: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-[#3b494b]/30">
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs text-[#f59e0b] font-bold uppercase">
-              SYNCHRONIZED POWERTRAIN TELEMETRY STREAM
+              Telemetry Stream
             </span>
             <span className="text-[10px] font-mono text-[#849495] hidden md:inline">
-              (Rolling 40 samples @ 250ms)
+              (40 samples · 250ms)
             </span>
           </div>
 
@@ -578,16 +578,16 @@ export const AutoDashboardView: React.FC = () => {
         <div className="lg:col-span-7 bg-[#121829]/90 border border-[#3b494b]/40 rounded-xl p-4 flex flex-col justify-between shadow-lg">
           <div className="flex items-center justify-between pb-2 border-b border-[#3b494b]/30">
             <span className="font-mono text-xs text-[#f59e0b] font-bold uppercase">
-              REAL-TIME PHYSICAL DYNAMOMETER CONTROLS
+              Dynamometer Controls
             </span>
-            <span className="text-[10px] font-mono text-[#849495]">Interactive Actuation</span>
+            <span className="text-[10px] font-mono text-[#849495]">Actuation</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
             {/* Throttle Slider */}
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-[#849495]">Throttle Actuation:</span>
+                <span className="text-[#849495]">Throttle:</span>
                 <span className="font-bold text-[#f59e0b]">{(simulationParams.throttle * 100).toFixed(0)}%</span>
               </div>
               <input
@@ -609,7 +609,7 @@ export const AutoDashboardView: React.FC = () => {
             {/* Load Torque Slider */}
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-[#849495]">Dyno Absorber Torque:</span>
+                <span className="text-[#849495]">Absorber Torque:</span>
                 <span className="font-bold text-[#38bdf8]">{simulationParams.loadTorque.toFixed(0)} Nm</span>
               </div>
               <input
@@ -631,7 +631,7 @@ export const AutoDashboardView: React.FC = () => {
             {/* Ambient Temperature */}
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-[#849495]">Cell Ambient Temp:</span>
+                <span className="text-[#849495]">Ambient Temp:</span>
                 <span className="font-bold text-emerald-400">{simulationParams.ambientTemp.toFixed(0)}°C</span>
               </div>
               <input
@@ -648,7 +648,7 @@ export const AutoDashboardView: React.FC = () => {
             {/* Altitude */}
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-[#849495]">Test Cell Altitude:</span>
+                <span className="text-[#849495]">Altitude:</span>
                 <span className="font-bold text-purple-400">{simulationParams.altitude.toFixed(0)} m</span>
               </div>
               <input
@@ -664,7 +664,7 @@ export const AutoDashboardView: React.FC = () => {
           </div>
 
           <div className="pt-2 border-t border-[#3b494b]/30 flex items-center justify-between text-[11px] font-mono text-[#849495]">
-            <span>Deterministic state propagation with Euler numerical integration (dt = 0.25s).</span>
+            <span>Euler numerical integration (dt = 0.25s).</span>
             <button
               onClick={() => navigate('/auto/tuning')}
               className="text-[#f59e0b] hover:underline flex items-center gap-1 font-bold"

@@ -56,11 +56,11 @@ export const AITacticalDispatchPanel: React.FC = () => {
         <div className="flex items-center gap-2">
           <Brain className="text-[#00f0ff] w-5 h-5 animate-pulse" />
           <span className="font-headline-sm text-[16px] text-[#dee2f5] uppercase font-bold tracking-wide">
-            AI TACTICAL DISPATCH ADVISORY
+            AI Tactical Dispatch
           </span>
         </div>
         <span className="font-label-micro text-[9px] px-2 py-0.5 bg-[#00f0ff]/10 text-[#00f0ff] border border-[#00f0ff]/30 rounded font-mono font-bold">
-          CONF: 98.4%
+          Conf: 98.4%
         </span>
       </div>
 
@@ -71,11 +71,11 @@ export const AITacticalDispatchPanel: React.FC = () => {
           <AlertCircle className="text-[#ffb4ab] w-5 h-5 shrink-0 mt-0.5" />
           <div className="flex flex-col gap-1 w-full">
             <span className="font-label-tactical text-[11px] text-[#ffb4ab] font-mono font-bold uppercase">
-              PRIORITY ACTION: EMERGENCY RECOVERY
+              Priority Action · Emergency Recovery
             </span>
             <p className="font-body-md text-[13px] text-[#dee2f5] leading-relaxed">
-              Recommend vectoring <strong className="text-[#ffb4ab] font-bold">UAV-03</strong> to{' '}
-              <strong className="text-[#00f0ff] font-bold">Runway 09</strong> for immediate priority emergency landing due to Stage 2 Crankshaft Bearing RUL expiration (&lt;18 hrs remaining).
+              Vector <strong className="text-[#ffb4ab] font-bold">UAV-03</strong> to{' '}
+              <strong className="text-[#00f0ff] font-bold">Runway 09</strong> for priority landing (Crankshaft Bearing RUL &lt;18 h).
             </p>
             <div className="flex items-center gap-4 mt-2 flex-wrap">
               <button
@@ -84,10 +84,10 @@ export const AITacticalDispatchPanel: React.FC = () => {
                 onClick={() => executeAction('EXECUTE_RTB')}
                 className="px-3 py-1.5 bg-[#93000a] hover:bg-[#b3141f] text-[#ffdad6] rounded font-label-tactical text-[10.5px] font-mono uppercase font-bold transition-all shadow-[0_0_10px_rgba(239,68,68,0.4)] border border-[#ffb4ab]/40 active:scale-95"
               >
-                EXECUTE AUTO-VECTOR RTB
+                Auto-Vector RTB
               </button>
               <span className="font-label-micro text-[9px] text-[#849495] font-mono">
-                EST. T-TOUCHDOWN: 14 MIN
+                ETA: 14 min
               </span>
             </div>
           </div>
@@ -98,11 +98,11 @@ export const AITacticalDispatchPanel: React.FC = () => {
           <Wrench className="text-amber-400 w-5 h-5 shrink-0 mt-0.5" />
           <div className="flex flex-col gap-1 w-full">
             <span className="font-label-tactical text-[11px] text-amber-300 font-mono font-bold uppercase">
-              SCHEDULED OVERHAUL ADVISORY
+              Scheduled Overhaul
             </span>
             <p className="font-body-md text-[13px] text-[#b9cacb] leading-relaxed">
-              Recommend scheduling thermal duct inspection and injector flush for{' '}
-              <strong className="text-[#dee2f5] font-semibold">UAV-02</strong> immediately upon completion of sortie 104 to prevent piston scoring.
+              Thermal duct inspection and injector flush for{' '}
+              <strong className="text-[#dee2f5] font-semibold">UAV-02</strong> upon sortie 104 completion.
             </p>
             <div className="flex items-center gap-4 mt-2 flex-wrap">
               <button
@@ -111,10 +111,10 @@ export const AITacticalDispatchPanel: React.FC = () => {
                 onClick={() => executeAction('QUEUE_MAINTENANCE')}
                 className="px-3 py-1.5 bg-[#1a1f2d] hover:bg-[#343948] text-[#dee2f5] border border-[#3b494b]/40 rounded font-label-tactical text-[10.5px] font-mono uppercase transition-colors"
               >
-                QUEUE MAINTENANCE BAY 2
+                Queue Bay 2
               </button>
               <span className="font-label-micro text-[9px] text-[#849495] font-mono">
-                PRIORITY: MEDIUM
+                Priority: Medium
               </span>
             </div>
           </div>
@@ -130,7 +130,7 @@ export const AITacticalDispatchPanel: React.FC = () => {
           className="flex-1 px-3 py-2 bg-[#00f0ff]/15 hover:bg-[#00f0ff] text-[#00f0ff] hover:text-[#002022] border border-[#00f0ff]/40 rounded font-label-tactical text-[10.5px] font-mono uppercase tracking-wider font-bold transition-all flex items-center justify-center gap-1.5 shadow-md"
         >
           <Radar className="w-4 h-4" />
-          COMMAND FLEET TELEMETRY SWEEP
+          Fleet Telemetry Sweep
         </button>
 
         <button
@@ -140,7 +140,7 @@ export const AITacticalDispatchPanel: React.FC = () => {
           className="flex-1 px-3 py-2 bg-[#252a38] hover:bg-[#343948] text-[#dee2f5] border border-[#3b494b]/40 rounded font-label-tactical text-[10.5px] font-mono uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-sm"
         >
           <Download className="w-4 h-4" />
-          EXPORT AIRWORTHINESS REPORT
+          Airworthiness Report
         </button>
       </div>
 
@@ -150,7 +150,7 @@ export const AITacticalDispatchPanel: React.FC = () => {
           <div className="flex items-center gap-1.5 text-on-surface">
             <MessageSquareCode className="w-4 h-4 text-[#00f0ff]" />
             <span className="font-label-tactical text-[11px] text-[#dee2f5] font-mono uppercase font-bold">
-              ENGINEERING COPILOT // {selectedEngine.callsign}
+              Copilot · {selectedEngine.callsign}
             </span>
           </div>
           <button
@@ -158,7 +158,7 @@ export const AITacticalDispatchPanel: React.FC = () => {
             onClick={() => setIsDialogueOpen(!isDialogueOpen)}
             className="text-[#849495] hover:text-[#00f0ff] text-[11px] font-mono flex items-center gap-1"
           >
-            <span>{isDialogueOpen ? 'Minimize Log' : 'View Dialogue'}</span>
+            <span>{isDialogueOpen ? 'Minimize' : 'View Dialogue'}</span>
             {isDialogueOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
           </button>
         </div>

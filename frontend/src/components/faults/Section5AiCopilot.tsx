@@ -49,30 +49,30 @@ export const Section5AiCopilot: React.FC = () => {
       className="w-full rounded-xl border border-[#00f0ff]/40 bg-[#161b29]/95 backdrop-blur-md p-4 sm:p-5 lg:p-6 shadow-[0_0_30px_rgba(0,240,255,0.08)] flex flex-col gap-5"
     >
       {/* Panel Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#3b494b]/40">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-[#00f0ff]/15 border border-[#00f0ff]/40 flex items-center justify-center text-[#00f0ff] shadow-[0_0_15px_rgba(0,240,255,0.2)]">
-            <Bot className="w-5 h-5" />
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-2.5 border-b border-[#3b494b]/30">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-[#00f0ff]/15 border border-[#00f0ff]/40 flex items-center justify-center text-[#00f0ff] shadow-[0_0_12px_rgba(0,240,255,0.2)]">
+            <Bot className="w-4 h-4" />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-display font-bold text-base sm:text-lg tracking-wider text-[#dee2f5] uppercase">
-                DHRUVAA AI DIAGNOSTIC COPILOT
+              <h3 className="font-display font-bold text-base tracking-wide text-[#dee2f5] uppercase">
+                AI Diagnostic Copilot
               </h3>
-              <span className="font-mono-telemetry text-xs px-2.5 py-0.5 rounded bg-[#00f0ff]/15 text-[#00f0ff] border border-[#00f0ff]/40 font-bold">
-                ADVISORY ENGINE
+              <span className="font-mono-telemetry text-[10px] px-2 py-0.2 rounded bg-[#00f0ff]/15 text-[#00f0ff] border border-[#00f0ff]/30 font-bold">
+                Advisory Mode
               </span>
             </div>
-            <p className="font-mono-telemetry text-xs text-[#849495]">
-              Autonomous Reasoning Model: DeepSeek-R1 Aerospace Invariant Reasoner // Unit: {selectedEngine.name}
+            <p className="font-mono-telemetry text-[11px] text-[#849495]">
+              Unit: {selectedEngine.name} ({selectedEngine.callsign})
             </p>
           </div>
         </div>
 
         {/* Confidence Score */}
-        <div className="flex items-center gap-2 font-mono-telemetry text-xs bg-[#090e1b] px-3 py-1.5 rounded-lg border border-[#00f0ff]/30">
-          <span className="text-[#849495]">AUTONOMIC CONFIDENCE:</span>
-          <span className="text-[#00f0ff] font-extrabold text-sm">
+        <div className="flex items-center gap-2 font-mono-telemetry text-xs bg-[#090e1b] px-2.5 py-1 rounded-lg border border-[#00f0ff]/30">
+          <span className="text-[#849495] text-[11px]">Confidence:</span>
+          <span className="text-[#00f0ff] font-bold text-sm">
             {selectedEngine.aiConfidence.toFixed(1)}%
           </span>
         </div>
@@ -82,62 +82,63 @@ export const Section5AiCopilot: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         
         {/* Left 8 Cols: Diagnosis, Supporting Telemetry & Recommended Action */}
-        <div className="lg:col-span-8 flex flex-col gap-4">
+        <div className="lg:col-span-8 flex flex-col gap-3">
           {/* AI Diagnosis Card */}
-          <div className="rounded-lg bg-[#0e1320] border border-[#3b494b]/50 p-4 flex flex-col gap-2.5 shadow-sm">
+          <div className="rounded-lg bg-[#0e1320] border border-[#3b494b]/40 p-3.5 flex flex-col gap-2 shadow-sm">
             <div className="flex items-center justify-between text-xs font-mono-telemetry">
-              <span className="text-[#00f0ff] font-bold uppercase flex items-center gap-1.5">
+              <span className="text-[#00f0ff] font-bold uppercase flex items-center gap-1.5 text-xs">
                 <Sparkles className="w-3.5 h-3.5" />
-                AUTONOMIC AI DIAGNOSIS
+                Diagnostic Finding
               </span>
-              <span className="text-[#849495]">TARGET: {selectedEngine.callsign}</span>
+              <span className="text-[#849495] text-[11px]">{selectedEngine.callsign}</span>
             </div>
 
-            <p className="font-mono-telemetry text-xs sm:text-sm text-[#dee2f5] leading-relaxed">
-              {diagnosticInsight.reasoningSynthesis ||
-                `Engine 02 displays localized convective stagnation on Cylinder #2 cooling fins. CHT reached 178.4°C (+26.4°C above digital twin baseline). Sump oil temperature remains nominal at 92°C, ruling out global lube system failure. Bayesian multi-signal correlator isolated cowling baffle distortion as the primary root cause with 68% probability.`}
-            </p>
+            <div className="text-xs space-y-1.5 pt-0.5">
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-[#849495] font-mono font-bold text-[10px] uppercase shrink-0">Finding:</span>
+                <span className="text-[#dee2f5] font-medium">
+                  {selectedEngine.id === 'eng-02'
+                    ? 'Elevated CHT on Cylinder #2 due to localized airflow stagnation.'
+                    : 'All thermal and mechanical channels operating within envelope.'}
+                </span>
+              </div>
+
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-[#849495] font-mono font-bold text-[10px] uppercase shrink-0">Evidence:</span>
+                <span className="text-[#7df4ff] font-mono text-[11px]">
+                  CHT {telemetry.cht}°C (+{telemetry.twinDivergenceMae}°C vs twin) · Air velocity 24.2 m/s
+                </span>
+              </div>
+
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-[#10b981] font-mono font-bold text-[10px] uppercase shrink-0">Action:</span>
+                <span className="text-[#dee2f5]">
+                  Derate climb throttle to 78%; inspect cooling baffle post-sortie.
+                </span>
+              </div>
+            </div>
 
             {/* Supporting Telemetry Chips */}
             <div className="pt-2 border-t border-[#3b494b]/30 flex flex-col gap-1 font-mono-telemetry text-xs">
-              <span className="text-[10px] text-[#849495] uppercase font-bold">SUPPORTING QUANTITATIVE TELEMETRY:</span>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-1">
-                <div className="p-2 rounded bg-[#161b29] border border-[#3b494b]/40">
-                  <span className="text-[10px] text-[#849495] block">OBSERVED CHT</span>
-                  <span className="text-[#ffb4ab] font-bold">{telemetry.cht}°C (Max 180)</span>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-0.5">
+                <div className="p-1.5 rounded bg-[#161b29] border border-[#3b494b]/30">
+                  <span className="text-[9px] text-[#849495] block">CHT</span>
+                  <span className="text-[#ffb4ab] font-bold text-xs">{telemetry.cht}°C</span>
                 </div>
-                <div className="p-2 rounded bg-[#161b29] border border-[#3b494b]/40">
-                  <span className="text-[10px] text-[#849495] block">TWIN RESIDUAL</span>
-                  <span className="text-[#00f0ff] font-bold">MAE {telemetry.twinDivergenceMae}°C</span>
+                <div className="p-1.5 rounded bg-[#161b29] border border-[#3b494b]/30">
+                  <span className="text-[9px] text-[#849495] block">Residual</span>
+                  <span className="text-[#00f0ff] font-bold text-xs">+{telemetry.twinDivergenceMae}°C</span>
                 </div>
-                <div className="p-2 rounded bg-[#161b29] border border-[#3b494b]/40">
-                  <span className="text-[10px] text-[#849495] block">AIR VELOCITY</span>
-                  <span className="text-[#dee2f5] font-bold">24.2 m/s (-29%)</span>
+                <div className="p-1.5 rounded bg-[#161b29] border border-[#3b494b]/30">
+                  <span className="text-[9px] text-[#849495] block">Airspeed</span>
+                  <span className="text-[#dee2f5] font-bold text-xs">24.2 m/s</span>
                 </div>
-                <div className="p-2 rounded bg-[#161b29] border border-[#3b494b]/40">
-                  <span className="text-[10px] text-[#849495] block">OIL TEMP</span>
-                  <span className="text-[#00f0ff] font-bold">{telemetry.oilTempC}°C (Nominal)</span>
+                <div className="p-1.5 rounded bg-[#161b29] border border-[#3b494b]/30">
+                  <span className="text-[9px] text-[#849495] block">Oil temp</span>
+                  <span className="text-[#10b981] font-bold text-xs">{telemetry.oilTempC}°C</span>
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Recommended Action Card */}
-          <div className="rounded-lg bg-[#0e1320] border border-[#b4c5ff]/40 p-4 flex flex-col gap-2">
-            <div className="flex items-center justify-between text-xs font-mono-telemetry">
-              <span className="text-[#b4c5ff] font-bold uppercase flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                RECOMMENDED OPERATIONAL DIRECTIVE
-              </span>
-              <span className="text-[#b4c5ff] text-[10px] font-bold px-2 py-0.5 rounded bg-[#303443]">
-                ADVISORY ACTION
-              </span>
-            </div>
-
-            <p className="font-mono-telemetry text-xs text-[#dee2f5] leading-relaxed">
-              {diagnosticInsight.prescribedInterventions?.[0]?.action ||
-                'Derate cruise throttle ceiling to 78% immediately to suppress peak thermal excursion below 172°C. Schedule post-sortie borescope inspection of cylinder baffle and cooling duct seals before next flight clearance.'}
-            </p>
           </div>
         </div>
 
@@ -196,62 +197,61 @@ export const Section5AiCopilot: React.FC = () => {
 
       </div>
 
-      {/* 2. ADVISORY ASSURANCE PIPELINE (Strict Requirement) */}
-      {/* AI RECOMMENDATION ↓ SAFETY VALIDATION ↓ HUMAN APPROVAL */}
-      <div className="rounded-lg bg-[#090e1b] border border-[#3b494b]/50 p-4 flex flex-col gap-3">
+      {/* 2. ADVISORY ASSURANCE PIPELINE */}
+      <div className="rounded-lg bg-[#090e1b] border border-[#3b494b]/40 p-3 flex flex-col gap-2.5">
         <div className="flex items-center justify-between flex-wrap gap-2 text-xs font-mono-telemetry">
           <div className="flex items-center gap-2">
             <Lock className="w-3.5 h-3.5 text-[#00f0ff]" />
-            <span className="font-bold text-[#dee2f5] uppercase tracking-wider">
-              AUTONOMIC ASSURANCE PIPELINE
+            <span className="font-bold text-[#dee2f5] uppercase tracking-wider text-[11px]">
+              Assurance Pipeline
             </span>
           </div>
-          <span className="text-[#00f0ff] text-[11px]">
-            ADVISORY ONLY — AUTONOMOUS FLIGHT PARAMETER OVERRIDE PREVENTED
+          <span className="text-[#849495] text-[10px]">
+            Advisory mode · Read-only
           </span>
         </div>
 
         {/* 3-Step Flow Container */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
           {/* Step 1: AI Recommendation */}
-          <div className="p-3 rounded-lg bg-[#161b29] border border-[#00f0ff]/40 flex flex-col gap-1.5">
-            <div className="flex items-center justify-between text-xs font-mono-telemetry font-bold text-[#00f0ff]">
-              <span>1. AI RECOMMENDATION</span>
-              <Sparkles className="w-3.5 h-3.5" />
+          <div className="p-2.5 rounded bg-[#161b29] border border-[#00f0ff]/30 flex flex-col justify-between gap-1">
+            <div className="flex items-center justify-between text-[11px] font-mono-telemetry font-bold text-[#00f0ff]">
+              <span>1. Recommendation</span>
+              <Sparkles className="w-3 h-3" />
             </div>
-            <p className="font-mono-telemetry text-xs text-[#b9cacb]">
-              Autonomic inference advises throttle derate to 78% cruise limit.
+            <p className="text-[11px] text-[#b9cacb]">
+              Derate throttle to 78% ceiling.
             </p>
-            <span className="font-mono-telemetry text-[10px] text-[#00f0ff]">Status: GENERATED</span>
+            <span className="font-mono-telemetry text-[9px] text-[#00f0ff]">Generated</span>
           </div>
 
           {/* Step 2: Safety Validation */}
-          <div className="p-3 rounded-lg bg-[#161b29] border border-[#b4c5ff]/40 flex flex-col gap-1.5">
-            <div className="flex items-center justify-between text-xs font-mono-telemetry font-bold text-[#b4c5ff]">
-              <span>2. SAFETY VALIDATION</span>
-              <ShieldCheck className="w-3.5 h-3.5" />
+          <div className="p-2.5 rounded bg-[#161b29] border border-[#b4c5ff]/30 flex flex-col justify-between gap-1">
+            <div className="flex items-center justify-between text-[11px] font-mono-telemetry font-bold text-[#b4c5ff]">
+              <span>2. Validation</span>
+              <ShieldCheck className="w-3 h-3" />
             </div>
-            <p className="font-mono-telemetry text-xs text-[#b9cacb]">
-              Flight envelope simulation verifies stall margin remains &gt;1.45 at 78% throttle.
+            <p className="text-[11px] text-[#b9cacb]">
+              Stall margin &gt;1.45 confirmed.
             </p>
-            <span className="font-mono-telemetry text-[10px] text-[#00f0ff]">Status: VERIFIED SAFE</span>
+            <span className="font-mono-telemetry text-[9px] text-[#10b981]">Verified safe</span>
           </div>
 
           {/* Step 3: Human Approval */}
-          <div className="p-3 rounded-lg bg-[#161b29] border border-[#ffb4ab]/40 flex flex-col gap-1.5">
-            <div className="flex items-center justify-between text-xs font-mono-telemetry font-bold text-[#ffb4ab]">
-              <span>3. HUMAN APPROVAL</span>
-              <CheckCircle2 className="w-3.5 h-3.5" />
+          <div className="p-2.5 rounded bg-[#161b29] border border-[#ffb4ab]/30 flex flex-col justify-between gap-1">
+            <div className="flex items-center justify-between text-[11px] font-mono-telemetry font-bold text-[#ffb4ab]">
+              <span>3. Sign-off</span>
+              <CheckCircle2 className="w-3 h-3" />
             </div>
-            <p className="font-mono-telemetry text-xs text-[#b9cacb]">
-              Pilot / Ground Station Commander must confirm directive before execution.
+            <p className="text-[11px] text-[#b9cacb]">
+              Operator confirmation required.
             </p>
             <button
               type="button"
               onClick={() => showToast('Flight Commander Human Sign-Off logged for Throttle Derate.', 'success')}
-              className="mt-1 py-1 px-2.5 rounded bg-[#00f0ff]/20 hover:bg-[#00f0ff]/30 text-[#00f0ff] font-mono-telemetry text-[10px] font-bold uppercase transition-colors text-center border border-[#00f0ff]/40"
+              className="mt-0.5 py-0.5 px-2 rounded bg-[#00f0ff]/20 hover:bg-[#00f0ff]/30 text-[#00f0ff] font-mono-telemetry text-[9px] font-bold uppercase transition-colors text-center border border-[#00f0ff]/40 cursor-pointer"
             >
-              COMMANDER SIGN-OFF
+              Confirm sign-off
             </button>
           </div>
         </div>

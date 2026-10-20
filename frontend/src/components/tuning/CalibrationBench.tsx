@@ -37,19 +37,19 @@ export const CalibrationBench: React.FC = () => {
             <div className="flex items-center gap-2">
               <Sliders className="text-[#00f0ff] w-4 h-4" />
               <h2 className="font-['Space_Grotesk'] text-base font-bold text-[#dee2f5] uppercase tracking-wider">
-                CALIBRATION BENCH
+                Calibration Bench
               </h2>
             </div>
             <span 
               id="bench-slot-badge"
               className="font-mono text-[9px] px-2 py-0.5 rounded bg-[#303443] text-[#00dbe9] border border-[#3b494b]/40 font-semibold"
             >
-              SLOT: C-4
+              Slot C-4
             </span>
           </div>
 
-          <p className="text-xs text-[#b9cacb] leading-relaxed">
-            Adjust injection map, ignition curvature, and thermodynamic governing setpoints.
+          <p className="text-xs text-[#b9cacb]">
+            Injection map, ignition & thermodynamic setpoints.
           </p>
 
           <div className="space-y-3 pt-1">
@@ -218,15 +218,15 @@ export const CalibrationBench: React.FC = () => {
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
               <RotateCw className={`w-4 h-4 ${isSimulating ? 'animate-spin' : 'group-hover:rotate-180 transition-transform duration-500'}`} />
-              {isSimulating ? 'SOLVING TWIN EQUATIONS...' : 'RUN DIGITAL TWIN SIMULATION'}
+              {isSimulating ? 'Solving equations...' : 'Run Simulation'}
             </span>
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 pointer-events-none" />
           </button>
 
-          <div className="flex justify-between items-center mt-2.5 px-1 font-mono text-[9px]">
-            <span className="text-[#849495] uppercase">SIM KERNEL: THERMO-TWIN V4.2</span>
+          <div className="flex justify-between items-center mt-2 px-1 font-mono text-[9px]">
+            <span className="text-[#849495] uppercase">Kernel: Thermo-Twin v4.2</span>
             <span className={`uppercase font-semibold ${isSimulating ? 'text-[#f59e0b] animate-pulse' : 'text-[#00dbe9]'}`}>
-              STATUS: {isSimulating ? 'SOLVING...' : 'READY'}
+              {isSimulating ? 'Solving...' : 'Ready'}
             </span>
           </div>
         </div>
@@ -235,14 +235,14 @@ export const CalibrationBench: React.FC = () => {
       {/* Calibration Ambient Profile Snapshot Widget */}
       <div 
         id="ambient-profile-widget"
-        className="bg-[#161b29]/90 border border-[#3b494b]/30 rounded-xl p-3.5 shadow-md space-y-2 select-none"
+        className="bg-[#161b29]/90 border border-[#3b494b]/30 rounded-xl p-3 shadow-md space-y-2 select-none"
       >
         <div className="flex items-center justify-between">
           <span className="font-mono text-[9px] text-[#849495] tracking-wider uppercase">
-            CALIBRATION AMBIENT PROFILE
+            Ambient Profile
           </span>
           <span className="font-mono text-[9px] text-[#00f0ff] font-semibold">
-            BARO: {currentMission.baroInHg.toFixed(2)} INHG
+            Baro: {currentMission.baroInHg.toFixed(2)} inHg
           </span>
         </div>
 
@@ -266,15 +266,15 @@ export const CalibrationBench: React.FC = () => {
         <div className="pt-1 flex flex-col gap-0.5 text-[10px] font-mono border-t border-[#3b494b]/20">
           <div className="flex items-center justify-between">
             <span className="text-[#849495] flex items-center gap-1">
-              <Activity className="w-3 h-3 text-[#00f0ff] animate-pulse" /> LIVE TELEMETRY:
+              <Activity className="w-3 h-3 text-[#00f0ff] animate-pulse" /> Live:
             </span>
             <span className="text-[#00f0ff] font-bold">
               {telemetry.rpm} RPM | {telemetry.cht}°C | {telemetry.fuelFlow} L/h
             </span>
           </div>
           <div className="flex items-center justify-between text-[9px] text-[#849495]">
-            <span>PEAK PRESS: <strong className="text-[#7df4ff]">{Math.max(...telemetry.cylinderPressure).toFixed(1)} bar</strong></span>
-            <span>VIB: <strong className="text-[#dee2f5]">{telemetry.vibration}g</strong></span>
+            <span>Peak P: <strong className="text-[#7df4ff]">{Math.max(...telemetry.cylinderPressure).toFixed(1)} bar</strong></span>
+            <span>Vib: <strong className="text-[#dee2f5]">{telemetry.vibration}g</strong></span>
             <span>EGT: <strong className="text-[#f59e0b]">{telemetry.egt}°C</strong></span>
           </div>
         </div>

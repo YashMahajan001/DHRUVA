@@ -213,26 +213,26 @@ export const Section3FaultsAndTelemetry: React.FC = () => {
                     </div>
 
                     {/* Description */}
-                    <p className="font-mono-telemetry text-xs text-[#b9cacb] leading-relaxed">
+                    <p className="font-mono-telemetry text-xs text-[#b9cacb]">
                       {fault.description}
                     </p>
 
                     {/* Metadata Row: Probability, Status & Detection Time */}
                     <div className="grid grid-cols-2 gap-2 pt-1 border-t border-[#3b494b]/30 font-mono-telemetry text-[10px]">
                       <div>
-                        <span className="text-[#849495]">PROBABILITY: </span>
-                        <span className="text-[#00f0ff] font-bold">{fault.probability}% BAYESIAN</span>
+                        <span className="text-[#849495]">Prob: </span>
+                        <span className="text-[#00f0ff] font-bold">{fault.probability}%</span>
                       </div>
                       <div className="text-right">
-                        <span className="text-[#849495]">STATUS: </span>
+                        <span className="text-[#849495]">Status: </span>
                         <span className="text-[#b4c5ff] font-semibold">{fault.status}</span>
                       </div>
                       <div className="col-span-2 text-[9px] text-[#849495]">
-                        DETECTED: {fault.detectionTime}
+                        Detected: {fault.detectionTime}
                       </div>
                     </div>
 
-                    {/* Exact Requested Action Buttons: INSPECT, DIAGNOSE, VIEW EVIDENCE */}
+                    {/* Action Buttons: INSPECT, DIAGNOSE, VIEW EVIDENCE */}
                     <div className="flex items-center gap-2 pt-1.5 border-t border-[#3b494b]/30">
                       <button
                         type="button"
@@ -242,10 +242,10 @@ export const Section3FaultsAndTelemetry: React.FC = () => {
                           if (el) el.scrollIntoView({ behavior: 'smooth' });
                           showToast(`Focused 3D Twin Viewport on ${fault.component} (Cylinder 2)`, 'info');
                         }}
-                        className="flex-1 py-1.5 px-2 rounded bg-[#00f0ff]/15 hover:bg-[#00f0ff]/25 border border-[#00f0ff]/40 text-[#00f0ff] font-mono-telemetry text-[11px] font-bold uppercase transition-all flex items-center justify-center gap-1"
+                        className="flex-1 py-1 px-2 rounded bg-[#00f0ff]/15 hover:bg-[#00f0ff]/25 border border-[#00f0ff]/40 text-[#00f0ff] font-mono-telemetry text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1"
                       >
                         <Eye className="w-3 h-3" />
-                        <span>INSPECT</span>
+                        <span>Inspect</span>
                       </button>
 
                       <button
@@ -254,10 +254,10 @@ export const Section3FaultsAndTelemetry: React.FC = () => {
                           openModal('agent-trace');
                           showToast(`Triggered Autonomous AI Diagnostics trace for ${fault.id}`, 'info');
                         }}
-                        className="flex-1 py-1.5 px-2 rounded bg-[#1a1f2d] hover:bg-[#252a38] border border-[#3b494b]/60 text-[#dee2f5] font-mono-telemetry text-[11px] font-bold uppercase transition-all flex items-center justify-center gap-1"
+                        className="flex-1 py-1 px-2 rounded bg-[#1a1f2d] hover:bg-[#252a38] border border-[#3b494b]/60 text-[#dee2f5] font-mono-telemetry text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1"
                       >
                         <Sparkles className="w-3 h-3 text-[#00f0ff]" />
-                        <span>DIAGNOSE</span>
+                        <span>Diagnose</span>
                       </button>
 
                       <button
@@ -267,10 +267,10 @@ export const Section3FaultsAndTelemetry: React.FC = () => {
                           if (el) el.scrollIntoView({ behavior: 'smooth' });
                           showToast(`Navigated to Bayesian Root-Cause Evidence Chain for ${fault.id}`, 'info');
                         }}
-                        className="flex-1 py-1.5 px-2 rounded bg-[#090e1b] hover:bg-[#161b29] border border-[#3b494b]/60 text-[#849495] hover:text-[#dee2f5] font-mono-telemetry text-[11px] font-bold uppercase transition-all flex items-center justify-center gap-1"
+                        className="flex-1 py-1 px-2 rounded bg-[#090e1b] hover:bg-[#161b29] border border-[#3b494b]/60 text-[#849495] hover:text-[#dee2f5] font-mono-telemetry text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1"
                       >
                         <FileText className="w-3 h-3" />
-                        <span>VIEW EVIDENCE</span>
+                        <span>Evidence</span>
                       </button>
                     </div>
                   </div>

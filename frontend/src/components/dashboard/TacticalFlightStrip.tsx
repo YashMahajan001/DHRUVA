@@ -53,8 +53,8 @@ export const TacticalFlightStrip: React.FC<TacticalFlightStripProps> = ({
         </div>
 
         <div className="hidden lg:flex items-center gap-1 text-[#b9cacb] font-mono text-xs uppercase tracking-wider">
-          <span className="text-[#849495]">LINK:</span>
-          <span className="text-[#00dbe9]">{mission.linkStatus || 'SATCOM // ENCRYPTED 256-BIT'}</span>
+          <span className="text-[#849495]">Link:</span>
+          <span className="text-[#00dbe9]">SATCOM Encrypted</span>
         </div>
       </div>
 
@@ -65,16 +65,16 @@ export const TacticalFlightStrip: React.FC<TacticalFlightStripProps> = ({
           className="bg-[#161b29] hover:bg-[#252a38] border border-[#3b494b]/20 hover:border-[#00f0ff]/40 px-2 sm:px-2.5 py-1 rounded flex items-center gap-1 transition-colors cursor-pointer"
           title="Click to view & configure mission envelope"
         >
-          <span className="text-[#849495] text-[10px]">MISSION:</span>
+          <span className="text-[#849495] text-[10px]">Mission:</span>
           <span className="text-[#dee2f5] font-semibold tracking-wide text-xs">
-            {mission.missionName || 'HIGH ALTITUDE ISR'}
+            {mission.missionName || 'ISR Patrol'}
           </span>
         </button>
 
         <div className="bg-[#161b29] border border-[#3b494b]/20 px-2 sm:px-2.5 py-1 rounded flex items-center gap-1">
-          <span className="text-[#849495] text-[10px]">PHASE:</span>
+          <span className="text-[#849495] text-[10px]">Phase:</span>
           <span className="text-[#00f0ff] font-semibold tracking-wide text-xs">
-            {mission.phase || 'LOITER // AUTONOMOUS'}
+            {mission.phase || 'Loiter'}
           </span>
         </div>
 

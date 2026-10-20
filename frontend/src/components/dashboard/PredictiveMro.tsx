@@ -73,10 +73,10 @@ export const PredictiveMro: React.FC<PredictiveMroProps> = ({ tasks, onSelectEng
       <button
         id="btn-export-mro"
         onClick={handleExportAudit}
-        className="w-full mt-2 py-2 bg-[#252a38] hover:bg-[#343948] border border-[#3b494b]/40 text-[#dee2f5] font-mono text-[11px] rounded transition-colors text-center uppercase tracking-wider font-semibold cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+        className="w-full mt-2 py-1.5 bg-[#252a38] hover:bg-[#343948] border border-[#3b494b]/40 text-[#dee2f5] font-mono text-[10px] rounded transition-colors text-center uppercase tracking-wider font-semibold cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
       >
         <FileText className="w-3.5 h-3.5 text-[#00f0ff]" />
-        <span>EXPORT COMPLETE MRO AUDIT</span>
+        <span>Export MRO Audit</span>
       </button>
 
       {/* Complete MRO Audit Modal */}

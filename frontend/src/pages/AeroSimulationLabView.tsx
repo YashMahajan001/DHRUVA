@@ -129,7 +129,7 @@ export const AeroSimulationLabView: React.FC = () => {
             </span>
           </div>
           <p className="text-xs font-mono text-[#94a3b8] mt-1">
-            Configure flight regimes, inject certified aerospace fault modes, and benchmark baseline vs candidate behavior.
+            Flight regimes, fault mode injection & baseline benchmarking.
           </p>
         </div>
 
@@ -139,7 +139,7 @@ export const AeroSimulationLabView: React.FC = () => {
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#38bdf8] hover:from-[#38bdf8] hover:to-[#0284c7] text-[#080d1a] font-bold text-xs font-mono uppercase tracking-wider transition-all cursor-pointer shadow-lg disabled:opacity-50"
         >
           {isRunningScenario ? <RotateCcw className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4 fill-current" />}
-          <span>{isRunningScenario ? 'EXECUTING SIMULATION...' : 'RUN SCENARIO'}</span>
+          <span>{isRunningScenario ? 'Executing...' : 'Run Scenario'}</span>
         </button>
       </div>
 
@@ -149,7 +149,7 @@ export const AeroSimulationLabView: React.FC = () => {
         <div className="lg:col-span-4 p-5 rounded-2xl bg-[#0b1329]/80 backdrop-blur-xl border border-[#38bdf8]/20 shadow-xl space-y-4">
           <h2 className="font-bold text-sm text-[#f8fafc] flex items-center gap-2 border-b border-slate-800 pb-2">
             <Sliders className="w-4 h-4 text-[#38bdf8]" />
-            FLIGHT REGIME PARAMETERS
+            Flight Parameters
           </h2>
 
           <div className="space-y-4 font-mono text-xs">
@@ -230,7 +230,7 @@ export const AeroSimulationLabView: React.FC = () => {
         <div className="lg:col-span-4 p-5 rounded-2xl bg-[#0b1329]/80 backdrop-blur-xl border border-[#38bdf8]/20 shadow-xl space-y-3">
           <h2 className="font-bold text-sm text-[#f8fafc] flex items-center gap-2 border-b border-slate-800 pb-2">
             <Wind className="w-4 h-4 text-[#38bdf8]" />
-            SELECT MISSION SCENARIO
+            Mission Scenarios
           </h2>
 
           <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
@@ -262,7 +262,7 @@ export const AeroSimulationLabView: React.FC = () => {
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <h2 className="font-bold text-sm text-[#f8fafc] flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-[#f59e0b]" />
-              FAULT INJECTION MATRIX
+              Fault Injections
             </h2>
             {Object.keys(injectedFaults).length > 0 && (
               <button
@@ -313,7 +313,7 @@ export const AeroSimulationLabView: React.FC = () => {
               <div className="flex items-center gap-2">
                 <span className="text-sm font-mono text-[#38bdf8] font-bold">BENCHMARK AUDIT:</span>
                 <h3 className="font-bold text-lg text-[#f8fafc]">
-                  Baseline Nominal vs Injected Fault Candidate
+                  Baseline vs Injected Fault Candidate
                 </h3>
               </div>
               <p className="text-xs text-[#94a3b8] font-mono mt-0.5">
@@ -342,7 +342,7 @@ export const AeroSimulationLabView: React.FC = () => {
                 }`}>
                   {v > 0 ? `+${v}` : v}
                 </div>
-                <div className="text-[10px] text-[#64748b]">Absolute delta vs baseline model</div>
+                <div className="text-[10px] text-[#64748b]">Delta vs baseline</div>
               </div>
             ))}
           </div>

@@ -201,7 +201,7 @@ export const AutoTuningLabView: React.FC = () => {
             </span>
           </div>
           <p className="text-xs md:text-sm text-[#849495] mt-1 font-mono">
-            Candidate calibration editing, authoritative thermodynamic limits verification, dyno curve overlays & test cycles.
+            ECU calibration editing, limit verification & dyno curves.
           </p>
         </div>
 
@@ -231,7 +231,7 @@ export const AutoTuningLabView: React.FC = () => {
           <div>
             <div className="flex items-center justify-between pb-2 border-b border-[#3b494b]/30">
               <span className="font-mono text-xs text-[#f59e0b] font-bold uppercase">
-                ECU CALIBRATION PARAMETERS
+                ECU Calibration
               </span>
               <span className="text-[10px] font-mono text-[#849495]">
                 Target: {currentEngine ? currentEngine.name : 'EA888'}
@@ -374,7 +374,7 @@ export const AutoTuningLabView: React.FC = () => {
           <div>
             <div className="flex items-center justify-between pb-2 border-b border-[#3b494b]/30">
               <span className="font-mono text-xs text-[#f59e0b] font-bold uppercase">
-                ENGINEERING FEASIBILITY VALIDATION
+                Feasibility Validation
               </span>
               <span className="text-[10px] font-mono text-[#849495]">
                 {isValidating ? 'Validating...' : 'Real-time Checked'}
@@ -452,10 +452,10 @@ export const AutoTuningLabView: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-[#3b494b]/30">
           <div>
             <span className="font-mono text-xs text-[#f59e0b] font-bold uppercase">
-              DYNO POWER & TORQUE COMPARISON: BASELINE vs CANDIDATE TUNE
+              Dyno Comparison · Baseline vs Candidate
             </span>
             <div className="text-[10px] font-mono text-[#849495] mt-0.5">
-              Simulated wide-open-throttle sweep from idle to redline.
+              WOT sweep idle to redline.
             </div>
           </div>
 

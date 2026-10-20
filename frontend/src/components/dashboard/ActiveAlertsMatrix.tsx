@@ -30,12 +30,12 @@ export const ActiveAlertsMatrix: React.FC<ActiveAlertsMatrixProps> = ({
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-1.5">
           <AlertTriangle className="w-4 h-4 text-[#ef4444]" />
-          <span className="font-display text-base font-bold text-[#dee2f5] tracking-wider uppercase">
-            Active Alerts Matrix
+          <span className="font-display text-sm font-bold text-[#dee2f5] tracking-wide uppercase">
+            Active Alerts
           </span>
         </div>
-        <span className="font-mono text-[9px] text-[#849495] uppercase tracking-wider">
-          {alerts.length} FLAGGED ANOMALIES
+        <span className="font-mono text-[10px] text-[#849495]">
+          {alerts.length} {alerts.length === 1 ? 'fault' : 'faults'}
         </span>
       </div>
 
@@ -45,7 +45,7 @@ export const ActiveAlertsMatrix: React.FC<ActiveAlertsMatrixProps> = ({
           <button
             key={sev}
             onClick={() => setSelectedSeverity(sev)}
-            className={`px-2 py-0.5 rounded transition-colors ${
+            className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
               selectedSeverity === sev
                 ? 'bg-[#252a38] text-[#00f0ff] border border-[#00f0ff]/40 font-bold'
                 : 'text-[#849495] hover:text-[#dee2f5]'
@@ -57,92 +57,65 @@ export const ActiveAlertsMatrix: React.FC<ActiveAlertsMatrixProps> = ({
       </div>
 
       {/* Alert Items List */}
-      <div className="flex flex-col gap-2 max-h-[170px] overflow-y-auto pr-1">
+      <div className="flex flex-col gap-1.5 max-h-[180px] overflow-y-auto pr-1">
         {filteredAlerts.length === 0 ? (
           <div className="py-4 text-center text-[#849495] font-mono text-xs border border-dashed border-[#3b494b]/30 rounded">
-            NO ACTIVE {selectedSeverity} ANOMALIES RECORDED
+            No active faults.
           </div>
         ) : (
           filteredAlerts.map((alert) => {
             const isCritical = alert.severity === 'CRITICAL';
             const isWarning = alert.severity === 'WARNING';
 
-            const bgClass = isCritical
-              ? 'bg-[#93000a]/25 border border-[#ffb4ab]/30'
+            const sevBadge = isCritical
+              ? 'bg-[#ef4444]/20 text-[#ffb4ab] border-[#ef4444]/40'
               : isWarning
-              ? 'bg-[#252a38] border border-[#f59e0b]/30'
-              : 'bg-[#252a38] border border-[#3b494b]/30';
+              ? 'bg-[#f59e0b]/20 text-[#f59e0b] border-[#f59e0b]/40'
+              : 'bg-[#00f0ff]/15 text-[#00dbe9] border-[#00f0ff]/30';
 
-            const dotClass = isCritical
-              ? 'bg-[#ef4444] animate-pulse shadow-[0_0_6px_#ef4444]'
-              : isWarning
-              ? 'bg-[#f59e0b]'
-              : 'bg-[#00dbe9]';
-
-            const titleColor = isCritical
-              ? 'text-[#ffb4ab]'
-              : isWarning
-              ? 'text-[#f59e0b]'
-              : 'text-[#00dbe9]';
+            const engLabel = `ENG-0${alert.engineIndex + 1}`;
 
             return (
               <div
                 key={alert.id}
-                className={`p-2.5 rounded flex items-center justify-between gap-2 transition-all ${bgClass}`}
+                className="p-2 rounded bg-[#090e1b]/80 border border-[#3b494b]/30 hover:border-[#00f0ff]/40 flex items-center justify-between gap-2 transition-all text-xs"
               >
-                <div className="flex items-start gap-2.5">
-                  <span className={`w-2 h-2 rounded-full mt-1 shrink-0 ${dotClass}`} />
-                  <div>
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className={`font-mono text-[11px] font-bold block ${titleColor}`}>
-                        {alert.title}
-                      </span>
-                      <span className="font-mono text-[9px] text-[#849495]">
-                        [{alert.timestamp}]
-                      </span>
-                    </div>
-                    <span className="text-xs text-[#b9cacb] block leading-tight">
-                      {alert.description}
-                    </span>
-                    <span className="font-mono text-[9px] text-[#849495] block mt-0.5">
-                      SUBSYSTEM: {alert.component}
-                    </span>
-                  </div>
+                <div 
+                  className="flex items-center gap-2 min-w-0 cursor-pointer flex-1"
+                  onClick={() => setInspectModalAlert(alert)}
+                  title="Click to view full fault evidence"
+                >
+                  <span className={`px-1.5 py-0.5 rounded font-mono text-[9px] font-bold border uppercase shrink-0 ${sevBadge}`}>
+                    {alert.severity}
+                  </span>
+                  <span className="font-mono text-[10px] text-[#dee2f5] font-semibold shrink-0">
+                    {engLabel}
+                  </span>
+                  <span className="text-[#849495]">·</span>
+                  <span className="font-sans text-xs text-[#dee2f5] font-medium truncate">
+                    {alert.title}
+                  </span>
+                  <span className="text-[#849495] hidden sm:inline">·</span>
+                  <span className="text-[10px] font-mono text-[#849495] truncate hidden sm:inline">
+                    {alert.component}
+                  </span>
                 </div>
 
                 <div className="flex items-center gap-1.5 shrink-0">
-                  {isCritical && (
-                    <button
-                      onClick={() => onInspectEngine(alert.engineIndex)}
-                      className="px-2.5 py-1 bg-[#ef4444] text-[#090e1b] font-mono text-[9px] font-bold rounded uppercase hover:opacity-90 transition-opacity cursor-pointer"
-                      title="Isolate and inspect Engine 03"
-                    >
-                      INSPECT
-                    </button>
-                  )}
-
-                  {isWarning && (
-                    <button
-                      onClick={() => onInspectEngine(alert.engineIndex)}
-                      className="px-2.5 py-1 bg-[#f59e0b]/20 text-[#f59e0b] hover:bg-[#f59e0b] hover:text-[#090e1b] border border-[#f59e0b]/40 font-mono text-[9px] font-bold rounded uppercase transition-colors cursor-pointer"
-                      title="Diagnose thermal gradient on Engine 02"
-                    >
-                      DIAGNOSE
-                    </button>
-                  )}
-
-                  {!isCritical && !isWarning && (
-                    <span className="font-mono text-[9px] text-[#849495] font-bold px-2 py-1 bg-[#161b29] rounded border border-[#3b494b]/30">
-                      NOMINAL
-                    </span>
-                  )}
+                  <button
+                    onClick={() => onInspectEngine(alert.engineIndex)}
+                    className="px-2 py-0.5 bg-[#252a38] hover:bg-[#00f0ff] hover:text-[#00363a] text-[#00f0ff] font-mono text-[9px] font-bold rounded uppercase border border-[#00f0ff]/30 transition-all cursor-pointer"
+                    title={`Inspect ${engLabel}`}
+                  >
+                    INSPECT
+                  </button>
 
                   <button
                     onClick={() => onDismissAlert(alert.id)}
-                    className="text-[#849495] hover:text-[#dee2f5] p-1 rounded hover:bg-[#161b29] transition-colors"
+                    className="text-[#849495] hover:text-[#dee2f5] p-1 rounded hover:bg-[#161b29] transition-colors cursor-pointer"
                     title="Acknowledge alert"
                   >
-                    <X className="w-3.5 h-3.5" />
+                    <X className="w-3 h-3" />
                   </button>
                 </div>
               </div>

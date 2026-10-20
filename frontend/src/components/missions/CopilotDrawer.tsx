@@ -53,36 +53,33 @@ export const CopilotDrawer: React.FC = () => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Drawer Top Header */}
-        <div className="p-4 bg-[#161b29] border-b border-[#3b494b]/30 flex items-center justify-between">
+        <div className="p-3.5 bg-[#161b29] border-b border-[#3b494b]/30 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded bg-[#252a38] border border-[#00f0ff]/50 flex items-center justify-center text-[#00f0ff] shadow-[0_0_10px_rgba(0,240,255,0.3)]">
-              <Sparkles className="w-4 h-4 animate-pulse" />
+            <div className="w-7 h-7 rounded bg-[#252a38] border border-[#00f0ff]/50 flex items-center justify-center text-[#00f0ff] shadow-[0_0_10px_rgba(0,240,255,0.3)]">
+              <Sparkles className="w-3.5 h-3.5 animate-pulse" />
             </div>
             <div className="flex flex-col">
-              <span className="font-mono-telemetry text-sm font-bold text-[#dee2f5] tracking-wider uppercase flex items-center gap-2">
-                AI COPILOT // ADVISORY
-                <span className="w-2 h-2 rounded-full bg-[#00f0ff] animate-ping" />
+              <span className="font-mono-telemetry text-xs font-bold text-[#dee2f5] tracking-wide uppercase flex items-center gap-1.5">
+                AI Copilot
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-ping" />
               </span>
-              <span className="font-mono-telemetry text-[9px] text-[#00dbe9]">
-                PROPULSION DIGITAL TWIN INFERENCE // {selectedEngine.model}
+              <span className="font-mono-telemetry text-[10px] text-[#849495]">
+                {selectedEngine.model} · Advisory mode
               </span>
             </div>
           </div>
 
-          <button
-            onClick={() => setIsCopilotOpen(false)}
-            className="p-1.5 rounded hover:bg-[#252a38] text-[#849495] hover:text-[#dee2f5] transition-colors cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Safety Disclaimer Banner */}
-        <div className="bg-[#161b29]/90 px-4 py-2 border-b border-[#3b494b]/20 flex items-center gap-2 font-mono-telemetry text-[10px] text-[#b4c5ff]">
-          <ShieldAlert className="w-4 h-4 text-[#00f0ff] flex-shrink-0" />
-          <span>
-            Advisory assistance only. Direct modification of engine throttle or mixture is prohibited by flight safety interlocks.
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="font-mono-telemetry text-[10px] text-[#849495] bg-[#090e1b] px-2 py-0.5 rounded border border-[#3b494b]/20">
+              Read-only
+            </span>
+            <button
+              onClick={() => setIsCopilotOpen(false)}
+              className="p-1 rounded hover:bg-[#252a38] text-[#849495] hover:text-[#dee2f5] transition-colors cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Prompt Recommendation Chips */}

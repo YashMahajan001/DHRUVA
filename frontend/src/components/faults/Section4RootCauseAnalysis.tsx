@@ -152,15 +152,15 @@ export const Section4RootCauseAnalysis: React.FC = () => {
               Fault Root-Cause Analysis
             </h3>
             <p className="font-mono-telemetry text-xs text-[#849495]">
-              Bayesian Multi-Signal Hypothesis Engine // Target: {selectedEngine.name} ({selectedEngine.callsign})
+              Bayesian Hypothesis Engine · Target: {selectedEngine.name} ({selectedEngine.callsign})
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 font-mono-telemetry text-xs">
-          <span className="text-[#849495]">MODEL CONVERGENCE:</span>
+          <span className="text-[#849495]">Convergence:</span>
           <span className="text-[#00f0ff] font-bold px-2 py-0.5 rounded bg-[#00f0ff]/10 border border-[#00f0ff]/30">
-            94.2% CONFIDENCE
+            94.2%
           </span>
         </div>
       </div>
@@ -168,8 +168,8 @@ export const Section4RootCauseAnalysis: React.FC = () => {
       {/* 1. ROOT CAUSE CANDIDATES (The 5 exact required candidates) */}
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between text-xs font-mono-telemetry text-[#849495]">
-          <span className="font-bold text-[#dee2f5] tracking-wider uppercase">ROOT CAUSE CANDIDATES</span>
-          <span>EVALUATED AGAINST 112 TELEMETRY INVARIANTS</span>
+          <span className="font-bold text-[#dee2f5] tracking-wider uppercase">Root Cause Candidates</span>
+          <span>112 invariants evaluated</span>
         </div>
 
         <div className="grid grid-cols-1 gap-3">
@@ -195,11 +195,11 @@ export const Section4RootCauseAnalysis: React.FC = () => {
 
                   <div className="flex items-center gap-3 font-mono-telemetry text-xs">
                     <span className="text-[#849495]">
-                      CONFIDENCE: <strong className="text-[#dee2f5]">{candidate.confidence}%</strong>
+                      Conf: <strong className="text-[#dee2f5]">{candidate.confidence}%</strong>
                     </span>
                     <span className="text-[#849495]">•</span>
                     <span className="text-[#849495]">
-                      PROBABILITY: <strong className={`text-sm ${candidate.statusClass}`}>{candidate.probability}%</strong>
+                      Prob: <strong className={`text-sm ${candidate.statusClass}`}>{candidate.probability}%</strong>
                     </span>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase ${candidate.badgeBg}`}>
                       {candidate.severity}

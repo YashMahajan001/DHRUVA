@@ -162,14 +162,14 @@ export const ExecutiveOverview: React.FC = () => {
         {/* Primary Title Bar & Quick Executive Actions */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div>
-            <h1 className="font-display text-xl sm:text-2xl lg:text-3xl font-black text-[#dee2f5] tracking-tight uppercase flex flex-wrap items-center gap-2.5">
+            <h1 className="font-display text-xl sm:text-2xl font-black text-[#dee2f5] tracking-tight uppercase flex flex-wrap items-center gap-2.5">
               <span>Executive Overview</span>
               <span className="text-[11px] font-mono font-normal tracking-wider px-2 py-0.5 rounded bg-[#10b981]/15 text-[#10b981] border border-[#10b981]/30">
                 {isHealthy ? 'ALL PROPULSION NOMINAL' : 'ATTENTION REQUIRED'}
               </span>
             </h1>
-            <p className="text-xs sm:text-sm text-[#849495] mt-0.5 font-sans">
-              High-Level Fleet Health, Sortie Envelope Readiness &amp; Strategic Decision Center
+            <p className="text-xs text-[#849495] mt-0.5 font-sans">
+              Fleet health, sortie readiness &amp; operational decisions
             </p>
           </div>
 
@@ -178,10 +178,10 @@ export const ExecutiveOverview: React.FC = () => {
             <button
               id="btn-open-executive-briefing"
               onClick={() => setIsBriefingOpen(true)}
-              className="px-3.5 py-1.5 rounded bg-gradient-to-r from-[#00f0ff]/20 to-[#0053db]/30 hover:from-[#00f0ff]/30 hover:to-[#0053db]/40 border border-[#00f0ff]/50 text-[#dee2f5] font-mono text-xs uppercase tracking-wider font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(0,240,255,0.25)] transition-all cursor-pointer"
+              className="px-3 py-1.5 rounded bg-gradient-to-r from-[#00f0ff]/20 to-[#0053db]/30 hover:from-[#00f0ff]/30 hover:to-[#0053db]/40 border border-[#00f0ff]/50 text-[#dee2f5] font-mono text-xs uppercase tracking-wider font-bold flex items-center gap-1.5 shadow-[0_0_12px_rgba(0,240,255,0.25)] transition-all cursor-pointer"
             >
               <FileText className="w-3.5 h-3.5 text-[#00f0ff]" />
-              Executive Briefing Document
+              Executive Briefing
             </button>
 
             <button
@@ -215,20 +215,20 @@ export const ExecutiveOverview: React.FC = () => {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-[#00f0ff]" />
-                <span className="font-mono text-xs text-[#849495] tracking-widest uppercase font-semibold">
-                  PLATFORM INTEGRATED HEALTH
+                <span className="font-mono text-xs text-[#849495] tracking-wider uppercase font-semibold">
+                  Platform Integrated Health
                 </span>
               </div>
               <span className="inline-flex items-center gap-1 font-mono text-[10px] text-[#00f0ff] bg-[#00f0ff]/10 px-2 py-0.5 rounded border border-[#00f0ff]/30">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-pulse"></span>
-                {isStreamActive ? 'LIVE CAN-BUS LINK' : 'STREAM PAUSED'}
+                {isStreamActive ? 'CAN-BUS ONLINE' : 'STREAM PAUSED'}
               </span>
             </div>
 
             {/* Circular Progress Gauge & Plain Summary */}
             <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 my-1">
               {/* Radial Score Gauge */}
-              <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center shrink-0">
+              <div className="relative w-28 h-28 sm:w-30 sm:h-30 flex items-center justify-center shrink-0">
                 <svg className="w-full h-full transform -rotate-90" viewBox="0 0 140 140">
                   <circle
                     cx="70"
@@ -256,7 +256,7 @@ export const ExecutiveOverview: React.FC = () => {
                     {avgHealth}%
                   </span>
                   <span className="font-mono text-[8px] sm:text-[9px] text-[#849495] uppercase tracking-wider font-semibold mt-0.5">
-                    FLEET SCORE
+                    SCORE
                   </span>
                 </div>
               </div>
@@ -270,18 +270,18 @@ export const ExecutiveOverview: React.FC = () => {
                     }`}
                   ></span>
                   <span className="font-mono text-xs sm:text-sm font-bold tracking-wider text-[#dee2f5] uppercase">
-                    {isHealthy ? 'OPERATIONALLY READY // GO' : 'PROCEED WITH ADVISORY'}
+                    {isHealthy ? 'Ready · Go' : 'Proceed with Advisory'}
                   </span>
                 </div>
 
                 <p className="text-xs text-[#b9cacb] leading-relaxed">
                   {isHealthy
-                    ? 'The propulsion system is operating within all safety margins. 3 engines are performing at peak efficiency, and 1 engine exhibits mild thermal elevation under altitude loiter.'
-                    : 'One engine requires monitoring due to thermal elevation. Normal cruise operations remain flight safe.'}
+                    ? 'Propulsion operating within safety margins. 3 nominal, 1 advisory thermal elevation.'
+                    : 'One engine requires monitoring due to thermal elevation. Normal cruise flight safe.'}
                 </p>
 
                 <div className="font-mono text-[10px] text-[#849495]">
-                  Synthetic Twin Validation: <span className="text-[#00f0ff] font-semibold">124,000 passes</span> • Zero critical faults
+                  Twin validation: <span className="text-[#00f0ff] font-semibold">124k passes</span> · 0 critical faults
                 </div>
               </div>
             </div>
@@ -289,7 +289,7 @@ export const ExecutiveOverview: React.FC = () => {
 
           {/* Quick Drill-down Footer */}
           <div className="mt-3 pt-2.5 border-t border-[#3b494b]/30 flex items-center justify-between text-xs font-mono text-[#849495]">
-            <span>UAV Platform: <strong className="text-[#dee2f5]">{mission?.assetId || 'UAV-01 MALE'}</strong></span>
+            <span>Asset: <strong className="text-[#dee2f5]">{mission?.assetId || 'UAV-01'}</strong></span>
             <button
               onClick={() => navigate('/dashboard')}
               className="text-[#00f0ff] hover:text-[#38bdf8] flex items-center gap-1 font-semibold transition-colors cursor-pointer"
@@ -304,16 +304,16 @@ export const ExecutiveOverview: React.FC = () => {
           {/* KPI 1: Active UAVs */}
           <div className="bg-[#161b29]/80 border border-[#3b494b]/30 rounded-xl p-3 sm:p-3.5 flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
             <div className="flex items-center justify-between text-[#849495] mb-1">
-              <span className="font-mono text-[10px] uppercase tracking-wider font-semibold">ACTIVE UAVs</span>
+              <span className="font-mono text-[10px] uppercase tracking-wider font-semibold">Active UAVs</span>
               <Plane className="w-3.5 h-3.5 text-[#00f0ff]" />
             </div>
             <div>
               <div className="font-mono text-xl sm:text-2xl font-black text-[#dee2f5]">
-                1 <span className="text-xs font-normal text-[#849495]">/ 1 Sortie</span>
+                1 <span className="text-xs font-normal text-[#849495]">/ 1</span>
               </div>
               <div className="font-mono text-[10px] text-[#10b981] mt-0.5 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>
-                Loiter Reconnaissance
+                Loiter Recon
               </div>
             </div>
           </div>
@@ -321,7 +321,7 @@ export const ExecutiveOverview: React.FC = () => {
           {/* KPI 2: Healthy Engines */}
           <div className="bg-[#161b29]/80 border border-[#3b494b]/30 rounded-xl p-3 sm:p-3.5 flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
             <div className="flex items-center justify-between text-[#849495] mb-1">
-              <span className="font-mono text-[10px] uppercase tracking-wider font-semibold">HEALTHY ENGINES</span>
+              <span className="font-mono text-[10px] uppercase tracking-wider font-semibold">Healthy Engines</span>
               <CheckCircle2 className="w-3.5 h-3.5 text-[#10b981]" />
             </div>
             <div>
@@ -329,7 +329,7 @@ export const ExecutiveOverview: React.FC = () => {
                 {healthyCount} <span className="text-xs font-normal text-[#849495]">/ {totalEngines}</span>
               </div>
               <div className="font-mono text-[10px] text-[#b9cacb] mt-0.5">
-                75% Optimal Status
+                75% Optimal
               </div>
             </div>
           </div>
@@ -337,15 +337,15 @@ export const ExecutiveOverview: React.FC = () => {
           {/* KPI 3: Engines Needing Attention */}
           <div className="bg-[#161b29]/80 border border-[#3b494b]/30 rounded-xl p-3 sm:p-3.5 flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
             <div className="flex items-center justify-between text-[#849495] mb-1">
-              <span className="font-mono text-[10px] uppercase tracking-wider font-semibold">NEEDS ATTENTION</span>
+              <span className="font-mono text-[10px] uppercase tracking-wider font-semibold">Needs Attention</span>
               <AlertTriangle className="w-3.5 h-3.5 text-[#f59e0b]" />
             </div>
             <div>
               <div className="font-mono text-xl sm:text-2xl font-black text-[#f59e0b]">
-                {attentionCount} <span className="text-xs font-normal text-[#849495]">Engine (ENG 02)</span>
+                {attentionCount} <span className="text-xs font-normal text-[#849495]">ENG-02</span>
               </div>
               <div className="font-mono text-[10px] text-[#f59e0b] mt-0.5">
-                Thermal Elevation (+18°C)
+                CHT +18 °C
               </div>
             </div>
           </div>
@@ -353,7 +353,7 @@ export const ExecutiveOverview: React.FC = () => {
           {/* KPI 4: Critical Safety Faults */}
           <div className="bg-[#161b29]/80 border border-[#3b494b]/30 rounded-xl p-3 sm:p-3.5 flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
             <div className="flex items-center justify-between text-[#849495] mb-1">
-              <span className="font-mono text-[10px] uppercase tracking-wider font-semibold">CRITICAL FAULTS</span>
+              <span className="font-mono text-[10px] uppercase tracking-wider font-semibold">Critical Faults</span>
               <ShieldAlert className="w-3.5 h-3.5 text-[#00f0ff]" />
             </div>
             <div>
@@ -362,7 +362,7 @@ export const ExecutiveOverview: React.FC = () => {
               </div>
               <div className="font-mono text-[10px] text-[#10b981] mt-0.5 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>
-                Zero Immediate Hazards
+                Zero Hazards
               </div>
             </div>
           </div>
@@ -370,15 +370,15 @@ export const ExecutiveOverview: React.FC = () => {
           {/* KPI 5: Average Remaining Life (RUL) */}
           <div className="bg-[#161b29]/80 border border-[#3b494b]/30 rounded-xl p-3 sm:p-3.5 flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
             <div className="flex items-center justify-between text-[#849495] mb-1">
-              <span className="font-mono text-[10px] uppercase tracking-wider font-semibold">AVG ENGINE LIFE (RUL)</span>
+              <span className="font-mono text-[10px] uppercase tracking-wider font-semibold">RUL</span>
               <Clock className="w-3.5 h-3.5 text-[#00f0ff]" />
             </div>
             <div>
               <div className="font-mono text-xl sm:text-2xl font-black text-[#dee2f5]">
-                {avgRul} <span className="text-xs font-normal text-[#849495]">Hours</span>
+                {avgRul} <span className="text-xs font-normal text-[#849495]">h</span>
               </div>
               <div className="font-mono text-[10px] text-[#00f0ff] mt-0.5">
-                +14h vs mission safety target
+                +14 h vs target
               </div>
             </div>
           </div>
@@ -386,7 +386,7 @@ export const ExecutiveOverview: React.FC = () => {
           {/* KPI 6: Mission Fuel Endurance */}
           <div className="bg-[#161b29]/80 border border-[#3b494b]/30 rounded-xl p-3 sm:p-3.5 flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
             <div className="flex items-center justify-between text-[#849495] mb-1">
-              <span className="font-mono text-[10px] uppercase tracking-wider font-semibold">FUEL ENDURANCE</span>
+              <span className="font-mono text-[10px] uppercase tracking-wider font-semibold">Endurance</span>
               <Fuel className="w-3.5 h-3.5 text-[#00f0ff]" />
             </div>
             <div>
@@ -394,7 +394,7 @@ export const ExecutiveOverview: React.FC = () => {
                 {mission?.remainingTime || '04h 32m'}
               </div>
               <div className="font-mono text-[10px] text-[#b9cacb] mt-0.5">
-                {mission?.fuelRemainingPct || 64}% remaining (Safe margin)
+                {mission?.fuelRemainingPct || 64}% remaining
               </div>
             </div>
           </div>
@@ -409,33 +409,28 @@ export const ExecutiveOverview: React.FC = () => {
         <div className="xl:col-span-6 flex flex-col gap-4">
           {/* Sortie Flight Envelope Assessment */}
           <div className="bg-[#161b29]/80 border border-[#3b494b]/30 rounded-xl p-4 shadow-sm flex flex-col justify-between">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#3b494b]/30 pb-3 mb-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-[#10b981]/15 border border-[#10b981]/30 flex items-center justify-center shrink-0">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#3b494b]/30 pb-2.5 mb-2.5">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-[#10b981]/15 border border-[#10b981]/30 flex items-center justify-center shrink-0">
                   <ShieldCheck className="w-4 h-4 text-[#10b981]" />
                 </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h2 className="font-display text-sm sm:text-base font-bold text-[#dee2f5] tracking-wide uppercase">
-                      Sortie Flight Envelope Assessment
-                    </h2>
-                    <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#10b981]/20 text-[#10b981] font-bold border border-[#10b981]/40">
-                      MISSION GO
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-[#849495] font-sans">
-                    Current operational margins ensure complete sortie safety without emergency intervention.
-                  </p>
+                <div className="flex items-center gap-2">
+                  <h2 className="font-display text-sm font-bold text-[#dee2f5] tracking-wide uppercase">
+                    Sortie Flight Envelope
+                  </h2>
+                  <span className="font-mono text-[10px] px-1.5 py-0.2 rounded bg-[#10b981]/20 text-[#10b981] font-bold border border-[#10b981]/40">
+                    GO
+                  </span>
                 </div>
               </div>
 
               {/* Quick Mission Metadata Badges */}
               <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
                 <span className="px-2 py-0.5 rounded bg-[#252a38] text-[#dee2f5] border border-[#3b494b]/40">
-                  Phase: <strong className="text-[#00f0ff]">{mission?.phase || 'HIGH ALTITUDE ISR'}</strong>
+                  {mission?.phase || 'HIGH ALTITUDE ISR'}
                 </span>
                 <span className="px-2 py-0.5 rounded bg-[#252a38] text-[#dee2f5] border border-[#3b494b]/40">
-                  Altitude: <strong className="text-[#dee2f5]">{mission?.altitudeFt?.toLocaleString() || '18,450'} FT</strong>
+                  {mission?.altitudeFt?.toLocaleString() || '18,450'} ft
                 </span>
               </div>
             </div>
@@ -445,57 +440,45 @@ export const ExecutiveOverview: React.FC = () => {
               {/* Margin 1: Thermal Margin */}
               <div className="bg-[#090e1b]/60 p-2.5 rounded-lg border border-[#3b494b]/20">
                 <div className="flex justify-between text-[11px] font-mono mb-1">
-                  <span className="text-[#849495]">Thermal Safety Margin</span>
-                  <span className="text-[#f59e0b] font-bold">14°C Headroom (Safe)</span>
+                  <span className="text-[#849495]">Thermal headroom</span>
+                  <span className="text-[#f59e0b] font-bold">14 °C (Safe)</span>
                 </div>
                 <div className="w-full h-1.5 bg-[#252a38] rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-[#10b981] to-[#f59e0b] rounded-full" style={{ width: '84%' }}></div>
                 </div>
-                <span className="text-[10px] text-[#849495] font-sans mt-1 block">
-                  Adequate convective cooling at 18,450 FT prevents thermal runaway.
-                </span>
               </div>
 
               {/* Margin 2: Vibration Envelope */}
               <div className="bg-[#090e1b]/60 p-2.5 rounded-lg border border-[#3b494b]/20">
                 <div className="flex justify-between text-[11px] font-mono mb-1">
-                  <span className="text-[#849495]">Vibration Stability</span>
-                  <span className="text-[#10b981] font-bold">4.8 mm/s (Within Limit)</span>
+                  <span className="text-[#849495]">Vibration stability</span>
+                  <span className="text-[#10b981] font-bold">4.8 mm/s</span>
                 </div>
                 <div className="w-full h-1.5 bg-[#252a38] rounded-full overflow-hidden">
                   <div className="h-full bg-[#10b981] rounded-full" style={{ width: '91%' }}></div>
                 </div>
-                <span className="text-[10px] text-[#849495] font-sans mt-1 block">
-                  Mechanical harmonics well below structural fatigue threshold.
-                </span>
               </div>
 
               {/* Margin 3: Fuel Reserve */}
               <div className="bg-[#090e1b]/60 p-2.5 rounded-lg border border-[#3b494b]/20">
                 <div className="flex justify-between text-[11px] font-mono mb-1">
-                  <span className="text-[#849495]">Fuel Reserve Status</span>
-                  <span className="text-[#10b981] font-bold">64% (Sortie + 45m reserve)</span>
+                  <span className="text-[#849495]">Fuel reserve</span>
+                  <span className="text-[#10b981] font-bold">64% (+45m reserve)</span>
                 </div>
                 <div className="w-full h-1.5 bg-[#252a38] rounded-full overflow-hidden">
                   <div className="h-full bg-[#10b981] rounded-full" style={{ width: '88%' }}></div>
                 </div>
-                <span className="text-[10px] text-[#849495] font-sans mt-1 block">
-                  Burn rate aligns with pre-flight mission plan trajectory.
-                </span>
               </div>
 
               {/* Margin 4: Autonomy & Telemetry */}
               <div className="bg-[#090e1b]/60 p-2.5 rounded-lg border border-[#3b494b]/20">
                 <div className="flex justify-between text-[11px] font-mono mb-1">
-                  <span className="text-[#849495]">Telemetry &amp; Twin Sync</span>
-                  <span className="text-[#00f0ff] font-bold">99.8% Synchronized</span>
+                  <span className="text-[#849495]">Telemetry sync</span>
+                  <span className="text-[#00f0ff] font-bold">99.8% (12 ms)</span>
                 </div>
                 <div className="w-full h-1.5 bg-[#252a38] rounded-full overflow-hidden">
                   <div className="h-full bg-[#00f0ff] rounded-full" style={{ width: '99%' }}></div>
                 </div>
-                <span className="text-[10px] text-[#849495] font-sans mt-1 block">
-                  Dual CAN-bus telemetry latency under 12ms.
-                </span>
               </div>
             </div>
           </div>
@@ -505,61 +488,57 @@ export const ExecutiveOverview: React.FC = () => {
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#00f0ff]/5 rounded-full blur-3xl pointer-events-none"></div>
 
             <div>
-              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#3b494b]/30 pb-3 mb-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00f0ff]/20 to-[#0053db]/30 border border-[#00f0ff]/40 flex items-center justify-center shadow-[0_0_10px_rgba(0,240,255,0.3)] shrink-0">
-                    <Sparkles className="w-4 h-4 text-[#00f0ff]" />
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#3b494b]/30 pb-2.5 mb-2.5">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#00f0ff]/20 to-[#0053db]/30 border border-[#00f0ff]/40 flex items-center justify-center shadow-[0_0_10px_rgba(0,240,255,0.3)] shrink-0">
+                    <Sparkles className="w-3.5 h-3.5 text-[#00f0ff]" />
                   </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h2 className="font-display text-sm sm:text-base font-bold text-[#dee2f5] tracking-wide uppercase">
-                        AI Executive Strategic Insight
-                      </h2>
-                      <span className="font-mono text-[9px] px-1.5 py-0.5 rounded bg-[#00f0ff]/10 text-[#00f0ff] border border-[#00f0ff]/30 font-semibold">
-                        SYNTHETIC DIGITAL TWIN
-                      </span>
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="font-display text-sm font-bold text-[#dee2f5] tracking-wide uppercase">
+                      AI Strategic Insight
+                    </h2>
+                    <span className="font-mono text-[9px] px-1.5 py-0.2 rounded bg-[#00f0ff]/10 text-[#00f0ff] border border-[#00f0ff]/30 font-semibold">
+                      Advisory
+                    </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold text-[#00f0ff]">94.2% High Fidelity</span>
+                  <span className="font-mono text-xs font-bold text-[#00f0ff]">94.2% Probability</span>
                   <button
                     onClick={() => navigate('/faults')}
-                    className="px-2.5 py-1 rounded bg-[#00f0ff]/15 hover:bg-[#00f0ff]/25 border border-[#00f0ff]/40 text-[#00f0ff] font-mono text-[10px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                    className="px-2 py-0.5 rounded bg-[#00f0ff]/15 hover:bg-[#00f0ff]/25 border border-[#00f0ff]/40 text-[#00f0ff] font-mono text-[10px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-colors cursor-pointer"
                   >
-                    AI Diagnostics <ChevronRight className="w-3 h-3" />
+                    Diagnostics <ChevronRight className="w-3 h-3" />
                   </button>
                 </div>
               </div>
 
-              <div className="space-y-2.5 text-xs text-[#dee2f5] leading-relaxed">
-                <p>
-                  Based on <strong>124,000 synthetic digital twin simulations</strong> against real-time CAN-bus telemetry, the propulsion platform maintains a <strong>94.2% mission success probability</strong>. Engine 02's temperature elevation has reached thermodynamic equilibrium due to convective airflow at 18,450 FT MSL.
-                </p>
+              <div className="space-y-2 text-xs leading-relaxed">
+                <div className="flex items-baseline gap-1.5">
+                  <span className="font-mono font-bold text-[#849495] text-[10px] uppercase shrink-0">Finding:</span>
+                  <span className="text-[#dee2f5]">Platform maintains 94.2% sortie success. ENG-02 reached thermodynamic equilibrium at 18,450 ft.</span>
+                </div>
 
-                <div className="bg-[#090e1b]/80 border border-[#00f0ff]/30 rounded-lg p-3 text-xs text-[#b9cacb]">
-                  <div className="font-mono text-[10px] text-[#00f0ff] uppercase font-bold tracking-wider mb-0.5 flex items-center gap-1.5">
-                    <Zap className="w-3 h-3 text-[#00f0ff]" />
-                    Recommended Strategic Decision:
+                <div className="bg-[#090e1b]/80 border border-[#00f0ff]/30 rounded-lg p-2.5 text-xs text-[#b9cacb]">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="font-mono font-bold text-[#00f0ff] text-[10px] uppercase shrink-0">Action:</span>
+                    <span className="text-[#dee2f5] font-medium">
+                      Maintain loiter; cap climb power margin at 5% on outboard wing. Post-recovery cooling inspection.
+                    </span>
                   </div>
-                  <p className="text-[#dee2f5] font-medium text-xs">
-                    Authorize planned mission continuation with a <strong>5% climb power margin cap</strong> on the outboard wing. Plan scheduled 45-minute ground inspection of the cooling shroud upon post-mission recovery.
-                  </p>
                 </div>
               </div>
             </div>
 
-            <div className="mt-3 pt-2.5 border-t border-[#3b494b]/30 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-[#849495]">
+            <div className="mt-3 pt-2 border-t border-[#3b494b]/30 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-[#849495]">
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                <span>Life Saved: <strong className="text-[#10b981]">+18.5 hrs</strong></span>
-                <span>•</span>
-                <span>Cost Avoidance: <strong className="text-[#10b981]">$12k saved</strong></span>
-                <span>•</span>
-                <span>Sortie: <strong className="text-[#10b981]">100% On Schedule</strong></span>
+                <span>RUL saved: <strong className="text-[#10b981]">+18.5 h</strong></span>
+                <span>·</span>
+                <span>Sortie: <strong className="text-[#10b981]">On Schedule</strong></span>
               </div>
-              <span className="text-[#10b981] font-semibold flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> LOW STRATEGIC RISK
+              <span className="text-[#10b981] font-semibold flex items-center gap-1 text-[11px]">
+                <CheckCircle2 className="w-3 h-3" /> Low Risk
               </span>
             </div>
           </div>
@@ -569,91 +548,86 @@ export const ExecutiveOverview: React.FC = () => {
         <div className="xl:col-span-6 flex flex-col gap-4">
           {/* "What Needs My Attention" Prioritized Section */}
           <div className="bg-[#161b29]/80 border border-[#3b494b]/30 rounded-xl p-4 shadow-sm flex flex-col justify-between">
-            <div className="flex items-center justify-between mb-2.5">
-              <div>
-                <h2 className="font-display text-sm sm:text-base font-bold text-[#dee2f5] tracking-wide uppercase flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 text-[#f59e0b]" />
-                  What Needs My Attention
-                </h2>
-                <p className="text-[11px] text-[#849495] font-sans">
-                  Prioritized operational issues requiring awareness, strategic decision, or maintenance scheduling.
-                </p>
-              </div>
-              <span className="font-mono text-[10px] text-[#849495] hidden sm:block">
-                Sorted: <strong className="text-[#dee2f5]">Urgency Order</strong>
+            <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#3b494b]/30">
+              <h2 className="font-display text-sm font-bold text-[#dee2f5] tracking-wide uppercase flex items-center gap-1.5">
+                <AlertCircle className="w-4 h-4 text-[#f59e0b]" />
+                Operational Attention
+              </h2>
+              <span className="font-mono text-[10px] text-[#849495]">
+                Priority order
               </span>
             </div>
 
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               {/* Card 1: Engine 02 (Thermal Elevation) */}
-              <div className="bg-[#090e1b]/70 border-l-4 border-l-[#f59e0b] border-y border-r border-[#3b494b]/30 rounded-lg p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-                <div className="space-y-1">
+              <div className="bg-[#090e1b]/70 border-l-4 border-l-[#f59e0b] border-y border-r border-[#3b494b]/30 rounded-lg p-2.5 flex items-center justify-between gap-2">
+                <div className="space-y-0.5 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="px-1.5 py-0.5 rounded bg-[#f59e0b]/15 text-[#f59e0b] border border-[#f59e0b]/30 font-mono text-[9px] font-bold uppercase">
-                      WATCH // MODERATE
+                    <span className="px-1.5 py-0.2 rounded bg-[#f59e0b]/15 text-[#f59e0b] border border-[#f59e0b]/30 font-mono text-[9px] font-bold uppercase shrink-0">
+                      WATCH
                     </span>
-                    <span className="font-mono text-xs text-[#dee2f5] font-semibold">ENG 02 (Port Outboard)</span>
+                    <span className="font-mono text-xs text-[#dee2f5] font-semibold shrink-0">ENG 02</span>
+                    <span className="text-xs text-[#dee2f5] font-medium truncate">
+                      Elevated CHT (+18 °C)
+                    </span>
                   </div>
-                  <h3 className="text-xs font-bold text-[#dee2f5]">
-                    Elevated Cylinder Head Temperature (+18°C)
-                  </h3>
-                  <p className="text-[11px] text-[#b9cacb] leading-snug">
-                    Running warmer than loiter level (196°C vs 178°C norm). Advise avoiding rapid climb bursts.
+                  <p className="text-[11px] text-[#849495] truncate">
+                    196 °C vs 178 °C norm · Limit rapid climbs
                   </p>
                 </div>
                 <button
                   onClick={() => navigate('/engine/eng-02')}
-                  className="font-mono text-xs text-[#00f0ff] hover:text-[#38bdf8] flex items-center gap-1 font-semibold shrink-0 self-end sm:self-center cursor-pointer"
+                  className="font-mono text-[11px] text-[#00f0ff] hover:text-[#38bdf8] flex items-center gap-0.5 font-semibold shrink-0 cursor-pointer"
                 >
-                  Inspect ENG 02 <ChevronRight className="w-3.5 h-3.5" />
+                  Inspect <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
 
               {/* Card 2: Engine 03 (Vibration Harmonics) */}
-              <div className="bg-[#090e1b]/70 border-l-4 border-l-[#00f0ff] border-y border-r border-[#3b494b]/30 rounded-lg p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-                <div className="space-y-1">
+              <div className="bg-[#090e1b]/70 border-l-4 border-l-[#00f0ff] border-y border-r border-[#3b494b]/30 rounded-lg p-2.5 flex items-center justify-between gap-2">
+                <div className="space-y-0.5 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="px-1.5 py-0.5 rounded bg-[#00f0ff]/15 text-[#00f0ff] border border-[#00f0ff]/30 font-mono text-[9px] font-bold uppercase">
-                      ROUTINE // POST-FLIGHT
+                    <span className="px-1.5 py-0.2 rounded bg-[#00f0ff]/15 text-[#00f0ff] border border-[#00f0ff]/30 font-mono text-[9px] font-bold uppercase shrink-0">
+                      ROUTINE
                     </span>
-                    <span className="font-mono text-xs text-[#dee2f5] font-semibold">ENG 03 (Starboard Inboard)</span>
+                    <span className="font-mono text-xs text-[#dee2f5] font-semibold shrink-0">ENG 03</span>
+                    <span className="text-xs text-[#dee2f5] font-medium truncate">
+                      Journal Bearing Harmonics (4.8 mm/s)
+                    </span>
                   </div>
-                  <h3 className="text-xs font-bold text-[#dee2f5]">
-                    Journal Bearing Harmonic Vibration Signature (4.8 mm/s)
-                  </h3>
-                  <p className="text-[11px] text-[#b9cacb] leading-snug">
-                    Zero in-flight hazard. Approve ultrasonic bearing check during scheduled post-flight inspection.
+                  <p className="text-[11px] text-[#849495] truncate">
+                    Within flight limits · Ultrasonic check scheduled post-flight
                   </p>
                 </div>
                 <button
                   onClick={() => navigate('/maintenance')}
-                  className="font-mono text-xs text-[#00f0ff] hover:text-[#38bdf8] flex items-center gap-1 font-semibold shrink-0 self-end sm:self-center cursor-pointer"
+                  className="font-mono text-[11px] text-[#00f0ff] hover:text-[#38bdf8] flex items-center gap-0.5 font-semibold shrink-0 cursor-pointer"
                 >
-                  View MRO Task <ChevronRight className="w-3.5 h-3.5" />
+                  MRO Task <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
 
               {/* Card 3: Engine 01 & 04 (Peak Operation) */}
-              <div className="bg-[#090e1b]/70 border-l-4 border-l-[#10b981] border-y border-r border-[#3b494b]/30 rounded-lg p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-                <div className="space-y-1">
+              <div className="bg-[#090e1b]/70 border-l-4 border-l-[#10b981] border-y border-r border-[#3b494b]/30 rounded-lg p-2.5 flex items-center justify-between gap-2">
+                <div className="space-y-0.5 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="px-1.5 py-0.5 rounded bg-[#10b981]/15 text-[#10b981] border border-[#10b981]/30 font-mono text-[9px] font-bold uppercase">
-                      NOMINAL // OPTIMAL
+                    <span className="px-1.5 py-0.2 rounded bg-[#10b981]/15 text-[#10b981] border border-[#10b981]/30 font-mono text-[9px] font-bold uppercase shrink-0">
+                      NOMINAL
                     </span>
-                    <span className="font-mono text-xs text-[#dee2f5] font-semibold">ENG 01 &amp; ENG 04</span>
+                    <span className="font-mono text-xs text-[#dee2f5] font-semibold shrink-0">ENG 01 &amp; 04</span>
+                    <span className="text-xs text-[#dee2f5] font-medium truncate">
+                      Primary Propulsion Nominal
+                    </span>
                   </div>
-                  <h3 className="text-xs font-bold text-[#dee2f5]">
-                    Primary Propulsion Units Performing Flawlessly
-                  </h3>
-                  <p className="text-[11px] text-[#b9cacb] leading-snug">
-                    Cylinder temps (170-172°C) and oil pressure (58 PSI) at ideal specs. Maintain passive tracking.
+                  <p className="text-[11px] text-[#849495] truncate">
+                    170-172 °C CHT · 58 psi oil pressure
                   </p>
                 </div>
                 <button
                   onClick={() => navigate('/fleet')}
-                  className="font-mono text-xs text-[#00f0ff] hover:text-[#38bdf8] flex items-center gap-1 font-semibold shrink-0 self-end sm:self-center cursor-pointer"
+                  className="font-mono text-[11px] text-[#00f0ff] hover:text-[#38bdf8] flex items-center gap-0.5 font-semibold shrink-0 cursor-pointer"
                 >
-                  Fleet Matrix <ChevronRight className="w-3.5 h-3.5" />
+                  Fleet <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
@@ -662,13 +636,10 @@ export const ExecutiveOverview: React.FC = () => {
           {/* Manager Operational Decision Center & Sign-Off */}
           <div className="bg-gradient-to-r from-[#161b29] to-[#0f172a] border border-[#00f0ff]/40 rounded-xl p-4 sm:p-5 shadow-xl flex-1 flex flex-col justify-between">
             <div>
-              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#3b494b]/30 pb-2.5 mb-2.5">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#3b494b]/30 pb-2 mb-2">
                 <div>
-                  <span className="font-mono text-[10px] text-[#00f0ff] tracking-widest uppercase font-semibold">
-                    COMMAND CHECKLIST &amp; SIGN-OFF
-                  </span>
-                  <h2 className="font-display text-sm sm:text-base font-bold text-[#dee2f5] tracking-wide uppercase">
-                    Manager Operational Decision Center
+                  <h2 className="font-display text-sm font-bold text-[#dee2f5] tracking-wide uppercase">
+                    Operational Decision &amp; Sign-off
                   </h2>
                 </div>
 
@@ -676,25 +647,22 @@ export const ExecutiveOverview: React.FC = () => {
                 <div className="flex flex-wrap items-center gap-1.5">
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#10b981]/15 text-[#10b981] border border-[#10b981]/40 font-mono text-[10px] font-bold uppercase">
                     <Check className="w-3 h-3" />
-                    1. Sortie: GO
+                    Sortie: GO
                   </span>
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#10b981]/15 text-[#10b981] border border-[#10b981]/40 font-mono text-[10px] font-bold uppercase">
                     <Check className="w-3 h-3" />
-                    2. Fleet: STABLE
+                    Fleet: Stable
                   </span>
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#f59e0b]/15 text-[#f59e0b] border border-[#f59e0b]/40 font-mono text-[10px] font-bold uppercase">
                     <Clock className="w-3 h-3" />
-                    3. MRO: ROUTINE
+                    MRO: Routine
                   </span>
                 </div>
               </div>
 
               <div className="space-y-1 text-xs text-[#b9cacb]">
-                <h3 className="font-display text-xs font-bold text-[#dee2f5] uppercase tracking-wide">
-                  Executive Decision Summary:
-                </h3>
                 <p className="leading-relaxed font-sans text-xs">
-                  "Proceed with scheduled mission profile. Authorize return-to-base recovery at scheduled 18:45 UTC. Maintain standard loiter altitude and log routine post-flight cooling inspection for Engine 02 and bearing check for Engine 03."
+                  Continue scheduled mission profile. Planned RTB recovery at 18:45 UTC. Maintain standard loiter altitude; routine post-flight cooling check for ENG 02 and bearing check for ENG 03.
                 </p>
                 {isSignedOff && (
                   <div className="pt-1 flex items-center gap-1.5 font-mono text-[11px] text-[#10b981]">
@@ -707,13 +675,13 @@ export const ExecutiveOverview: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-end gap-2.5 pt-3 mt-2 border-t border-[#3b494b]/30">
+            <div className="flex flex-wrap items-center justify-end gap-2 pt-2.5 mt-2 border-t border-[#3b494b]/30">
               <button
                 onClick={() => setIsBriefingOpen(true)}
                 className="px-3 py-1.5 rounded bg-[#161b29] hover:bg-[#252a38] border border-[#3b494b]/40 text-[#dee2f5] font-mono text-xs uppercase tracking-wider font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <Printer className="w-3.5 h-3.5 text-[#00f0ff]" />
-                Export Briefing
+                Briefing
               </button>
 
               <button
@@ -725,7 +693,7 @@ export const ExecutiveOverview: React.FC = () => {
                 }`}
               >
                 <Check className="w-3.5 h-3.5" />
-                {isSignedOff ? 'Authorized ✓' : 'Log Authorization'}
+                {isSignedOff ? 'Authorized ✓' : 'Authorize Sortie'}
               </button>
             </div>
           </div>
@@ -737,14 +705,11 @@ export const ExecutiveOverview: React.FC = () => {
       {/* ========================================================================= */}
       <section className="mb-4 bg-[#161b29]/80 border border-[#3b494b]/30 rounded-xl p-4 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
-          <div>
-            <h2 className="font-display text-base font-bold text-[#dee2f5] tracking-wide uppercase flex items-center gap-2">
-              <Layers className="w-4 h-4 text-[#00f0ff]" />
-              Propulsion Fleet Health Distribution
+          <div className="flex items-center gap-2">
+            <Layers className="w-4 h-4 text-[#00f0ff]" />
+            <h2 className="font-display text-sm sm:text-base font-bold text-[#dee2f5] tracking-wide uppercase">
+              Fleet Propulsion Distribution
             </h2>
-            <p className="text-[11px] text-[#849495] font-sans">
-              Individual engine health status with plain-English summaries. Click any engine to view full details.
-            </p>
           </div>
 
           {/* Segmented Distribution Legend */}
@@ -765,7 +730,7 @@ export const ExecutiveOverview: React.FC = () => {
         </div>
 
         {/* Fleet Distribution Bar */}
-        <div className="w-full h-2 bg-[#252a38] rounded-full overflow-hidden flex mb-3">
+        <div className="w-full h-1.5 bg-[#252a38] rounded-full overflow-hidden flex mb-3">
           <div className="bg-[#10b981] h-full" style={{ width: '75%' }} title="3 Healthy Engines (75%)"></div>
           <div className="bg-[#f59e0b] h-full" style={{ width: '25%' }} title="1 Watch Engine (25%)"></div>
         </div>
@@ -786,13 +751,6 @@ export const ExecutiveOverview: React.FC = () => {
               ? 'bg-[#f59e0b]/15 text-[#f59e0b] border-[#f59e0b]/30'
               : 'bg-[#ef4444]/15 text-[#ef4444] border-[#ef4444]/30';
 
-            const descriptions = [
-              'Optimal combustion across all 4 cylinders. Zero anomalies.',
-              'Elevated cylinder temperature under climb; stable at cruise.',
-              'Mild journal bearing vibration; normal flight safe.',
-              'Excellent ignition and fuel flow parameters.',
-            ];
-
             return (
               <div
                 key={eng.id || idx}
@@ -804,34 +762,30 @@ export const ExecutiveOverview: React.FC = () => {
                     <span className="font-mono text-xs font-bold text-[#dee2f5]">
                       {eng.id.toUpperCase()}
                     </span>
-                    <span className={`font-mono text-[9px] px-1.5 py-0.5 rounded border uppercase font-semibold ${badgeBg}`}>
+                    <span className={`font-mono text-[9px] px-1.5 py-0.2 rounded border uppercase font-semibold ${badgeBg}`}>
                       {isEngHealthy ? 'OPTIMAL' : isEngWatch ? 'WATCH' : 'CRITICAL'}
                     </span>
                   </div>
 
-                  <div className="font-display text-xs font-semibold text-[#dee2f5] mb-1">
+                  <div className="font-display text-xs font-semibold text-[#dee2f5]">
                     {eng.name || `Engine 0${idx + 1}`}
                   </div>
-
-                  <p className="text-[11px] text-[#849495] mb-2 leading-snug">
-                    {descriptions[idx] || 'Operating within safe parameters.'}
-                  </p>
                 </div>
 
-                <div className="border-t border-[#3b494b]/30 pt-2 mt-auto">
+                <div className="border-t border-[#3b494b]/30 pt-2 mt-3">
                   <div className="flex justify-between items-baseline mb-0.5">
-                    <span className="font-mono text-[10px] text-[#849495]">Health Index</span>
+                    <span className="font-mono text-[10px] text-[#849495]">Health</span>
                     <span className={`font-mono text-sm font-black ${healthColor}`}>
                       {eng.health || 85}%
                     </span>
                   </div>
                   <div className="flex justify-between items-baseline text-[10px] font-mono text-[#849495]">
-                    <span>Remaining Life</span>
-                    <span className="text-[#dee2f5] font-semibold">{eng.rul || 420} hrs</span>
+                    <span>RUL</span>
+                    <span className="text-[#dee2f5] font-semibold">{eng.rul || 420} h</span>
                   </div>
                   <div className="mt-1.5 text-right">
                     <span className="font-mono text-[9px] text-[#00f0ff] group-hover:underline flex items-center justify-end gap-0.5">
-                      View Diagnostics <ChevronRight className="w-3 h-3" />
+                      Diagnostics <ChevronRight className="w-3 h-3" />
                     </span>
                   </div>
                 </div>
