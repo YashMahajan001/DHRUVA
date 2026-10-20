@@ -68,7 +68,7 @@ export const AutoHeader: React.FC<AutoHeaderProps> = () => {
     <>
       <header
         id="auto-header"
-        className="fixed top-0 left-0 md:left-20 right-0 h-16 bg-[#090e1b]/95 backdrop-blur-xl border-b border-[#f59e0b]/25 z-40 flex items-center justify-between px-3 sm:px-4 lg:px-6 shadow-[0_4px_25px_rgba(245,158,11,0.08)]"
+        className="fixed top-3 left-3 md:left-[84px] right-3 h-14 bg-[#090e1b]/95 backdrop-blur-xl border border-[#f59e0b]/25 rounded-xl z-40 flex items-center justify-between px-3 sm:px-4 shadow-[0_4px_24px_rgba(245,158,11,0.08)]"
       >
         {/* Brand & Mobile Hamburger */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">

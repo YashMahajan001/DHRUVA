@@ -40,7 +40,7 @@ export const DroneSidebar: React.FC<DroneSidebarProps> = ({
   return (
     <aside
       id="drone-sidebar"
-      className="hidden md:flex fixed left-0 top-0 h-full w-20 bg-[#090e1b]/95 backdrop-blur-xl border-r border-[#00f0ff]/20 z-50 flex-col justify-between items-center py-4 shadow-[4px_0_20px_rgba(0,0,0,0.5)]"
+      className="hidden md:flex fixed left-3 top-3 bottom-3 w-16 bg-[#090e1b]/95 backdrop-blur-xl border border-[#00f0ff]/20 rounded-2xl z-50 flex-col justify-between items-center py-3.5 shadow-[0_8px_32px_rgba(0,0,0,0.6)] transition-all"
     >
       <div className="flex flex-col items-center gap-4 w-full">
         {/* Tactical UAV Radio Emblem */}

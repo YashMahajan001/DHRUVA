@@ -31,13 +31,13 @@ export const SubsystemsHealth: React.FC<SubsystemsHealthProps> = ({
   return (
     <div
       id="subsystems-health-panel"
-      className="bg-[#161b29] border border-[#3b494b]/30 p-3.5 rounded-xl shadow-lg flex flex-col justify-between h-full"
+      className="bg-[#0c1220]/90 border border-[#00f0ff]/15 p-3.5 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.35)] flex flex-col justify-between h-full"
     >
       <div className="flex items-center justify-between mb-2">
-        <span className="font-display text-base font-bold text-[#dee2f5] uppercase tracking-wide">
-          Subsystems Health
+        <span className="text-sm font-semibold text-[#dee2f5]">
+          Subsystems
         </span>
-        <span className="font-mono text-[9px] text-[#00f0ff] font-bold tracking-wider uppercase">
+        <span className="text-[10px] text-[#00f0ff] font-medium">
           {syncStatus || 'Synced'}
         </span>
       </div>
@@ -100,9 +100,9 @@ export const SubsystemsHealth: React.FC<SubsystemsHealthProps> = ({
         </div>
       </div>
 
-      <div className="bg-[#252a38]/60 border border-[#3b494b]/30 p-1.5 rounded text-center mt-2">
-        <span className="font-mono text-[9px] text-[#849495] tracking-wide font-semibold">
-          Confidence: {(confidence || 98.4).toFixed(1)}%
+      <div className="bg-[#161f30]/60 border border-[#3b494b]/20 py-1 px-2 rounded-lg text-center mt-2">
+        <span className="text-[10px] text-[#849495]">
+          Twin confidence: <span className="font-mono text-[#dee2f5] font-semibold">{(confidence || 98.4).toFixed(1)}%</span>
         </span>
       </div>
     </div>

@@ -29,154 +29,142 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
   const oilStatus = oilPress < 60 ? { text: 'WARN', color: 'text-[#f59e0b]' } : { text: 'STABLE', color: 'text-[#10b981]' };
 
   return (
-    <div className="flex flex-col gap-1.5 w-full">
-      {/* 6 Primary Telemetry Metric Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
-        {/* Metric 1: RPM */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-2.5 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
-          <div className="flex justify-between items-center text-[#849495] font-mono text-[11px]">
-            <span>RPM</span>
-            <span className="text-[#10b981] font-bold text-[10px]">Normal</span>
+    <div className="flex flex-col gap-2 w-full">
+      {/* Consolidated Engine Telemetry Panel (1 unified container instead of 6 separate cards) */}
+      <div className="bg-[#0c1220]/90 border border-[#00f0ff]/15 rounded-xl p-3 sm:p-3.5 shadow-[0_4px_20px_rgba(0,0,0,0.35)]">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-y sm:divide-y-0 sm:divide-x divide-[#3b494b]/20">
+          {/* Metric 1: RPM */}
+          <div className="px-3 py-1.5 sm:py-0 sm:first:pl-0 flex flex-col justify-between">
+            <div className="flex justify-between items-center text-[#849495] text-[11px]">
+              <span className="font-medium tracking-wide">RPM</span>
+              <span className="text-[#10b981] font-semibold text-[10px]">Nominal</span>
+            </div>
+            <div className="my-1.5 flex items-baseline gap-1">
+              <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] tracking-tight">
+                {rpm.toLocaleString()}
+              </span>
+              <span className="text-[10px] text-[#849495]">rpm</span>
+            </div>
+            <div className="w-full bg-[#1e2538] h-1 rounded overflow-hidden">
+              <div
+                className="bg-[#00f0ff] h-full transition-all duration-300"
+                style={{ width: `${rpmPct}%` }}
+              />
+            </div>
           </div>
-          <div className="my-1">
-            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] tracking-tight">
-              {rpm.toLocaleString()}
-            </span>
-            <span className="font-mono text-[10px] text-[#849495] ml-1">rpm</span>
-          </div>
-          <div className="w-full bg-[#303443] h-1 rounded overflow-hidden">
-            <div
-              className="bg-[#00f0ff] h-full transition-all duration-300 shadow-[0_0_6px_#00f0ff]"
-              style={{ width: `${rpmPct}%` }}
-            />
-          </div>
-        </div>
 
-        {/* Metric 2: CHT */}
-        <div
-          className={`p-2.5 rounded-lg flex flex-col justify-between border transition-colors ${
-            cht > 210
-              ? 'bg-[#93000a]/20 border-[#ffb4ab]/40'
-              : 'bg-[#252a38]/70 border-[#3b494b]/20 hover:border-[#00f0ff]/40'
-          }`}
-        >
-          <div className="flex justify-between items-center text-[#849495] font-mono text-[11px]">
-            <span>CHT</span>
-            <span className={`font-bold text-[10px] ${chtStatus.color}`}>{chtStatus.text}</span>
+          {/* Metric 2: CHT */}
+          <div className="px-3 py-1.5 sm:py-0 flex flex-col justify-between">
+            <div className="flex justify-between items-center text-[#849495] text-[11px]">
+              <span className="font-medium tracking-wide">CHT</span>
+              <span className={`font-semibold text-[10px] ${chtStatus.color}`}>{chtStatus.text}</span>
+            </div>
+            <div className="my-1.5 flex items-baseline gap-1">
+              <span
+                className={`font-mono text-lg md:text-xl font-bold tracking-tight ${
+                  cht > 210 ? 'text-[#ffdad6]' : 'text-[#dee2f5]'
+                }`}
+              >
+                {cht}
+              </span>
+              <span className="text-[10px] text-[#849495]">°C</span>
+            </div>
+            <div className="w-full bg-[#1e2538] h-1 rounded overflow-hidden">
+              <div
+                className={`h-full transition-all duration-300 ${
+                  cht > 210 ? 'bg-[#ef4444]' : 'bg-[#00f0ff]'
+                }`}
+                style={{ width: `${chtPct}%` }}
+              />
+            </div>
           </div>
-          <div className="my-1">
-            <span
-              className={`font-mono text-lg md:text-xl font-bold tracking-tight ${
-                cht > 210 ? 'text-[#ffdad6]' : 'text-[#dee2f5]'
-              }`}
-            >
-              {cht}
-            </span>
-            <span className="font-mono text-[10px] text-[#849495] ml-1">°C</span>
-          </div>
-          <div className="w-full bg-[#303443] h-1 rounded overflow-hidden">
-            <div
-              className={`h-full transition-all duration-300 ${
-                cht > 210 ? 'bg-[#ef4444]' : 'bg-[#00f0ff]'
-              }`}
-              style={{ width: `${chtPct}%` }}
-            />
-          </div>
-        </div>
 
-        {/* Metric 3: EGT */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-2.5 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
-          <div className="flex justify-between items-center text-[#849495] font-mono text-[11px]">
-            <span>EGT</span>
-            <span className="text-[#10b981] font-bold text-[10px]">Normal</span>
+          {/* Metric 3: EGT */}
+          <div className="px-3 py-1.5 sm:py-0 flex flex-col justify-between">
+            <div className="flex justify-between items-center text-[#849495] text-[11px]">
+              <span className="font-medium tracking-wide">EGT</span>
+              <span className="text-[#10b981] font-semibold text-[10px]">Nominal</span>
+            </div>
+            <div className="my-1.5 flex items-baseline gap-1">
+              <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] tracking-tight">
+                {egt}
+              </span>
+              <span className="text-[10px] text-[#849495]">°C</span>
+            </div>
+            <div className="w-full bg-[#1e2538] h-1 rounded overflow-hidden">
+              <div
+                className="bg-[#00f0ff] h-full transition-all duration-300"
+                style={{ width: `${egtPct}%` }}
+              />
+            </div>
           </div>
-          <div className="my-1">
-            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] tracking-tight">
-              {egt}
-            </span>
-            <span className="font-mono text-[10px] text-[#849495] ml-1">°C</span>
-          </div>
-          <div className="w-full bg-[#303443] h-1 rounded overflow-hidden">
-            <div
-              className="bg-[#00f0ff] h-full transition-all duration-300"
-              style={{ width: `${egtPct}%` }}
-            />
-          </div>
-        </div>
 
-        {/* Metric 4: Oil Pressure */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-2.5 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
-          <div className="flex justify-between items-center text-[#849495] font-mono text-[11px]">
-            <span>Oil pressure</span>
-            <span className={`font-bold text-[10px] ${oilStatus.color}`}>{oilStatus.text}</span>
+          {/* Metric 4: Oil Pressure */}
+          <div className="px-3 py-1.5 sm:py-0 flex flex-col justify-between">
+            <div className="flex justify-between items-center text-[#849495] text-[11px]">
+              <span className="font-medium tracking-wide">Oil pressure</span>
+              <span className={`font-semibold text-[10px] ${oilStatus.color}`}>{oilStatus.text}</span>
+            </div>
+            <div className="my-1.5 flex items-baseline gap-1">
+              <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] tracking-tight">
+                {oilPress}
+              </span>
+              <span className="text-[10px] text-[#849495]">psi</span>
+            </div>
+            <div className="w-full bg-[#1e2538] h-1 rounded overflow-hidden">
+              <div
+                className={`h-full transition-all duration-300 ${
+                  oilPress < 60 ? 'bg-[#f59e0b]' : 'bg-[#00f0ff]'
+                }`}
+                style={{ width: `${oilPct}%` }}
+              />
+            </div>
           </div>
-          <div className="my-1">
-            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] tracking-tight">
-              {oilPress}
-            </span>
-            <span className="font-mono text-[10px] text-[#849495] ml-1">psi</span>
-          </div>
-          <div className="w-full bg-[#303443] h-1 rounded overflow-hidden">
-            <div
-              className={`h-full transition-all duration-300 ${
-                oilPress < 60 ? 'bg-[#f59e0b]' : 'bg-[#00f0ff]'
-              }`}
-              style={{ width: `${oilPct}%` }}
-            />
-          </div>
-        </div>
 
-        {/* Metric 5: Fuel Flow */}
-        <div className="bg-[#252a38]/70 border border-[#3b494b]/20 p-2.5 rounded-lg flex flex-col justify-between hover:border-[#00f0ff]/40 transition-colors">
-          <div className="flex justify-between items-center text-[#849495] font-mono text-[11px]">
-            <span>Fuel flow</span>
-            <span className="text-[#10b981] font-bold text-[10px]">Optimal</span>
+          {/* Metric 5: Fuel Flow */}
+          <div className="px-3 py-1.5 sm:py-0 flex flex-col justify-between">
+            <div className="flex justify-between items-center text-[#849495] text-[11px]">
+              <span className="font-medium tracking-wide">Fuel flow</span>
+              <span className="text-[#10b981] font-semibold text-[10px]">Optimal</span>
+            </div>
+            <div className="my-1.5 flex items-baseline gap-1">
+              <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] tracking-tight">
+                {fuelFlow}
+              </span>
+              <span className="text-[10px] text-[#849495]">L/h</span>
+            </div>
+            <div className="w-full bg-[#1e2538] h-1 rounded overflow-hidden">
+              <div
+                className="bg-[#00f0ff] h-full transition-all duration-300"
+                style={{ width: `${fuelPct}%` }}
+              />
+            </div>
           </div>
-          <div className="my-1">
-            <span className="font-mono text-lg md:text-xl font-bold text-[#dee2f5] tracking-tight">
-              {fuelFlow}
-            </span>
-            <span className="font-mono text-[10px] text-[#849495] ml-1">L/h</span>
-          </div>
-          <div className="w-full bg-[#303443] h-1 rounded overflow-hidden">
-            <div
-              className="bg-[#00f0ff] h-full transition-all duration-300"
-              style={{ width: `${fuelPct}%` }}
-            />
-          </div>
-        </div>
 
-        {/* Metric 6: Vibration RMS */}
-        <div
-          className={`p-2.5 rounded-lg flex flex-col justify-between border transition-colors ${
-            parseFloat(vib) > 4.0
-              ? 'bg-[#93000a]/20 border-[#ffb4ab]/40'
-              : parseFloat(vib) > 3.0
-              ? 'bg-[#f59e0b]/15 border-[#f59e0b]/40'
-              : 'bg-[#252a38]/70 border-[#3b494b]/20 hover:border-[#00f0ff]/40'
-          }`}
-        >
-          <div className="flex justify-between items-center text-[#849495] font-mono text-[11px]">
-            <span>Vibration</span>
-            <span className={`font-bold text-[10px] ${vibStatus.color}`}>{vibStatus.text}</span>
-          </div>
-          <div className="my-1">
-            <span
-              className={`font-mono text-lg md:text-xl font-bold tracking-tight ${
-                parseFloat(vib) > 4.0 ? 'text-[#ffb4ab]' : parseFloat(vib) > 3.0 ? 'text-[#f59e0b]' : 'text-[#dee2f5]'
-              }`}
-            >
-              {vib}
-            </span>
-            <span className="font-mono text-[10px] text-[#849495] ml-1">mm/s</span>
-          </div>
-          <div className="w-full bg-[#303443] h-1 rounded overflow-hidden">
-            <div
-              className={`h-full transition-all duration-300 ${
-                parseFloat(vib) > 4.0 ? 'bg-[#ef4444]' : parseFloat(vib) > 3.0 ? 'bg-[#f59e0b]' : 'bg-[#00f0ff]'
-              }`}
-              style={{ width: `${vibPct}%` }}
-            />
+          {/* Metric 6: Vibration RMS */}
+          <div className="px-3 py-1.5 sm:py-0 sm:last:pr-0 flex flex-col justify-between">
+            <div className="flex justify-between items-center text-[#849495] text-[11px]">
+              <span className="font-medium tracking-wide">Vibration</span>
+              <span className={`font-semibold text-[10px] ${vibStatus.color}`}>{vibStatus.text}</span>
+            </div>
+            <div className="my-1.5 flex items-baseline gap-1">
+              <span
+                className={`font-mono text-lg md:text-xl font-bold tracking-tight ${
+                  parseFloat(vib) > 4.0 ? 'text-[#ffb4ab]' : parseFloat(vib) > 3.0 ? 'text-[#f59e0b]' : 'text-[#dee2f5]'
+                }`}
+              >
+                {vib}
+              </span>
+              <span className="text-[10px] text-[#849495]">mm/s</span>
+            </div>
+            <div className="w-full bg-[#1e2538] h-1 rounded overflow-hidden">
+              <div
+                className={`h-full transition-all duration-300 ${
+                  parseFloat(vib) > 4.0 ? 'bg-[#ef4444]' : parseFloat(vib) > 3.0 ? 'bg-[#f59e0b]' : 'bg-[#00f0ff]'
+                }`}
+                style={{ width: `${vibPct}%` }}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -194,57 +182,59 @@ export const TelemetryCardsMatrix: React.FC<TelemetryCardsMatrixProps> = ({ tele
 
       {/* Collapsible Auxiliary Telemetry Row (Battery, Alternator, Oil Temp, Manifold Pressure) */}
       {showSecondary && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 border-t border-[#3b494b]/20">
-          <div className="bg-[#161b29]/90 border border-[#3b494b]/30 p-2 rounded flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Thermometer className="w-3.5 h-3.5 text-[#f59e0b]" />
-              <div>
-                <span className="text-[9px] font-mono text-[#849495] block">Oil temp</span>
-                <span className="font-mono text-xs font-bold text-[#dee2f5]">
-                  {telemetry?.oilTemperature || 85} °C
-                </span>
+        <div className="bg-[#090e1a]/90 border border-[#00f0ff]/15 rounded-lg p-2.5 shadow-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[#3b494b]/20">
+            <div className="px-3 py-1 sm:py-0 sm:first:pl-0 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Thermometer className="w-3.5 h-3.5 text-[#f59e0b]" />
+                <div>
+                  <span className="text-[10px] text-[#849495] block">Oil temp</span>
+                  <span className="font-mono text-xs font-bold text-[#dee2f5]">
+                    {telemetry?.oilTemperature || 85} °C
+                  </span>
+                </div>
               </div>
+              <span className="text-[10px] text-[#10b981] font-medium">Nominal</span>
             </div>
-            <span className="font-mono text-[9px] text-[#10b981]">Normal</span>
-          </div>
 
-          <div className="bg-[#161b29]/90 border border-[#3b494b]/30 p-2 rounded flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Battery className="w-3.5 h-3.5 text-[#00f0ff]" />
-              <div>
-                <span className="text-[9px] font-mono text-[#849495] block">Battery</span>
-                <span className="font-mono text-xs font-bold text-[#dee2f5]">
-                  {(telemetry?.batteryVoltage || 28.2).toFixed(1)} V
-                </span>
+            <div className="px-3 py-1 sm:py-0 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Battery className="w-3.5 h-3.5 text-[#00f0ff]" />
+                <div>
+                  <span className="text-[10px] text-[#849495] block">Battery</span>
+                  <span className="font-mono text-xs font-bold text-[#dee2f5]">
+                    {(telemetry?.batteryVoltage || 28.2).toFixed(1)} V
+                  </span>
+                </div>
               </div>
+              <span className="text-[10px] text-[#10b981] font-medium">28 V</span>
             </div>
-            <span className="font-mono text-[9px] text-[#10b981]">28 V</span>
-          </div>
 
-          <div className="bg-[#161b29]/90 border border-[#3b494b]/30 p-2 rounded flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Zap className="w-3.5 h-3.5 text-[#00dbe9]" />
-              <div>
-                <span className="text-[9px] font-mono text-[#849495] block">Alternator</span>
-                <span className="font-mono text-xs font-bold text-[#dee2f5]">
-                  {(telemetry?.alternatorCurrent || 44.5).toFixed(1)} A
-                </span>
+            <div className="px-3 py-1 sm:py-0 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Zap className="w-3.5 h-3.5 text-[#00dbe9]" />
+                <div>
+                  <span className="text-[10px] text-[#849495] block">Alternator</span>
+                  <span className="font-mono text-xs font-bold text-[#dee2f5]">
+                    {(telemetry?.alternatorCurrent || 44.5).toFixed(1)} A
+                  </span>
+                </div>
               </div>
+              <span className="text-[10px] text-[#10b981] font-medium">62% load</span>
             </div>
-            <span className="font-mono text-[9px] text-[#10b981]">62% load</span>
-          </div>
 
-          <div className="bg-[#161b29]/90 border border-[#3b494b]/30 p-2 rounded flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Gauge className="w-3.5 h-3.5 text-[#7df4ff]" />
-              <div>
-                <span className="text-[9px] font-mono text-[#849495] block">Manifold</span>
-                <span className="font-mono text-xs font-bold text-[#dee2f5]">
-                  {(telemetry?.manifoldPressure || 24.8).toFixed(1)} inHg
-                </span>
+            <div className="px-3 py-1 sm:py-0 sm:last:pr-0 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Gauge className="w-3.5 h-3.5 text-[#7df4ff]" />
+                <div>
+                  <span className="text-[10px] text-[#849495] block">Manifold</span>
+                  <span className="font-mono text-xs font-bold text-[#dee2f5]">
+                    {(telemetry?.manifoldPressure || 24.8).toFixed(1)} inHg
+                  </span>
+                </div>
               </div>
+              <span className="text-[10px] text-[#10b981] font-medium">Nominal</span>
             </div>
-            <span className="font-mono text-[9px] text-[#10b981]">Normal</span>
           </div>
         </div>
       )}

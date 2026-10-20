@@ -62,7 +62,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="relative min-h-screen bg-[#090e1b] text-[#dee2f5] flex">
           <AutoSidebar />
           <AutoHeader />
-          <main className="relative pt-16 pl-0 md:pl-20 w-full min-h-screen bg-[#090e1b]">
+          <main className="relative pt-[76px] pl-0 md:pl-[88px] pr-3 pb-8 w-full min-h-screen bg-[#090e1b]">
             {children}
           </main>
         </div>
@@ -83,7 +83,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="relative min-h-screen bg-[#080d1a] text-[#dee2f5] flex">
           <AeroSidebar />
           <AeroHeader />
-          <main className="relative pt-16 pl-0 md:pl-20 w-full min-h-screen bg-[#080d1a]">
+          <main className="relative pt-[76px] pl-0 md:pl-[88px] pr-3 pb-8 w-full min-h-screen bg-[#080d1a]">
             {children}
           </main>
         </div>
@@ -96,7 +96,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <div className="relative min-h-screen bg-[#0e1320] text-[#dee2f5] flex">
       <DroneSidebar isStreamActive={isStreamActive} onToggleStream={toggleStream} />
       <DroneHeader unreadAlertsCount={alerts.length} />
-      <main className="relative pt-16 pl-0 md:pl-20 w-full min-h-screen bg-[#0e1320] aerospace-grid">
+      <main className="relative pt-[76px] pl-0 md:pl-[88px] pr-3 pb-8 w-full min-h-screen bg-[#0e1320] aerospace-grid">
         {children}
       </main>
     </div>

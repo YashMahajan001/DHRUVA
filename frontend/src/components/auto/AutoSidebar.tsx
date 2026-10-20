@@ -108,7 +108,7 @@ export const AutoSidebar: React.FC<AutoSidebarProps> = () => {
   return (
     <aside
       id="auto-sidebar"
-      className="hidden md:flex fixed left-0 top-0 h-full w-20 bg-gradient-to-b from-[#090e1b] via-[#070b16] to-[#04070e] backdrop-blur-2xl border-r border-[#f59e0b]/25 z-50 flex-col justify-between items-center py-4 shadow-[6px_0_35px_rgba(0,0,0,0.7)] transition-all select-none"
+      className="hidden md:flex fixed left-3 top-3 bottom-3 w-16 bg-gradient-to-b from-[#090e1b] via-[#070b16] to-[#04070e] backdrop-blur-2xl border border-[#f59e0b]/25 rounded-2xl z-50 flex-col justify-between items-center py-3.5 shadow-[0_8px_32px_rgba(0,0,0,0.7)] transition-all select-none"
     >
       {/* 1. Top Section: Automotive Emblem & Domain Badge */}
       <div className="flex flex-col items-center gap-3 w-full">

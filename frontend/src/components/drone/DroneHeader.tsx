@@ -70,14 +70,14 @@ export const DroneHeader: React.FC<DroneHeaderProps> = ({
     <>
       <header
         id="drone-header"
-        className="fixed top-0 left-0 md:left-20 right-0 h-16 bg-[#090e1b]/95 backdrop-blur-xl border-b border-[#00f0ff]/20 z-40 flex items-center justify-between px-3 sm:px-4 lg:px-6 shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
+        className="fixed top-3 left-3 md:left-[84px] right-3 h-14 bg-[#090e1b]/95 backdrop-blur-xl border border-[#00f0ff]/20 rounded-xl z-40 flex items-center justify-between px-3 sm:px-4 shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
       >
         {/* Brand & Mobile Hamburger */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button
             id="drone-mobile-nav-toggle"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-1.5 rounded lg:hidden text-[#b9cacb] hover:text-[#00f0ff] hover:bg-[#161b29] border border-[#00f0ff]/30 transition-colors"
+            className="p-1.5 rounded-lg lg:hidden text-[#b9cacb] hover:text-[#00f0ff] hover:bg-[#161b29] border border-[#00f0ff]/30 transition-colors"
             title="Toggle Drone Navigation Menu"
             aria-label="Toggle Drone Navigation Menu"
           >
@@ -89,84 +89,59 @@ export const DroneHeader: React.FC<DroneHeaderProps> = ({
             onClick={() => navigate('/dashboard')}
             title="DHRUVA UAV Drone Console"
           >
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#00f0ff] to-[#0053db] p-0.5 shadow-[0_0_15px_rgba(0,240,255,0.4)] flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00f0ff] to-[#0053db] p-0.5 shadow-[0_0_12px_rgba(0,240,255,0.35)] flex items-center justify-center shrink-0">
               <div className="w-full h-full bg-[#090e1b] rounded-[6px] flex items-center justify-center">
-                <Radio className="w-4 h-4 text-[#00f0ff] animate-pulse" />
+                <Radio className="w-3.5 h-3.5 text-[#00f0ff] animate-pulse" />
               </div>
             </div>
             <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="font-display text-sm sm:text-base font-bold text-[#dee2f5] tracking-wider leading-none uppercase">
+              <div className="flex items-center gap-1.5">
+                <span className="font-sans text-xs sm:text-sm font-bold text-[#dee2f5] tracking-wide uppercase">
                   DHRUVA DRONE
                 </span>
-                <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-[#00f0ff]/15 text-[#00f0ff] border border-[#00f0ff]/30">
-                  UAV TWIN
+                <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-mono font-semibold bg-[#00f0ff]/10 text-[#00f0ff] border border-[#00f0ff]/30">
+                  UAV-01
                 </span>
               </div>
-              <span className="font-mono text-[9px] sm:text-[10px] text-[#849495] tracking-widest uppercase">
-                Tactical Propulsion System
+              <span className="font-mono text-[9px] text-[#849495] tracking-wider uppercase">
+                Propulsion Twin
               </span>
-            </div>
-          </div>
-
-          <div className="h-6 w-[1px] bg-[#3b494b]/30 mx-1 hidden xl:block" />
-
-          {/* UTC Clock & Telemetry Status */}
-          <div className="hidden xl:flex items-center gap-2">
-            <div className="flex items-center gap-1.5 font-mono text-xs text-[#b9cacb] bg-[#161b29]/80 px-2.5 py-1 rounded border border-[#3b494b]/20">
-              <Clock className="w-3.5 h-3.5 text-[#00f0ff]" />
-              <span>{utcTime || 'UTC 12:00:00'}</span>
-            </div>
-            <div
-              onClick={toggleStream}
-              className={`flex items-center gap-1.5 px-2 py-1 rounded font-mono text-[10px] font-bold border cursor-pointer transition-all ${
-                isStreamActive
-                  ? 'bg-[#10b981]/15 text-[#10b981] border-[#10b981]/40'
-                  : 'bg-[#f59e0b]/15 text-[#f59e0b] border-[#f59e0b]/40'
-              }`}
-              title="Click to toggle Drone Telemetry link"
-            >
-              <span className={`w-1.5 h-1.5 rounded-full ${isStreamActive ? 'bg-[#10b981] animate-ping' : 'bg-[#f59e0b]'}`} />
-              <span>{isStreamActive ? 'CAN-BUS ONLINE' : 'STREAM PAUSED'}</span>
             </div>
           </div>
         </div>
 
-        {/* Drone Horizontal Navigation Links (Desktop) */}
-        <div className="hidden lg:flex items-center gap-2">
+        {/* Center Utility Cluster: Switch System, Clock, and Connection Status (Replaces Duplicate Page Nav) */}
+        <div className="hidden md:flex items-center gap-2.5">
           {/* Switch System Button */}
           <button
             id="drone-btn-switch-platform"
             onClick={() => navigate('/')}
-            className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#00f0ff]/10 hover:bg-[#00f0ff]/20 border border-[#00f0ff]/40 text-[#00f0ff] font-mono text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_12px_rgba(0,240,255,0.15)]"
-            title="Switch System (Automotive / Drone / Aeroplane)"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#161b29] hover:bg-[#252a38] border border-[#00f0ff]/30 hover:border-[#00f0ff]/60 text-[#00f0ff] font-mono text-[11px] uppercase tracking-wider transition-all cursor-pointer shadow-sm"
+            title="Switch Platform (Drone / Auto / Aero)"
           >
             <Layers className="w-3.5 h-3.5" />
-            <span className="font-bold">SWITCH SYSTEM</span>
+            <span className="font-semibold">SWITCH SYSTEM</span>
           </button>
 
-          <nav
-            id="drone-header-nav"
-            className="flex items-center gap-1 px-1.5 py-1 bg-[#161b29]/80 rounded-lg border border-[#3b494b]/30"
+          {/* UTC Clock */}
+          <div className="flex items-center gap-1.5 font-mono text-xs text-[#b9cacb] bg-[#161b29]/90 px-2.5 py-1 rounded-lg border border-[#3b494b]/30">
+            <Clock className="w-3.5 h-3.5 text-[#00f0ff]" />
+            <span>{utcTime || 'UTC 12:00:00'}</span>
+          </div>
+
+          {/* CAN-BUS Stream Status */}
+          <div
+            onClick={toggleStream}
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-mono text-[10px] font-semibold border cursor-pointer transition-all ${
+              isStreamActive
+                ? 'bg-[#10b981]/15 text-[#10b981] border-[#10b981]/40'
+                : 'bg-[#f59e0b]/15 text-[#f59e0b] border-[#f59e0b]/40'
+            }`}
+            title="Toggle Drone Telemetry Stream"
           >
-            {droneNavLinks.map((item) => {
-              const active = isLinkActive(item);
-              return (
-                <button
-                  key={item.path}
-                  id={`drone-tab-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
-                  onClick={() => navigate(item.path)}
-                  className={`px-2.5 py-1 font-mono text-xs uppercase tracking-wider rounded transition-all whitespace-nowrap ${
-                    active
-                      ? 'text-[#090e1b] bg-[#00f0ff] font-bold shadow-[0_0_10px_rgba(0,240,255,0.3)]'
-                      : 'text-[#b9cacb] hover:text-[#dee2f5] hover:bg-[#1a1f2d]/70'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              );
-            })}
-          </nav>
+            <span className={`w-1.5 h-1.5 rounded-full ${isStreamActive ? 'bg-[#10b981] animate-ping' : 'bg-[#f59e0b]'}`} />
+            <span>{isStreamActive ? 'CAN-BUS ONLINE' : 'STREAM PAUSED'}</span>
+          </div>
         </div>
 
         {/* Flight Deck Security & Operator Identity */}

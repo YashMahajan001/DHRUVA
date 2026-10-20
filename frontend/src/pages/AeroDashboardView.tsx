@@ -624,18 +624,18 @@ const KPICard: React.FC<KPICardProps> = ({ title, value, nominal, limit, provena
 
   return (
     <div
-      className={`p-3.5 rounded-xl bg-[#0b1329]/90 border transition-all ${
+      className={`p-3 rounded-xl bg-[#0b1329]/90 border transition-all ${
         isCrit
           ? 'border-[#ef4444] bg-[#ef4444]/10 shadow-[0_0_12px_rgba(239,68,68,0.3)] animate-pulse'
           : isWarn
           ? 'border-[#f59e0b] bg-[#f59e0b]/10'
-          : 'border-[#38bdf8]/20 hover:border-[#38bdf8]/50'
+          : 'border-[#38bdf8]/20 hover:border-[#38bdf8]/40'
       }`}
     >
-      <div className="flex items-center justify-between text-[9px] font-mono text-[#94a3b8] mb-1">
-        <span className="truncate max-w-[110px]">{title}</span>
+      <div className="flex items-center justify-between text-[10px] text-[#94a3b8] mb-1">
+        <span className="truncate max-w-[120px] font-medium">{title}</span>
         <span
-          className={`px-1 py-0.2 rounded text-[8px] font-bold ${
+          className={`px-1 py-0.2 rounded text-[8px] font-mono font-semibold ${
             provenance === 'SIMULATED'
               ? 'bg-[#38bdf8]/15 text-[#38bdf8]'
               : provenance === 'MEASURED'
@@ -647,13 +647,13 @@ const KPICard: React.FC<KPICardProps> = ({ title, value, nominal, limit, provena
         </span>
       </div>
 
-      <div className={`text-lg md:text-xl font-black font-display tracking-tight my-1 ${
+      <div className={`text-lg md:text-xl font-bold font-mono tracking-tight my-1 ${
         isCrit ? 'text-[#ef4444]' : isWarn ? 'text-[#f59e0b]' : 'text-[#f8fafc]'
       }`}>
         {value}
       </div>
 
-      <div className="flex items-center justify-between text-[9px] font-mono text-[#64748b] border-t border-slate-800/80 pt-1 mt-1">
+      <div className="flex items-center justify-between text-[10px] text-[#64748b] border-t border-slate-800/80 pt-1 mt-1 font-mono">
         <span>{nominal}</span>
         <span className="text-[#94a3b8]">{limit}</span>
       </div>

@@ -56,13 +56,13 @@ export const TelemetryTrendChart: React.FC<TelemetryTrendChartProps> = ({
   return (
     <div
       id="telemetry-trend-panel"
-      className="bg-[#161b29] border border-[#3b494b]/30 p-3.5 rounded-xl shadow-lg flex flex-col justify-between h-full"
+      className="bg-[#0c1220]/90 border border-[#00f0ff]/15 p-3.5 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.35)] flex flex-col justify-between h-full"
     >
       {/* Chart Header & Controls */}
       <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
           <Activity className="w-4 h-4 text-[#00f0ff]" />
-          <span className="font-display text-base font-bold text-[#dee2f5] uppercase tracking-wide">
+          <span className="text-sm font-semibold text-[#dee2f5]">
             Live Telemetry Trend
           </span>
         </div>

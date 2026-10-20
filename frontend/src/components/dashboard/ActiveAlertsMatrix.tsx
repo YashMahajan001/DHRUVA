@@ -24,17 +24,17 @@ export const ActiveAlertsMatrix: React.FC<ActiveAlertsMatrixProps> = ({
   return (
     <div
       id="active-alerts-matrix"
-      className="bg-[#161b29] border border-[#3b494b]/30 p-3.5 rounded-xl shadow-lg flex flex-col gap-2.5"
+      className="bg-[#0c1220]/90 border border-[#00f0ff]/15 p-3 sm:p-3.5 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.35)] flex flex-col gap-2.5"
     >
       {/* Alerts Matrix Header */}
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-1.5">
           <AlertTriangle className="w-4 h-4 text-[#ef4444]" />
-          <span className="font-display text-sm font-bold text-[#dee2f5] tracking-wide uppercase">
+          <span className="text-sm font-semibold text-[#dee2f5]">
             Active Alerts
           </span>
         </div>
-        <span className="font-mono text-[10px] text-[#849495]">
+        <span className="text-xs text-[#849495]">
           {alerts.length} {alerts.length === 1 ? 'fault' : 'faults'}
         </span>
       </div>
@@ -104,10 +104,10 @@ export const ActiveAlertsMatrix: React.FC<ActiveAlertsMatrixProps> = ({
                 <div className="flex items-center gap-1.5 shrink-0">
                   <button
                     onClick={() => onInspectEngine(alert.engineIndex)}
-                    className="px-2 py-0.5 bg-[#252a38] hover:bg-[#00f0ff] hover:text-[#00363a] text-[#00f0ff] font-mono text-[9px] font-bold rounded uppercase border border-[#00f0ff]/30 transition-all cursor-pointer"
+                    className="px-2 py-0.5 bg-[#161f30] hover:bg-[#00f0ff] hover:text-[#00363a] text-[#00f0ff] text-[10px] font-semibold rounded border border-[#00f0ff]/30 transition-all cursor-pointer"
                     title={`Inspect ${engLabel}`}
                   >
-                    INSPECT
+                    Inspect
                   </button>
 
                   <button

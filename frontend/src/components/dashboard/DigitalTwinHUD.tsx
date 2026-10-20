@@ -145,12 +145,12 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
       {/* Top HUD Controls & Tactical Mode Switcher */}
       <div className="relative z-30 flex items-center justify-between gap-2 pb-2">
         {/* Camera Info Callout */}
-        <div className="font-mono text-xs text-[#00f0ff]/80 tracking-widest leading-relaxed hidden md:block">
-          [HUD.CAM_AFT_MALE_01]
-          <br />
-          FOV: {mission.fovDegrees || 84}° // FLIR INFRARED ACTIVE
-          <br />
-          STABILIZATION: {mission.stabilization || '3-AXIS LOCK'}
+        <div className="text-xs text-[#849495] leading-relaxed hidden md:block">
+          <span className="font-mono text-[#00f0ff] font-semibold">CAM-01</span>
+          <span className="mx-1.5 text-[#3b494b]">·</span>
+          <span>FOV {mission.fovDegrees || 84}°</span>
+          <span className="mx-1.5 text-[#3b494b]">·</span>
+          <span className="text-[#00dbe9]">FLIR</span>
         </div>
 
         {/* Tactical View Mode Switcher & Asset Replacement Tools */}
@@ -202,12 +202,12 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
         </div>
 
         {/* Top-Right Spatial Callout */}
-        <div className="text-right font-mono text-xs text-[#00f0ff]/80 tracking-widest leading-relaxed hidden md:block">
-          AZ: {engine.twinState?.azimuth || 114}° // EL: {engine.twinState?.elevation || -12.4}°
-          <br />
-          SYNC: {engine.twinState?.syntheticTwinId || 'SYNTHETIC TWIN D-04'}
-          <br />
-          LAT/LONG: {mission.latLong || "S 34°52', W 70°15'"}
+        <div className="text-right text-xs text-[#849495] leading-relaxed hidden md:block">
+          <span className="font-mono text-[#00f0ff]">{engine.twinState?.syntheticTwinId || 'TWIN D-04'}</span>
+          <span className="mx-1.5 text-[#3b494b]">·</span>
+          <span>AZ {engine.twinState?.azimuth || 114}°</span>
+          <span className="mx-1.5 text-[#3b494b]">·</span>
+          <span>EL {engine.twinState?.elevation || -12.4}°</span>
         </div>
       </div>
 
@@ -398,24 +398,24 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
           </svg>
 
           {/* Interactive Floating Sensor Badges */}
-          <div className="absolute top-2 left-4 bg-[#161b29]/90 border border-[#3b494b]/30 px-3 py-1.5 rounded shadow-lg backdrop-blur-md text-left">
-            <span className="font-mono text-xs text-[#849495] block">NODE N-1A [CHT]</span>
-            <span className="font-mono text-sm font-bold text-[#00f0ff]">
+          <div className="absolute top-2 left-4 bg-[#090e1a]/90 border border-[#00f0ff]/20 px-2.5 py-1 rounded-lg shadow-md backdrop-blur-md text-left">
+            <span className="text-[10px] text-[#849495] block">CHT · 1A</span>
+            <span className="font-mono text-xs font-bold text-[#00f0ff]">
               {Math.round(c1)} °C
             </span>
           </div>
 
-          <div className="absolute top-2 right-4 bg-[#161b29]/90 border border-[#3b494b]/30 px-3 py-1.5 rounded shadow-lg backdrop-blur-md text-right">
-            <span className="font-mono text-xs text-[#849495] block">NODE N-2B [EGT]</span>
-            <span className="font-mono text-sm font-bold text-[#00f0ff]">
+          <div className="absolute top-2 right-4 bg-[#090e1a]/90 border border-[#00f0ff]/20 px-2.5 py-1 rounded-lg shadow-md backdrop-blur-md text-right">
+            <span className="text-[10px] text-[#849495] block">EGT · 2B</span>
+            <span className="font-mono text-xs font-bold text-[#00f0ff]">
               {Math.round(engine.telemetry?.egt || 690)} °C
             </span>
           </div>
 
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-[#161b29]/90 border border-[#3b494b]/30 px-4 py-2 rounded shadow-lg backdrop-blur-md text-center whitespace-nowrap">
-            <span className="font-mono text-xs text-[#849495] block">CRANK TURBINE BEARING VIB</span>
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-[#090e1a]/90 border border-[#00f0ff]/20 px-3 py-1 rounded-lg shadow-md backdrop-blur-md text-center whitespace-nowrap">
+            <span className="text-[10px] text-[#849495] block">Bearing Vibration</span>
             <span
-              className={`font-mono text-sm font-bold ${
+              className={`font-mono text-xs font-bold ${
                 (engine.telemetry?.vibration || 2.1) > 4.0
                   ? 'text-[#ef4444]'
                   : (engine.telemetry?.vibration || 2.1) > 3.0
@@ -423,26 +423,29 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
                   : 'text-[#10b981]'
               }`}
             >
-              {(engine.telemetry?.vibration || 2.1).toFixed(1)} mm/s (
-              {(engine.telemetry?.vibration || 2.1) > 4.0
-                ? 'CRITICAL'
-                : (engine.telemetry?.vibration || 2.1) > 3.0
-                ? 'WARNING'
-                : 'NOMINAL'}
-              )
+              {(engine.telemetry?.vibration || 2.1).toFixed(1)} mm/s
+              <span className="ml-1 text-[10px] font-normal text-[#849495]">
+                (
+                {(engine.telemetry?.vibration || 2.1) > 4.0
+                  ? 'Critical'
+                  : (engine.telemetry?.vibration || 2.1) > 3.0
+                  ? 'Warning'
+                  : 'Nominal'}
+                )
+              </span>
             </span>
           </div>
         </div>
       </div>
 
       {/* Integrated Live Engine Health circle HUD widget over the twin */}
-      <div className="relative z-20 flex flex-wrap items-center justify-between gap-3 bg-[#252a38]/85 border border-[#3b494b]/20 backdrop-blur-xl p-3.5 sm:p-4 rounded-lg shadow-lg">
+      <div className="relative z-20 flex flex-wrap items-center justify-between gap-3 bg-[#0c1220]/90 border border-[#00f0ff]/15 backdrop-blur-xl p-3 sm:p-3.5 rounded-xl shadow-md">
         {/* Big Health Dial Indicator */}
         <div className="flex items-center gap-3">
-          <div className="relative w-16 h-16 sm:w-18 sm:h-18 flex items-center justify-center shrink-0">
+          <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center shrink-0">
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
               <path
-                className="text-[#303443]"
+                className="text-[#1a2335]"
                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                 fill="none"
                 stroke="currentColor"
@@ -460,13 +463,13 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
               <span
-                className="font-mono text-lg sm:text-xl font-bold leading-none"
+                className="font-mono text-base sm:text-lg font-bold leading-none"
                 style={{ color: engine.statusColor || '#00f0ff' }}
               >
                 {healthVal}%
               </span>
-              <span className="font-mono text-[9px] text-[#849495] uppercase tracking-wider">
-                HEALTH
+              <span className="text-[8px] text-[#849495] uppercase tracking-wider mt-0.5">
+                Health
               </span>
             </div>
           </div>
@@ -478,44 +481,40 @@ export const DigitalTwinHUD: React.FC<DigitalTwinHUDProps> = ({
                 style={{ backgroundColor: engine.statusColor || '#10b981' }}
               ></span>
               <span
-                className="font-display text-sm sm:text-base font-bold uppercase tracking-wide"
+                className="text-sm sm:text-base font-semibold tracking-tight"
                 style={{ color: engine.statusColor === '#ef4444' ? '#ffb4ab' : engine.statusColor === '#f59e0b' ? '#f59e0b' : '#dee2f5' }}
               >
-                {engine.status || 'HEALTHY // OPTIMAL'}
+                {engine.status || 'Nominal'}
               </span>
             </div>
-            <span className="font-mono text-[11px] text-[#b9cacb]">
-              MODEL: {engine.model || 'LYCOMING O-320 PROPULSION SYSTEM'}
-            </span>
-            <span className="font-mono text-[11px] text-[#849495]">
-              ESTIMATED REMAINING USEFUL LIFE:{' '}
-              <span className="text-[#00f0ff] font-bold font-mono">
-                {engine.rul || 184} HRS
-              </span>
-            </span>
+            <div className="flex items-center gap-2 mt-0.5 text-xs text-[#849495]">
+              <span>Model: <span className="text-[#dee2f5] font-medium">{engine.model || 'Lycoming O-320'}</span></span>
+              <span>·</span>
+              <span>RUL <span className="text-[#00f0ff] font-mono font-bold">{engine.rul || 184} h</span></span>
+            </div>
           </div>
         </div>
 
         {/* Live Animated Canvas Waveform (Combustion Oscilloscope) */}
-        <div className="flex-1 min-w-[200px] max-w-sm flex flex-col gap-1.5">
-          <div className="flex justify-between items-center font-mono text-[11px] text-[#b9cacb]">
-            <span>CYLINDER HARMONIC SENSOR [CH-01]</span>
-            <span className="text-[#00f0ff] font-bold font-mono">
+        <div className="flex-1 min-w-[180px] max-w-sm flex flex-col gap-1">
+          <div className="flex justify-between items-center text-[11px] text-[#849495]">
+            <span>Harmonic Sensor [CH-01]</span>
+            <span className="text-[#00f0ff] font-mono font-semibold">
               {(engine.telemetry?.harmonicFreq || 124.8).toFixed(1)} Hz
             </span>
           </div>
           <canvas
             ref={oscCanvasRef}
-            className="w-full h-10 bg-[#090e1b] rounded border border-[#3b494b]/30"
+            className="w-full h-8 bg-[#090e1a] rounded-lg border border-[#3b494b]/20"
           ></canvas>
         </div>
       </div>
 
       {/* Bottom HUD Reticle Footer Info */}
-      <div className="relative z-20 flex justify-between items-end pt-2 text-[#849495] font-mono text-xs">
-        <div className="hidden sm:block">TARGET LOCK: {mission.targetLock || 'DISENGAGED // RECON MATRIX'}</div>
-        <div className="text-[#00f0ff] tracking-wider">
-          FRAME REFRESH: {engine.twinState?.frameRefreshHz || 60}Hz // LATENCY: {engine.twinState?.latencyMs || 12}ms
+      <div className="relative z-20 flex justify-between items-end pt-1.5 text-[#849495] text-xs">
+        <div className="hidden sm:block text-[11px]">Lock: <span className="text-[#dee2f5]">{mission.targetLock || 'Disengaged'}</span></div>
+        <div className="text-[11px]">
+          Refresh <span className="font-mono text-[#00f0ff]">{engine.twinState?.frameRefreshHz || 60}Hz</span> · Latency <span className="font-mono text-[#00f0ff]">{engine.twinState?.latencyMs || 12}ms</span>
         </div>
       </div>
     </div>

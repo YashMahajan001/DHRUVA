@@ -51,7 +51,7 @@ export const AeroHeader: React.FC = () => {
   const operatingStates = ['IDLE', 'TAKEOFF', 'CLIMB', 'CRUISE', 'DESCENT'];
 
   return (
-    <header className="fixed top-0 left-0 right-0 h-16 bg-[#080d1a]/95 backdrop-blur-md border-b border-[#38bdf8]/20 z-40 px-4 md:px-6 flex items-center justify-between text-[#dee2f5] pl-4 md:pl-24">
+    <header className="fixed top-3 left-3 md:left-[84px] right-3 h-14 bg-[#080d1a]/95 backdrop-blur-xl border border-[#38bdf8]/20 rounded-xl z-40 px-3 sm:px-4 flex items-center justify-between text-[#dee2f5] shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
       {/* 1. Left: Identity & Engine Selector Dropdown */}
       <div className="flex items-center gap-3 md:gap-5">
         <div className="flex items-center gap-2.5">

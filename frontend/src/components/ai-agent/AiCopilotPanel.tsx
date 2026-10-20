@@ -47,17 +47,17 @@ export const AiCopilotPanel: React.FC<AiCopilotPanelProps> = ({
   return (
     <div
       id="ai-copilot-panel"
-      className="bg-[#161b29] border border-[#3b494b]/20 p-4 rounded-xl shadow-lg flex flex-col h-[480px]"
+      className="bg-[#0c1220]/90 border border-[#00f0ff]/15 p-3.5 sm:p-4 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.35)] flex flex-col h-[480px]"
     >
       {/* Copilot Header */}
       <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-[#3b494b]/20">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded bg-[#00f0ff] text-[#00363a] flex items-center justify-center font-bold shadow-[0_0_10px_rgba(0,240,255,0.4)]">
+          <div className="w-7 h-7 rounded-lg bg-[#00f0ff] text-[#00363a] flex items-center justify-center font-bold shadow-[0_0_10px_rgba(0,240,255,0.3)]">
             <Bot className="w-4 h-4" />
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-display text-sm font-bold text-[#dee2f5] tracking-wide">
-              AI COPILOT
+            <span className="text-sm font-semibold text-[#dee2f5]">
+              AI Copilot
             </span>
             <span className="font-mono text-[9px] bg-[#00f0ff]/15 text-[#00f0ff] border border-[#00f0ff]/30 px-1.5 py-0.2 rounded font-semibold">
               LLM-AERO v3

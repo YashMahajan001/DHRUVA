@@ -58,7 +58,7 @@ export const AeroSidebar: React.FC = () => {
   return (
     <aside
       id="aero-sidebar"
-      className="hidden md:flex fixed left-0 top-0 h-full w-20 bg-[#080d1a]/95 backdrop-blur-xl border-r border-[#38bdf8]/20 z-50 flex-col justify-between items-center py-4 shadow-[4px_0_24px_rgba(0,0,0,0.6)]"
+      className="hidden md:flex fixed left-3 top-3 bottom-3 w-16 bg-[#080d1a]/95 backdrop-blur-xl border border-[#38bdf8]/20 rounded-2xl z-50 flex-col justify-between items-center py-3.5 shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
     >
       <div className="flex flex-col items-center gap-5 w-full">
         {/* Supersonic Plane Emblem */}
