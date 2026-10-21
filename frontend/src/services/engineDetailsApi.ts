@@ -52,11 +52,15 @@ export class DHRUVAA_ApiService {
           if (Array.isArray(rawList) && rawList.length > 0) {
             return rawList.map((raw: any, idx: number) => {
               const fb = INITIAL_ENGINES[idx % INITIAL_ENGINES.length] || INITIAL_ENGINES[0];
+              const model = raw.engine_model?.name || raw.name || fb.model;
               return {
                 ...fb,
                 id: raw.id || fb.id,
-                model: raw.engine_model?.name || raw.name || fb.model,
+                name: raw.name || model,
+                model,
                 operatingHours: raw.total_hours ?? fb.operatingHours,
+                isFallback: false,
+                dataSource: 'LIVE_TELEMETRY',
               };
             });
           }
@@ -77,11 +81,15 @@ export class DHRUVAA_ApiService {
           if (Array.isArray(raw) && raw.length > 0) {
             return raw.map((m: any, idx: number) => {
               const fb = INITIAL_MISSIONS[idx % INITIAL_MISSIONS.length] || INITIAL_MISSIONS[0];
+              const missionName = m.name || m.callsign || fb.callsign;
               return {
                 ...fb,
                 ...m,
                 id: m.id || fb.id,
-                callsign: m.callsign || fb.callsign,
+                name: missionName,
+                callsign: missionName,
+                missionType: m.mission_type || m.missionType || fb.missionType,
+                phase: m.status || m.phase || fb.phase,
               };
             });
           }
@@ -97,7 +105,31 @@ export class DHRUVAA_ApiService {
     if (this.isUsingRemoteApi()) {
       try {
         const res = await fetch(`${API_BASE_URL}/api/v1/subsystems`);
-        if (res.ok) return await res.json();
+        if (res.ok) {
+          const raw = await res.json();
+          // Backend returns List[SubsystemsResponse] (array) or a single SubsystemsResponse object
+          const items = Array.isArray(raw) 
+            ? (raw[0]?.subsystems || []) 
+            : (raw && Array.isArray(raw.subsystems) ? raw.subsystems : []);
+
+          if (Array.isArray(items) && items.length > 0) {
+            const mapped: Record<SubsystemId, SubsystemState> = { ...INITIAL_SUBSYSTEMS };
+            for (const item of items) {
+              const key = item.name?.toLowerCase() as SubsystemId;
+              if (key && mapped[key]) {
+                const health = typeof item.health_score === 'number' ? Math.round(item.health_score) : mapped[key].health;
+                mapped[key] = {
+                  ...mapped[key],
+                  health,
+                  badge: `${item.status || 'NOMINAL'} // ${health}%`,
+                  isFallback: false,
+                  dataSource: 'LIVE_TELEMETRY',
+                };
+              }
+            }
+            return mapped;
+          }
+        }
       } catch (err) {
         console.warn('[DHRUVAA API] Failed to fetch remote subsystems, using local store:', err);
       }

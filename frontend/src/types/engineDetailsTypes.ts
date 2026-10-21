@@ -55,14 +55,19 @@ export interface SubsystemState {
   params: SubsystemParam[];
   faults: MicroFault[];
   chartTag: string;
+  isFallback?: boolean;
+  dataSource?: 'LIVE_TELEMETRY' | 'FALLBACK_BASELINE';
 }
 
 export interface EngineInstance {
   id: string;
   serialNumber: string;
   model: string;
+  name?: string;
   type: string;
   displacement: string;
+  isFallback?: boolean;
+  dataSource?: 'LIVE_TELEMETRY' | 'FALLBACK_BASELINE';
   maxRpm: number;
   nominalRpm: number;
   ratedPowerHp: number;

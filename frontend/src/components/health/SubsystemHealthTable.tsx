@@ -10,14 +10,15 @@ export const SubsystemHealthTable: React.FC = () => {
   const { selectedEngine, openModal, approveWorkOrder } = useMission();
   const [searchTerm, setSearchTerm] = useState('');
 
-  const components = selectedEngine.components;
+  const components = selectedEngine?.components || [];
 
   const filteredComponents = components.filter((c) => {
+    if (!c) return false;
     const term = searchTerm.toLowerCase();
     return (
-      c.name.toLowerCase().includes(term) ||
-      c.subsystem.toLowerCase().includes(term) ||
-      c.status.toLowerCase().includes(term)
+      (c.name && c.name.toLowerCase().includes(term)) ||
+      (c.subsystem && c.subsystem.toLowerCase().includes(term)) ||
+      (c.status && c.status.toLowerCase().includes(term))
     );
   });
 

@@ -168,9 +168,6 @@ export const ExecutiveOverview: React.FC = () => {
                 {isHealthy ? 'ALL PROPULSION NOMINAL' : 'ATTENTION REQUIRED'}
               </span>
             </h1>
-            <p className="text-xs text-[#849495] mt-0.5 font-sans">
-              Fleet health, sortie readiness &amp; operational decisions
-            </p>
           </div>
 
           {/* Executive Action Cluster */}

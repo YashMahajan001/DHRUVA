@@ -126,14 +126,18 @@ export function adaptFleetResponse(raw: any): EngineInstance[] {
 export function adaptMission(raw: any): Mission {
   if (!raw) return INITIAL_MISSION;
 
+  const missionName = raw.missionName || raw.mission_name || raw.name || INITIAL_MISSION.missionName;
+  const name = raw.name || raw.missionName || raw.mission_name || INITIAL_MISSION.name || INITIAL_MISSION.missionName;
+
   return {
     ...INITIAL_MISSION,
     ...raw,
     id: raw.id || raw.missionId || raw.mission_id || INITIAL_MISSION.id,
+    name,
     assetId: raw.assetId || raw.asset_id || INITIAL_MISSION.assetId,
-    missionName: raw.missionName || raw.mission_name || INITIAL_MISSION.missionName,
+    missionName,
     missionType: raw.missionType || raw.mission_type || INITIAL_MISSION.missionType,
-    phase: raw.phase || INITIAL_MISSION.phase,
+    phase: raw.phase || raw.status || INITIAL_MISSION.phase,
     altitudeFt: raw.altitudeFt ?? raw.altitude ?? INITIAL_MISSION.altitudeFt,
     airspeedKt: raw.airspeedKt ?? raw.airspeed ?? INITIAL_MISSION.airspeedKt,
     fuelRemainingPct: raw.fuelRemainingPct ?? raw.fuel_remaining_pct ?? INITIAL_MISSION.fuelRemainingPct,

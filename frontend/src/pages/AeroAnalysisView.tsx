@@ -29,7 +29,17 @@ export const AeroAnalysisView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'components' | 'faults' | 'anomalies'>('faults');
 
   if (!currentEngine) {
-    return <div className="p-8 text-center text-[#94a3b8] font-mono">Loading Engine Analysis...</div>;
+    return (
+      <div className="p-8 max-w-4xl mx-auto text-center space-y-4">
+        <div className="p-6 rounded-2xl bg-[#0b1329]/80 border border-[#38bdf8]/30 shadow-xl space-y-3">
+          <div className="w-10 h-10 mx-auto rounded-full bg-[#38bdf8]/10 border border-[#38bdf8]/30 flex items-center justify-center">
+            <span className="w-3 h-3 rounded-full bg-[#38bdf8] animate-ping" />
+          </div>
+          <h2 className="text-lg font-bold font-display text-[#f8fafc]">Loading Aircraft Engine Analysis...</h2>
+          <p className="text-xs font-mono text-[#94a3b8]">Initializing CAD cutaway and component health models.</p>
+        </div>
+      </div>
+    );
   }
 
   const components = diagnostics?.components || [];
@@ -46,15 +56,9 @@ export const AeroAnalysisView: React.FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl md:text-2xl font-black font-display tracking-tight text-[#f8fafc]">
-              ENGINE ANALYSIS & FAULT DIAGNOSTICS
+              Engine Analysis
             </h1>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#38bdf8]/15 text-[#38bdf8] border border-[#38bdf8]/40 font-mono font-bold">
-              CAD TWIN
-            </span>
           </div>
-          <p className="text-xs font-mono text-[#94a3b8] mt-1">
-            Component health, failure attribution & 3D inspection.
-          </p>
         </div>
 
         {/* Status Badge */}

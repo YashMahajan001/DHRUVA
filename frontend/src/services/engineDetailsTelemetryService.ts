@@ -26,7 +26,9 @@ export const INITIAL_ENGINES: EngineInstance[] = [
     activeSensors: 18,
     totalSensors: 18,
     pipelineLatencyMs: 14,
-    pipelinePort: 9443
+    pipelinePort: 9443,
+    isFallback: true,
+    dataSource: 'FALLBACK_BASELINE'
   },
   {
     id: 'UAV-ENG-88204',
@@ -46,7 +48,9 @@ export const INITIAL_ENGINES: EngineInstance[] = [
     activeSensors: 18,
     totalSensors: 18,
     pipelineLatencyMs: 19,
-    pipelinePort: 9443
+    pipelinePort: 9443,
+    isFallback: true,
+    dataSource: 'FALLBACK_BASELINE'
   },
   {
     id: 'UAV-ENG-10291',
@@ -66,7 +70,9 @@ export const INITIAL_ENGINES: EngineInstance[] = [
     activeSensors: 16,
     totalSensors: 16,
     pipelineLatencyMs: 12,
-    pipelinePort: 9443
+    pipelinePort: 9443,
+    isFallback: true,
+    dataSource: 'FALLBACK_BASELINE'
   }
 ];
 
@@ -151,6 +157,8 @@ export const INITIAL_SUBSYSTEMS: Record<SubsystemId, SubsystemState> = {
     health: 91,
     confidence: '98.2%',
     chartTag: 'CYLINDER HEAD TRANSIENT DYNAMICS',
+    isFallback: true,
+    dataSource: 'FALLBACK_BASELINE',
     params: [
       { label: 'PEAK CHT TEMP', val: '182 °C', note: 'TOLERANCE < 205°C' },
       { label: 'CHT SPREAD (VARIANCE)', val: '4.0 °C', note: 'NOMINAL (± 6°C)' },
@@ -184,6 +192,8 @@ export const INITIAL_SUBSYSTEMS: Record<SubsystemId, SubsystemState> = {
     health: 84,
     confidence: '94.6%',
     chartTag: 'HEAT EXCHANGER THERMAL FLUX',
+    isFallback: true,
+    dataSource: 'FALLBACK_BASELINE',
     params: [
       { label: 'COOLANT / AIR DELTA', val: '-12.4 %', note: 'MARGIN REDUCED' },
       { label: 'RADIATOR AIRFLOW', val: '42.0 m/s', note: 'RAM AIR SCOOP OPEN' },
@@ -217,6 +227,8 @@ export const INITIAL_SUBSYSTEMS: Record<SubsystemId, SubsystemState> = {
     health: 94,
     confidence: '99.1%',
     chartTag: 'OIL RAIL PRESSURE PULSATION',
+    isFallback: true,
+    dataSource: 'FALLBACK_BASELINE',
     params: [
       { label: 'OIL PRESSURE', val: '82.4 PSI', note: 'TARGET: 75-90 PSI' },
       { label: 'SUMP OIL TEMP', val: '88.2 °C', note: 'SAFE OPERATING RANGE' },
@@ -250,6 +262,8 @@ export const INITIAL_SUBSYSTEMS: Record<SubsystemId, SubsystemState> = {
     health: 96,
     confidence: '98.9%',
     chartTag: 'INJECTOR PULSE WIDTH & RAIL STABILITY',
+    isFallback: true,
+    dataSource: 'FALLBACK_BASELINE',
     params: [
       { label: 'FLOW RATE', val: '32.5 L/h', note: 'CRUISE FUEL BURN' },
       { label: 'INJECTOR BALANCE', val: '99.2 %', note: 'TRIM ADJUSTED' },
@@ -283,6 +297,8 @@ export const INITIAL_SUBSYSTEMS: Record<SubsystemId, SubsystemState> = {
     health: 98,
     confidence: '99.8%',
     chartTag: 'PRIMARY IGNITION VOLTAGE TRANSIENTS',
+    isFallback: true,
+    dataSource: 'FALLBACK_BASELINE',
     params: [
       { label: 'MAGNETO DROP', val: '25 RPM', note: 'LIMIT < 150 RPM' },
       { label: 'AVIONICS DC BUS', val: '28.4 V', note: 'ALTERNATOR NOMINAL' },

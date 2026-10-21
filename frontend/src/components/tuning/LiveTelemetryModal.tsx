@@ -127,7 +127,7 @@ export const LiveTelemetryModal: React.FC = () => {
                 9-CHANNEL LIVE TELEMETRY MATRIX
               </h2>
               <div className="font-mono text-[10px] text-[#849495] tracking-wider uppercase">
-                {currentEngine.name} // {currentMission.name}
+                {currentEngine?.name || currentEngine?.model || 'PROPULSION PLANT'} // {currentMission?.name || (currentMission as any)?.missionName || 'MISSION ENVELOPE'}
               </div>
             </div>
           </div>

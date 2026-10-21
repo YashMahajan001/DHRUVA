@@ -16,8 +16,10 @@ class EngineService {
   }
 
   public async getEngineById(id: string): Promise<EngineInstance | undefined> {
+    if (!id) return this.engines[0];
+    const target = id.toLowerCase();
     const found = this.engines.find(
-      (e) => e.id.toLowerCase() === id.toLowerCase() || e.name.toLowerCase().includes(id.toLowerCase())
+      (e) => e && (e.id.toLowerCase() === target || (e.name && e.name.toLowerCase().includes(target)))
     );
     if (found) return found;
 

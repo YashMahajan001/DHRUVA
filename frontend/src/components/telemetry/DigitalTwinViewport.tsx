@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useMissionDashboard } from '../../context/EngineDetailsContext';
 import { SubsystemId } from '../../types/engineDetailsTypes';
 import { DynamicEngineTwin } from '../faults/DynamicEngineTwin';
+import { DroneEngineModel3D } from '../drone/DroneEngineModel3D';
 import { Video, Box, Plane, RotateCcw, RotateCw, ZoomIn, ZoomOut, Maximize2, Upload, Grid, Layers, Eye, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export const DigitalTwinViewport: React.FC = () => {
@@ -220,6 +221,7 @@ export const DigitalTwinViewport: React.FC = () => {
         </span>
         {(Object.keys(subsystems) as SubsystemId[]).map((key) => {
           const item = subsystems[key];
+          if (!item) return null;
           const isSelected = selectedSubsystemId === key;
           return (
             <button
@@ -232,9 +234,9 @@ export const DigitalTwinViewport: React.FC = () => {
                   : 'bg-[#161b29] text-[#b9cacb] border-[#3b494b]/30 hover:border-[#849495] hover:text-[#dee2f5]'
               }`}
             >
-              <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-[#00363a]' : item.health >= 90 ? 'bg-[#10b981]' : 'bg-[#f59e0b]'}`} />
-              <span>{item.index}. {item.name}</span>
-              <span className={`text-[9px] ${isSelected ? 'text-[#00363a]/80 font-extrabold' : 'text-[#849495]'}`}>({item.health}%)</span>
+              <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-[#00363a]' : (item.health ?? 95) >= 90 ? 'bg-[#10b981]' : 'bg-[#f59e0b]'}`} />
+              <span>{item.index ?? 1}. {item.name || key}</span>
+              <span className={`text-[9px] ${isSelected ? 'text-[#00363a]/80 font-extrabold' : 'text-[#849495]'}`}>({item.health ?? 95}%)</span>
             </button>
           );
         })}
@@ -271,20 +273,16 @@ export const DigitalTwinViewport: React.FC = () => {
             id="engine-canvas-container"
             className="relative w-full h-full flex items-center justify-center overflow-hidden"
           >
-            <DynamicEngineTwin
-              zoomLevel={cameraZoom}
-              isThermalMode={renderMode === 'holo'}
+            <DroneEngineModel3D
               rpm={telemetry.rpm}
-              cameraRotationDeg={cameraRotation}
-              explodedOffset={isometricOffset}
-              renderMode={renderMode}
-              selectedSubsystemId={selectedSubsystemId}
-              cylinders={dynamicCylinders}
               chtPeak={telemetry.chtPeak}
               chtAvg={telemetry.chtAvg}
               chtSpread={telemetry.chtSpread}
-              isStressed={stressSimulationActive}
-              className="w-full h-full max-w-[760px] max-h-[480px]"
+              selectedSubsystemId={selectedSubsystemId}
+              onSelectSubsystem={selectSubsystem}
+              explodedOffset={isometricOffset}
+              renderMode={renderMode === 'wireframe' ? 'wireframe' : renderMode === 'holo' ? 'holo' : 'pbr'}
+              className="w-full h-full"
             />
 
             {/* INTERACTIVE HOLOGRAPHIC HOTSPOT CALLOUT OVERLAYS */}
@@ -430,11 +428,8 @@ export const DigitalTwinViewport: React.FC = () => {
               <div className="flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/50 rounded-lg p-8 max-w-md text-center bg-surface-container/40">
                 <Video className="w-12 h-12 text-primary mb-3 animate-pulse" />
                 <h4 className="font-headline-sm text-sm text-on-surface font-bold">
-                  CUSTOM UAV / PROPULSION MEDIA SLOT
+                  MEDIA FEED
                 </h4>
-                <p className="text-xs text-outline mt-1 max-w-xs">
-                  This viewport slot is engineered for your UAV flight video, 3D simulation recording, or CAD render stream.
-                </p>
                 <div className="flex items-center gap-2 mt-4">
                   <label className="px-3 py-1.5 bg-primary-container text-on-primary-container text-xs font-mono font-bold rounded cursor-pointer hover:opacity-90 transition-opacity">
                     Upload Local File

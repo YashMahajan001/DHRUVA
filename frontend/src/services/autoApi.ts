@@ -58,6 +58,7 @@ export interface EngineCatalogEntry {
   operating_limits: OperatingLimits;
   assumptions: string[];
   provenance_records: ProvenanceRecord[];
+  simulation_parameters?: Record<string, any>;
 }
 
 export interface EngineTelemetryRecord {

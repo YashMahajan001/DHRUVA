@@ -47,12 +47,8 @@ export const FlightProfileConsole: React.FC = () => {
           </div>
 
           <h1 className="font-['Space_Grotesk'] text-2xl md:text-3xl font-bold text-[#dbfcff] tracking-tight">
-            MISSION TUNING &amp; AERO-ENGINE OPTIMIZATION
+            Mission Tuning
           </h1>
-
-          <p className="text-sm text-[#b9cacb] max-w-4xl leading-relaxed">
-            Simulate, Optimize &amp; Validate Engine Calibration against Digital Twin Thermodynamic Envelopes. Real-time predictive degradation assessment for tactical UAV propulsion.
-          </p>
         </div>
 
         {/* Right Section: Interactive Selectors & Sync Trigger */}
@@ -72,9 +68,9 @@ export const FlightProfileConsole: React.FC = () => {
                 onChange={(e) => setSelectedMissionId(e.target.value)}
                 className="appearance-none bg-[#252a38] text-[#dee2f5] font-mono text-xs px-3 py-2 pr-8 rounded border border-[#3b494b]/40 focus:outline-none focus:border-[#00f0ff] cursor-pointer transition-colors shadow-sm"
               >
-                {missions.map(m => (
+                {missions?.map(m => m && (
                   <option key={m.id} value={m.id}>
-                    {m.name}
+                    {m.name || (m as any).missionName || m.id}
                   </option>
                 ))}
               </select>
@@ -97,9 +93,9 @@ export const FlightProfileConsole: React.FC = () => {
                 onChange={(e) => setSelectedEngineId(e.target.value)}
                 className="appearance-none bg-[#252a38] text-[#dee2f5] font-mono text-xs px-3 py-2 pr-8 rounded border border-[#3b494b]/40 focus:outline-none focus:border-[#00f0ff] cursor-pointer transition-colors shadow-sm"
               >
-                {engines.map(e => (
+                {engines?.map(e => e && (
                   <option key={e.id} value={e.id}>
-                    {e.name}
+                    {e.name || e.model || e.id}
                   </option>
                 ))}
               </select>

@@ -97,7 +97,7 @@ export const Modals: React.FC = () => {
           </div>
 
           <p className="font-sans text-xs text-[#b9cacb]">
-            Inject realistic thermodynamic and mechanical fault signatures into the virtual digital twin of {selectedEngine.name} ({selectedEngine.callsign}) to evaluate real-time autonomic response.
+            Inject realistic thermodynamic and mechanical fault signatures into the virtual digital twin of {selectedEngine?.name || 'Engine'} ({selectedEngine?.callsign || 'Unit'}) to evaluate real-time autonomic response.
           </p>
 
           <div className="flex flex-col gap-2 font-mono-telemetry text-xs">
@@ -201,11 +201,11 @@ export const Modals: React.FC = () => {
             </div>
             <div className="flex justify-between border-b border-[#3b494b]/20 pb-1">
               <span className="text-[#849495]">TARGET UNIT:</span>
-              <span className="text-[#dee2f5]">{selectedEngine.name} ({selectedEngine.callsign})</span>
+              <span className="text-[#dee2f5]">{selectedEngine?.name || 'Engine'} ({selectedEngine?.callsign || 'Unit'})</span>
             </div>
             <div className="flex justify-between border-b border-[#3b494b]/20 pb-1">
               <span className="text-[#849495]">ENGINE SERIAL:</span>
-              <span className="text-[#dee2f5]">{selectedEngine.engineNumber}</span>
+              <span className="text-[#dee2f5]">{selectedEngine?.engineNumber || 'SN-UNKNOWN'}</span>
             </div>
             <div className="flex justify-between border-b border-[#3b494b]/20 pb-1">
               <span className="text-[#849495]">PRIORITY:</span>

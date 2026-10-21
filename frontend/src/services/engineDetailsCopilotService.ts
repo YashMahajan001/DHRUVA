@@ -64,7 +64,7 @@ The elevated CHT is correlated with ram-air scoop thermal dissipation efficiency
 **Active Alerts (${alerts.length} Total):**
 ${activeList}
 
-**Current Subsystem under Inspection:** ${activeSubsystem.name} (${activeSubsystem.badge})
+**Current Subsystem under Inspection:** ${activeSubsystem?.name || 'Cylinder Assembly'} (${activeSubsystem?.badge || 'NOMINAL'})
 **Kalman Residual Error:** ±${telemetry.residualError} V
 **Sensor Bus Status:** All 18 nodes synchronized with 0 rejected telemetry frames.`;
   }

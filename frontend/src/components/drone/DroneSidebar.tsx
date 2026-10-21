@@ -63,10 +63,7 @@ export const DroneSidebar: React.FC<DroneSidebarProps> = ({
               </div>
               <div className="flex flex-col overflow-hidden">
                 <span className="font-display font-bold text-sm text-[#dee2f5] tracking-wider uppercase leading-tight">
-                  DHRUVA
-                </span>
-                <span className="font-mono text-[9px] text-[#00f0ff] font-semibold tracking-wider">
-                  DRONE TACTICAL
+                  DHRUVA DRONE
                 </span>
               </div>
             </div>
@@ -141,8 +138,7 @@ export const DroneSidebar: React.FC<DroneSidebarProps> = ({
 
                 {/* Hover Tooltip (Shown in Collapsed Mode) */}
                 {!isExpanded && hoveredTab === item.label && (
-                  <div className="absolute left-14 top-1/2 -translate-y-1/2 bg-[#090e1b] text-[#dee2f5] border border-[#00f0ff]/40 px-3 py-1.5 rounded-lg text-xs font-mono tracking-wider uppercase z-50 shadow-2xl pointer-events-none whitespace-nowrap">
-                    <span className="text-[#00f0ff] font-bold">DRONE: </span>
+                  <div className="absolute left-14 top-1/2 -translate-y-1/2 bg-[#090e1b] text-[#dee2f5] border border-[#00f0ff]/40 px-3 py-1.5 rounded-lg text-xs font-mono tracking-wider z-50 shadow-2xl pointer-events-none whitespace-nowrap">
                     {item.label}
                   </div>
                 )}
@@ -161,21 +157,16 @@ export const DroneSidebar: React.FC<DroneSidebarProps> = ({
             <button
               id="drone-btn-switch-system"
               onClick={() => navigate('/')}
-              className="flex items-center gap-2.5 w-full px-2.5 py-1.5 rounded-xl bg-[#161b29] border border-[#00f0ff]/30 text-[#00f0ff] hover:bg-[#00f0ff] hover:text-[#090e1b] transition-all cursor-pointer group"
-              title="Switch Engine Platform (Automotive / Drone / Aeroplane)"
-              aria-label="Switch Engine Platform"
+              className="flex items-center gap-2.5 w-full px-2.5 py-2 rounded-xl bg-[#161b29] border border-[#00f0ff]/30 text-[#00f0ff] hover:bg-[#00f0ff] hover:text-[#090e1b] transition-all cursor-pointer group"
+              title="Switch Platform"
+              aria-label="Switch Platform"
             >
               <Layers className="w-4 h-4 shrink-0" />
-              <div className="flex flex-col text-left overflow-hidden">
-                <span className="text-xs font-semibold leading-tight">Switch Platform</span>
-                <span className="text-[9px] text-[#849495] group-hover:text-[#090e1b] leading-tight">
-                  Drone · Aero · Auto
-                </span>
-              </div>
+              <span className="text-xs font-semibold leading-tight">Switch Platform</span>
             </button>
 
             {/* CAN-BUS Stream Status & Pause/Resume Control */}
-            <div className="flex items-center justify-between w-full px-2.5 py-1.5 rounded-xl bg-[#161b29]/80 border border-[#3b494b]/30">
+            <div className="flex items-center justify-between w-full px-2.5 py-2 rounded-xl bg-[#161b29]/80 border border-[#3b494b]/30">
               <div className="flex items-center gap-2">
                 <span
                   className={`w-2 h-2 rounded-full shrink-0 ${
@@ -184,12 +175,9 @@ export const DroneSidebar: React.FC<DroneSidebarProps> = ({
                       : 'bg-[#f59e0b]'
                   }`}
                 />
-                <div className="flex flex-col">
-                  <span className="font-mono text-[10px] text-[#dee2f5] font-semibold leading-tight">
-                    {isStreamActive ? 'CAN-BUS LIVE' : 'STREAM PAUSED'}
-                  </span>
-                  <span className="text-[9px] text-[#849495] leading-tight">Telemetry link</span>
-                </div>
+                <span className="font-mono text-[10px] text-[#dee2f5] font-semibold leading-tight">
+                  {isStreamActive ? 'CAN-BUS LIVE' : 'STREAM PAUSED'}
+                </span>
               </div>
 
               {onToggleStream && (

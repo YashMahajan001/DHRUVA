@@ -555,11 +555,11 @@ export const TelemetryService = {
       if (engine.id === 'eng-03') {
         return `[CRITICAL ANOMALY // ENGINE 03]\nEngine health has degraded to ${engine.healthPercent}% due to severe mechanical bearing wear. Inductive chip detector indicates +47 metallic particulate counts/min, and vibration kurtosis is at ${telemetry.vibrationKurtosis} (critical threshold >5.0).`;
       }
-      return `[DIAGNOSTIC STATUS // ${engine.name}]\nEngine health is nominal at ${engine.healthPercent}%. All thermodynamic and vibrational parameters track within the digital twin ±1.1% margin.`;
+      return `[DIAGNOSTIC STATUS // ${engine?.name || engine?.model || 'Engine'}]\nEngine health is nominal at ${engine?.healthPercent ?? 98}%. All thermodynamic and vibrational parameters track within the digital twin ±1.1% margin.`;
     }
 
     if (q.includes('current rul') || q.includes('rul')) {
-      return `[PREDICTIVE REMAINING USEFUL LIFE]\nCurrent estimated RUL for ${engine.callsign} (${engine.name}) is ${engine.rulHours} Flight Hours under current operating conditions. At current cruise throttle (82%), thermal stress accelerates component fatigue. Implementing the recommended throttle derate to 78% will extend safe RUL by approximately +28 hours.`;
+      return `[PREDICTIVE REMAINING USEFUL LIFE]\nCurrent estimated RUL for ${engine?.callsign || 'Target'} (${engine?.name || engine?.model || 'Engine'}) is ${engine?.rulHours ?? 420} Flight Hours under current operating conditions. At current cruise throttle (82%), thermal stress accelerates component fatigue. Implementing the recommended throttle derate to 78% will extend safe RUL by approximately +28 hours.`;
     }
 
     if (q.includes('why is cht increasing') || q.includes('cht')) {

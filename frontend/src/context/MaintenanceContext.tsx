@@ -126,7 +126,7 @@ export const MissionProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, [isSimulating, simulationSpeed]);
 
   const selectedEngine = useMemo(() => {
-    return engines.find((e) => e.id === selectedEngineId) || engines[0];
+    return (engines && engines.find((e) => e.id === selectedEngineId)) || (engines && engines[0]) || createInitialEngines()[0];
   }, [engines, selectedEngineId]);
 
   const showToast = useCallback((title: string, message: string, icon = 'check_circle', type: 'info' | 'success' | 'warning' | 'error' = 'success') => {

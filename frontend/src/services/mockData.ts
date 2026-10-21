@@ -10,6 +10,7 @@ import {
 
 export const INITIAL_MISSION: Mission = {
   id: 'MSN-774-ALPHA',
+  name: 'STRATEGIC BORDER RECONNAISSANCE',
   assetId: 'UAV-01 (MALE CLASS)',
   missionName: 'STRATEGIC BORDER RECONNAISSANCE',
   missionType: 'High-Altitude ISR Long-Loiter',

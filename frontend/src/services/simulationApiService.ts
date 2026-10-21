@@ -302,7 +302,7 @@ export class DhruvaaApiService {
       'PARAMETER,VALUE,UNIT,DESCRIPTION',
       `TIMESTAMP,"${new Date(telemetry.timestamp).toISOString()}",UTC,Observation Time`,
       `MET,"${telemetry.timeFormatted}",T+HH:MM:SS,Mission Elapsed Time`,
-      `MISSION_NAME,"${mission.name}",-,Current Active Sortie`,
+      `MISSION_NAME,"${mission?.missionName || mission?.name || 'STRATEGIC BORDER RECONNAISSANCE'}",-,Current Active Sortie`,
       `HEALTH_SCORE,${twinState.healthScore},%,Overall Digital Twin Health`,
       `HEALTH_STATUS,"${twinState.healthStatus}",-,Predictive Classification`,
       `RUL_REMAINING,${twinState.rulHoursRemaining},HRS,Remaining Useful Life`,

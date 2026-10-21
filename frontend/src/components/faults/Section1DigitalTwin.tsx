@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDashboard } from '../../context/FaultDiagnosticsContext';
 import { DynamicEngineTwin } from './DynamicEngineTwin';
+import { DroneEngineModel3D } from '../drone/DroneEngineModel3D';
 import {
   Layers,
   Video,
@@ -71,45 +72,30 @@ export const Section1DigitalTwin: React.FC = () => {
           : 'p-4 sm:p-5 lg:p-6'
       }`}
     >
-      {/* 1. TOP HEADER: Engine Identification, Live Status & Mode Toggles */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#3b494b]/40">
-        {/* Left: Engine ID, Callsign & Digital Twin Synchronization Status */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-[#00f0ff]/10 border border-[#00f0ff]/40 flex items-center justify-center text-[#00f0ff] shadow-[0_0_15px_rgba(0,240,255,0.2)]">
-            <Cpu className="w-5 h-5" />
+      {/* 1. TOP HEADER: Engine Identification & View Mode Toggles */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#3b494b]/40">
+        {/* Left: Section Title & Selected Hotspot Indicator */}
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-[#00f0ff]/10 border border-[#00f0ff]/30 flex items-center justify-center text-[#00f0ff]">
+            <Cpu className="w-4 h-4" />
           </div>
           <div className="flex flex-col">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-display font-bold text-base sm:text-lg tracking-wider text-[#dee2f5] uppercase">
-                3D Digital Twin Engine Visualization
+            <div className="flex items-center gap-2">
+              <span className="font-display font-bold text-sm lg:text-base tracking-wide text-[#dee2f5] uppercase">
+                Engine Digital Twin
               </span>
-              <span className="font-mono-telemetry text-xs font-bold px-2.5 py-0.5 rounded bg-[#00f0ff]/15 text-[#00f0ff] border border-[#00f0ff]/40">
-                {selectedEngine.name} // {selectedEngine.engineNumber}
-              </span>
-              <span className="font-mono-telemetry text-[11px] px-2 py-0.5 rounded bg-[#303443] text-[#b9cacb] border border-[#3b494b]/60">
-                {selectedEngine.callsign}
+              <span className="font-mono text-xs px-2 py-0.5 rounded bg-[#00f0ff]/15 text-[#00f0ff] border border-[#00f0ff]/40 font-bold">
+                {selectedEngine?.name || 'ENGINE'}
               </span>
             </div>
-            <div className="flex items-center gap-2 font-mono-telemetry text-[11px] text-[#849495] mt-0.5">
-              <span className="flex items-center gap-1.5">
-                <span
-                  className={`w-2 h-2 rounded-full ${
-                    twinState?.syncStatus === 'SYNCHRONIZED'
-                      ? 'bg-[#00f0ff] shadow-[0_0_8px_#00f0ff]'
-                      : 'bg-[#ffb4ab] animate-ping'
-                  }`}
-                ></span>
-                <span className="text-[#00f0ff] font-semibold">
-                  TWIN SYNC: {twinState?.syncStatus || 'SYNCHRONIZED'} ({twinState?.thermodynamicParametersCount || 112} PARAMETERS)
+            {activeHotspot && (
+              <span className="font-mono text-[10px] text-[#849495] flex items-center gap-1.5 mt-0.5">
+                <span>Selected:</span>
+                <span className={`font-semibold ${activeHotspot.status === 'WARNING' ? 'text-amber-400' : activeHotspot.status === 'CRITICAL' ? 'text-red-400' : 'text-[#00f0ff]'}`}>
+                  {activeHotspot.label} ({activeHotspot.temp}°C · {activeHotspot.status})
                 </span>
               </span>
-              <span>•</span>
-              <span>RESIDUAL MAE: {twinState?.divergenceScoreMae ?? telemetry.twinDivergenceMae}°C</span>
-              <span>•</span>
-              <span className={isLiveStreaming ? 'text-[#00f0ff]' : 'text-[#849495]'}>
-                {isLiveStreaming ? 'LIVE TELEMETRY (20Hz)' : 'SIMULATION PAUSED'}
-              </span>
-            </div>
+            )}
           </div>
         </div>
 
@@ -275,14 +261,13 @@ export const Section1DigitalTwin: React.FC = () => {
             className="relative w-full h-full flex items-center justify-center p-4 transition-transform duration-300 ease-out"
             style={{ transform: `scale(${zoomLevel})` }}
           >
-            {/* Dynamic Interactive 3D Digital Twin Engine (Replaces static image) */}
-            <DynamicEngineTwin
-              zoomLevel={zoomLevel}
-              isThermalMode={false}
+            {/* Dynamic Interactive 3D Digital Twin Engine (Three.js WebGL) */}
+            <DroneEngineModel3D
               rpm={telemetry.rpm || 2450}
-              activeHotspotId={activeHotspotId}
-              onRotationChange={(yaw, pitch) => setEngineOrientation({ yaw, pitch })}
-              cylinders={currentHotspots}
+              chtPeak={telemetry.cht || (telemetry.chtCylinders ? Math.max(...telemetry.chtCylinders) : 155)}
+              chtAvg={telemetry.chtBaseline || telemetry.cht || 148}
+              renderMode="pbr"
+              selectedSubsystemId={activeHotspotId === 1 ? 'cylinder' : activeHotspotId === 2 ? 'cooling' : activeHotspotId === 3 ? 'lubrication' : 'fuel'}
               className="w-full h-full max-h-[500px]"
             />
 

@@ -15,8 +15,11 @@ import {
   Radio,
 } from 'lucide-react';
 
+import { useState } from 'react';
+
 export const Section4RootCauseAnalysis: React.FC = () => {
   const { selectedEngine, showToast } = useDashboard();
+  const [showAllCandidates, setShowAllCandidates] = useState(false);
 
   // Root Cause Candidates (Strictly includes the 5 requested candidates)
   const rootCauses = [
@@ -152,7 +155,7 @@ export const Section4RootCauseAnalysis: React.FC = () => {
               Fault Root-Cause Analysis
             </h3>
             <p className="font-mono-telemetry text-xs text-[#849495]">
-              Bayesian Hypothesis Engine · Target: {selectedEngine.name} ({selectedEngine.callsign})
+              Bayesian Hypothesis Engine · Target: {selectedEngine?.name || 'ENGINE'} ({selectedEngine?.callsign || 'N/A'})
             </p>
           </div>
         </div>
@@ -165,79 +168,130 @@ export const Section4RootCauseAnalysis: React.FC = () => {
         </div>
       </div>
 
-      {/* 1. ROOT CAUSE CANDIDATES (The 5 exact required candidates) */}
+      {/* 1. ROOT CAUSE CANDIDATES */}
       <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between text-xs font-mono-telemetry text-[#849495]">
-          <span className="font-bold text-[#dee2f5] tracking-wider uppercase">Root Cause Candidates</span>
-          <span>112 invariants evaluated</span>
+        <div className="flex items-center justify-between text-xs font-mono text-[#849495]">
+          <span className="font-bold text-[#dee2f5] tracking-wider uppercase">Most Likely Cause</span>
+          <span className="text-[11px] text-[#00f0ff] font-bold">112 invariants evaluated</span>
         </div>
 
-        <div className="grid grid-cols-1 gap-3">
-          {rootCauses.map(candidate => {
+        {/* Primary Diagnosis (Rank 1) Always Prominently Displayed */}
+        {rootCauses.slice(0, 1).map(candidate => {
+          const Icon = candidate.icon;
+          return (
+            <div
+              key={candidate.rank}
+              id={`candidate-${candidate.rank}`}
+              className="rounded-lg border border-[#00f0ff]/40 bg-[#0e1320] p-3.5 flex flex-col gap-2.5 shadow-sm"
+            >
+              {/* Row 1: Rank, Name, Probability, Confidence & Severity Badge */}
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-6 h-6 rounded bg-[#00f0ff]/15 border border-[#00f0ff]/40 flex items-center justify-center font-mono text-xs font-bold text-[#00f0ff]">
+                    {candidate.rank}
+                  </div>
+                  <Icon className={`w-4 h-4 ${candidate.statusClass}`} />
+                  <span className="font-display text-sm font-bold text-[#dee2f5]">
+                    {candidate.name}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2.5 font-mono text-xs">
+                  <span className="text-[#849495]">
+                    Conf: <strong className="text-[#dee2f5]">{candidate.confidence}%</strong>
+                  </span>
+                  <span className="text-[#849495]">•</span>
+                  <span className="text-[#849495]">
+                    Prob: <strong className={`text-sm ${candidate.statusClass}`}>{candidate.probability}%</strong>
+                  </span>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase ${candidate.badgeBg}`}>
+                    {candidate.severity}
+                  </span>
+                </div>
+              </div>
+
+              {/* Probability Bar */}
+              <div className="w-full bg-[#161b29] h-2 rounded-full overflow-hidden border border-[#3b494b]/40">
+                <div
+                  className={`h-full rounded-full transition-all duration-500 ${candidate.barColor}`}
+                  style={{ width: `${candidate.probability}%` }}
+                ></div>
+              </div>
+
+              {/* Supporting Evidence */}
+              <div className="flex flex-col gap-1 pt-1.5 border-t border-[#3b494b]/30 font-mono text-xs">
+                <span className="text-[10px] text-[#849495] uppercase font-bold">Supporting Evidence</span>
+                <p className="text-[#b9cacb] text-xs leading-relaxed">
+                  {candidate.supportingEvidence}
+                </p>
+              </div>
+
+              {/* Recommended Action & Affected Sensors */}
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[#3b494b]/30 font-mono text-xs">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[#10b981] font-bold text-[10px] uppercase">Action:</span>
+                  <span className="text-[#dee2f5] text-[11px]">Inspect and re-seat cowling airflow baffle seal. Throttle derate advised.</span>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  {candidate.affectedSensors.map(sensor => (
+                    <span
+                      key={sensor}
+                      className="px-1.5 py-0.5 rounded bg-[#161b29] border border-[#00f0ff]/30 text-[#00f0ff] text-[9px] font-bold"
+                    >
+                      {sensor}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Toggle Button for Secondary Candidates */}
+        <button
+          type="button"
+          onClick={() => setShowAllCandidates(!showAllCandidates)}
+          className="text-xs font-mono text-[#00f0ff] hover:text-[#7df4ff] py-1 px-2.5 rounded bg-[#090e1b] border border-[#3b494b]/40 flex items-center justify-between transition-colors cursor-pointer select-none"
+        >
+          <span>{showAllCandidates ? '▲ Hide Secondary Candidates' : `▼ View Secondary Candidates (${rootCauses.length - 1}) & Timeline`}</span>
+          <span className="text-[10px] text-[#849495]">Rank 2 - 5</span>
+        </button>
+
+        {/* Secondary Candidates Container */}
+        <div className={`grid grid-cols-1 gap-2.5 ${showAllCandidates ? '' : 'hidden'}`}>
+          {rootCauses.slice(1).map(candidate => {
             const Icon = candidate.icon;
             return (
               <div
                 key={candidate.rank}
                 id={`candidate-${candidate.rank}`}
-                className="rounded-lg border border-[#3b494b]/50 bg-[#0e1320] p-4 flex flex-col gap-2.5 hover:border-[#00f0ff]/40 transition-all shadow-sm"
+                className="rounded-lg border border-[#3b494b]/40 bg-[#0e1320] p-3 flex flex-col gap-2 transition-all shadow-sm"
               >
-                {/* Row 1: Rank, Name, Probability, Confidence & Severity Badge */}
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-6 h-6 rounded bg-[#1a1f2d] border border-[#3b494b]/50 flex items-center justify-center font-mono-telemetry text-xs font-bold text-[#00f0ff]">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded bg-[#1a1f2d] border border-[#3b494b]/50 flex items-center justify-center font-mono text-[11px] font-bold text-[#849495]">
                       {candidate.rank}
-                    </div>
-                    <Icon className={`w-4 h-4 ${candidate.statusClass}`} />
-                    <span className="font-display text-sm font-bold text-[#dee2f5]">
+                    </span>
+                    <Icon className={`w-3.5 h-3.5 ${candidate.statusClass}`} />
+                    <span className="font-display text-xs font-bold text-[#dee2f5]">
                       {candidate.name}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-3 font-mono-telemetry text-xs">
-                    <span className="text-[#849495]">
-                      Conf: <strong className="text-[#dee2f5]">{candidate.confidence}%</strong>
+                  <div className="flex items-center gap-2 font-mono text-xs">
+                    <span className="text-[#849495] text-[11px]">
+                      Prob: <strong className={candidate.statusClass}>{candidate.probability}%</strong>
                     </span>
-                    <span className="text-[#849495]">•</span>
-                    <span className="text-[#849495]">
-                      Prob: <strong className={`text-sm ${candidate.statusClass}`}>{candidate.probability}%</strong>
-                    </span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase ${candidate.badgeBg}`}>
+                    <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded border uppercase ${candidate.badgeBg}`}>
                       {candidate.severity}
                     </span>
                   </div>
                 </div>
 
-                {/* Probability Bar */}
-                <div className="w-full bg-[#161b29] h-2 rounded-full overflow-hidden border border-[#3b494b]/40">
-                  <div
-                    className={`h-full rounded-full transition-all duration-500 ${candidate.barColor}`}
-                    style={{ width: `${candidate.probability}%` }}
-                  ></div>
-                </div>
-
-                {/* Supporting Evidence & Affected Sensors */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-3 pt-1.5 border-t border-[#3b494b]/30 font-mono-telemetry text-xs">
-                  <div className="md:col-span-8 flex flex-col gap-0.5">
-                    <span className="text-[10px] text-[#849495] uppercase font-bold">SUPPORTING EVIDENCE</span>
-                    <p className="text-[#b9cacb] text-[11px] leading-relaxed">
-                      {candidate.supportingEvidence}
-                    </p>
-                  </div>
-
-                  <div className="md:col-span-4 flex flex-col gap-1 md:items-end">
-                    <span className="text-[10px] text-[#849495] uppercase font-bold">AFFECTED SENSORS</span>
-                    <div className="flex flex-wrap gap-1.5 md:justify-end">
-                      {candidate.affectedSensors.map(sensor => (
-                        <span
-                          key={sensor}
-                          className="px-2 py-0.5 rounded bg-[#161b29] border border-[#00f0ff]/30 text-[#00f0ff] text-[10px] font-bold"
-                        >
-                          {sensor}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <p className="text-[#849495] text-[11px] font-mono leading-relaxed">
+                  {candidate.supportingEvidence}
+                </p>
               </div>
             );
           })}
@@ -245,7 +299,7 @@ export const Section4RootCauseAnalysis: React.FC = () => {
       </div>
 
       {/* 2. EVIDENCE TIMELINE (Showing how system reached diagnosis) */}
-      <div className="flex flex-col gap-3 pt-3 border-t border-[#3b494b]/40">
+      <div className={`flex flex-col gap-3 pt-3 border-t border-[#3b494b]/40 ${showAllCandidates ? '' : 'hidden'}`}>
         <div className="flex items-center justify-between text-xs font-mono-telemetry text-[#849495]">
           <span className="font-bold text-[#dee2f5] tracking-wider uppercase flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5 text-[#00f0ff]" />

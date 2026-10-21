@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDashboard } from '../../context/FaultDiagnosticsContext';
+import { DroneEngineModel3D } from '../drone/DroneEngineModel3D';
 import {
   Layers,
   Video,
@@ -93,7 +94,7 @@ export const PropulsionTwinModelCard: React.FC = () => {
             </div>
             <span className="font-mono-telemetry text-[10px] text-[#849495] flex items-center gap-1.5">
               <span>ACTIVE CO-SIMULATION:</span>
-              <span className="text-[#00f0ff] font-semibold">{selectedEngine.name} ({selectedEngine.callsign})</span>
+              <span className="text-[#00f0ff] font-semibold">{selectedEngine?.name || 'Engine'} ({selectedEngine?.callsign || 'Unit'})</span>
               <span>•</span>
               <span className="text-[#b9cacb]">THERMODYNAMIC RESIDUAL: {twinState.divergenceScoreMae}°C</span>
             </span>
@@ -267,12 +268,20 @@ export const PropulsionTwinModelCard: React.FC = () => {
                 className="relative w-full h-full flex items-center justify-center p-4 transition-transform duration-300 ease-out"
                 style={{ transform: `scale(${zoomLevel})` }}
               >
-                {/* High-res Aero Piston Engine CAD Wireframe Graphic */}
+                {/* High-res 3D Aero Piston Engine Simulation (Three.js WebGL) */}
+                <DroneEngineModel3D
+                  rpm={telemetry.rpm || 2450}
+                  chtPeak={telemetry.cht || (telemetry.chtCylinders ? Math.max(...telemetry.chtCylinders) : 155)}
+                  chtAvg={telemetry.chtBaseline || telemetry.cht || 148}
+                  renderMode={thermalOverlay ? 'holo' : 'pbr'}
+                  selectedSubsystemId={activeHotspotId === 1 ? 'cylinder' : activeHotspotId === 2 ? 'cooling' : activeHotspotId === 3 ? 'lubrication' : 'fuel'}
+                  className="w-full h-full max-h-[480px]"
+                />
                 <img
                   id="aero-engine-cad-wireframe-img"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9nSnI54G1zXINMfqrMSkfsTwQLVFm7Hd852eOEyMKlBmHZZUY_cECExFKCCY7GWCtyfQGy4TZ_j3d4QYTCTxUTwac0CUjVshT8mqndlRX75QZnqeMYE3BCfG76NpwUb3porcXyhbqRsgQbSF16jyZwNUmILzFF3VokuifHUxeNBe8mcyVUruNd6E3tbZkSCw8kVx5GEk-1-KMxRmlTVp8JPWqv_gu0pRwbiAtOclx2SwBfB7qjA7U"
-                  alt="Technical CAD wireframe rendering of aero piston engine with cooling fins, cylinder heads, and manifold telemetry"
-                  className="w-full h-full max-h-[480px] object-contain filter drop-shadow-[0_0_20px_rgba(0,240,255,0.18)] transition-all duration-500"
+                  alt="Aero Engine CAD"
+                  className="hidden"
                 />
 
                 {/* Thermal Gradient Heat Map Overlay Layer */}

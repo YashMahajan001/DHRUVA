@@ -81,10 +81,7 @@ export const AeroSidebar: React.FC = () => {
               </div>
               <div className="flex flex-col overflow-hidden">
                 <span className="font-display font-bold text-sm text-[#dee2f5] tracking-wider uppercase leading-tight">
-                  DHRUVA
-                </span>
-                <span className="font-mono text-[9px] text-[#38bdf8] font-semibold tracking-wider">
-                  AERO DIGITAL TWIN
+                  DHRUVA AERO
                 </span>
               </div>
             </div>
@@ -148,20 +145,15 @@ export const AeroSidebar: React.FC = () => {
 
                   {/* Expanded mode text */}
                   {isExpanded && (
-                    <div className="flex flex-col items-start min-w-0 flex-1 overflow-hidden text-left">
-                      <div className="flex items-center justify-between w-full">
-                        <span className="font-sans text-xs font-semibold tracking-wide whitespace-nowrap truncate">
-                          {item.label}
-                        </span>
-                        {item.badge !== undefined && (
-                          <span className="px-1.5 py-0.2 rounded-full bg-[#ef4444] text-white font-mono text-[9px] font-bold shrink-0 ml-1.5">
-                            {item.badge}
-                          </span>
-                        )}
-                      </div>
-                      <span className={`text-[9.5px] truncate w-full ${isActive ? 'text-[#080d1a]/85' : 'text-[#64748b]'}`}>
-                        {item.subtitle}
+                    <div className="flex items-center justify-between min-w-0 flex-1 overflow-hidden text-left">
+                      <span className="font-sans text-xs font-semibold tracking-wide whitespace-nowrap truncate">
+                        {item.label}
                       </span>
+                      {item.badge !== undefined && (
+                        <span className="px-1.5 py-0.2 rounded-full bg-[#ef4444] text-white font-mono text-[9px] font-bold shrink-0 ml-1.5">
+                          {item.badge}
+                        </span>
+                      )}
                     </div>
                   )}
 
@@ -180,9 +172,8 @@ export const AeroSidebar: React.FC = () => {
 
                 {/* Hover Tooltip in Collapsed Mode */}
                 {!isExpanded && hoveredTab === item.label && (
-                  <div className="absolute left-14 top-1/2 -translate-y-1/2 bg-[#0b1329] text-[#f8fafc] border border-[#38bdf8]/40 px-3 py-1.5 rounded-lg text-xs font-mono tracking-wider uppercase z-50 shadow-2xl pointer-events-none whitespace-nowrap">
+                  <div className="absolute left-14 top-1/2 -translate-y-1/2 bg-[#0b1329] text-[#f8fafc] border border-[#38bdf8]/40 px-3 py-1.5 rounded-lg text-xs font-mono tracking-wider z-50 shadow-2xl pointer-events-none whitespace-nowrap">
                     <div className="text-[#38bdf8] font-bold">{item.label}</div>
-                    <div className="text-[10px] text-[#94a3b8] normal-case">{item.subtitle}</div>
                   </div>
                 )}
               </div>
@@ -200,17 +191,12 @@ export const AeroSidebar: React.FC = () => {
             <button
               id="aero-btn-switch-system"
               onClick={() => navigate('/select-engine')}
-              className="flex items-center gap-2.5 w-full px-2.5 py-1.5 rounded-xl bg-[#0f172a] border border-[#38bdf8]/30 text-[#38bdf8] hover:bg-[#38bdf8] hover:text-[#080d1a] transition-all cursor-pointer group"
-              title="Switch Propulsion System (Drone / Aero / Auto)"
-              aria-label="Switch Propulsion System"
+              className="flex items-center gap-2.5 w-full px-2.5 py-2 rounded-xl bg-[#0f172a] border border-[#38bdf8]/30 text-[#38bdf8] hover:bg-[#38bdf8] hover:text-[#080d1a] transition-all cursor-pointer group"
+              title="Switch Platform"
+              aria-label="Switch Platform"
             >
               <Layers className="w-4 h-4 shrink-0" />
-              <div className="flex flex-col text-left overflow-hidden">
-                <span className="text-xs font-semibold leading-tight">Switch Platform</span>
-                <span className="text-[9px] text-[#94a3b8] group-hover:text-[#080d1a] leading-tight">
-                  Drone · Aero · Auto
-                </span>
-              </div>
+              <span className="text-xs font-semibold leading-tight">Switch Platform</span>
             </button>
 
             {/* Active Engine Category Pill Banner */}

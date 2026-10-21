@@ -16,7 +16,7 @@ import {
   FaultEvent,
   MapProfile 
 } from '../types/tuningTypes';
-import { CANDIDATE_CONFIGS } from '../services/tuningMockData';
+import { CANDIDATE_CONFIGS, INITIAL_ENGINES, INITIAL_MISSIONS } from '../services/tuningMockData';
 import { dhruvaaApi } from '../services/tuningApi';
 import { telemetryService } from '../services/tuningTelemetryService';
 import { generateCopilotResponse, CopilotAnalysisResult } from '../services/tuningCopilotService';
@@ -112,9 +112,9 @@ const DashboardContext = createContext<DashboardContextType | undefined>(undefin
 
 export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // 1. Core State
-  const [engines, setEngines] = useState<EngineInstance[]>([]);
+  const [engines, setEngines] = useState<EngineInstance[]>(INITIAL_ENGINES);
   const [selectedEngineId, setSelectedEngineId] = useState<string>('eng01');
-  const [missions, setMissions] = useState<Mission[]>([]);
+  const [missions, setMissions] = useState<Mission[]>(INITIAL_MISSIONS);
   const [selectedMissionId, setSelectedMissionId] = useState<string>('isr');
   const [alerts, setAlerts] = useState<FaultEvent[]>([]);
 
@@ -184,9 +184,9 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         dhruvaaApi.getActiveAlerts(),
       ]);
       if (mounted) {
-        setEngines(engs);
-        setMissions(msns);
-        setAlerts(alrts);
+        if (Array.isArray(engs) && engs.length > 0) setEngines(engs);
+        if (Array.isArray(msns) && msns.length > 0) setMissions(msns);
+        if (Array.isArray(alrts)) setAlerts(alrts);
       }
     }
     loadData();
@@ -204,42 +204,15 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   // Derived current engine & mission
   const currentEngine = useMemo(() => {
-    return engines.find(e => e.id === selectedEngineId) || {
-      id: 'eng01',
-      name: 'PROPULSION UNIT 01 // LYCOMING O-320 MOD',
-      model: 'Lycoming O-320-D2J Turbo-Normalized',
-      serialNumber: 'L-29481-27A',
-      type: 'Horizontal Opposed 4-Cylinder Aero Piston',
-      totalFlightHours: 342.6,
-      baseRulHours: 184,
-      currentHealth: 94.2,
-      healthStatus: 'OPTIMIZED',
-      nominalRpmRange: [2200, 2700],
-      nominalChtMax: 190,
-      status: 'ONLINE',
-    };
+    return (engines && engines.find(e => e && e.id === selectedEngineId)) 
+      || (engines && engines[0]) 
+      || INITIAL_ENGINES[0];
   }, [engines, selectedEngineId]);
 
   const currentMission = useMemo(() => {
-    return missions.find(m => m.id === selectedMissionId) || {
-      id: 'isr',
-      name: 'HIGH ALTITUDE ISR (25,000 FT // -34°C COLD TEMP)',
-      type: 'Intelligence, Surveillance & Reconnaissance',
-      phase: 'HIGH CRUISE LOITER',
-      targetAltitudeFt: 25000,
-      ambientTempC: -34,
-      baroInHg: 29.92,
-      densityAltitudeFt: 26480,
-      intakeAirO2Kpa: 11.4,
-      progressPercent: 48,
-      elapsedHours: 4.8,
-      totalPlannedHours: 10.0,
-      fuelCapacityLiters: 280,
-      currentFuelLiters: 174,
-      burnRateLh: 27.2,
-      uavCallsign: 'DHRUV-ALPHA-07',
-      linkStatus: 'MALE-LINK-01 // ENCRYPTED',
-    };
+    return (missions && missions.find(m => m && m.id === selectedMissionId)) 
+      || (missions && missions[0]) 
+      || INITIAL_MISSIONS[0];
   }, [missions, selectedMissionId]);
 
   // Compute custom tune config from live tuning parameters + telemetry + mission context

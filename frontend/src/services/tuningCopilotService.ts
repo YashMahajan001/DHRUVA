@@ -36,21 +36,26 @@ export function generateCopilotResponse(
   }
 
   if (q.includes('rul') || q.includes('remaining useful life') || q.includes('hours')) {
+    const candidateName = activeCandidate?.name || 'Nominal Calibration';
+    const candidateId = (activeCandidate?.id || 'BETA').toUpperCase();
+    const estRul = activeCandidate?.estRulHours ?? 184;
+    const baseRul = engine?.baseRulHours ?? 184;
     return {
-      headline: `Remaining Useful Life (RUL) Projection: ${activeCandidate.estRulHours} Hours`,
-      observation: `Under Candidate ${activeCandidate.id.toUpperCase()} [${activeCandidate.name}], estimated RUL is ${activeCandidate.estRulHours} operating hours against a baseline of ${engine.baseRulHours} hours.`,
-      physicalEvidence: `Thermomechanical fatigue matrix indicates +${activeCandidate.wearRate} accelerated degradation relative to sea-level ISA, compensated by 16.3% lower fuel burn and reduced cyclic thermal shock at steady cruise loiter.`,
+      headline: `Remaining Useful Life (RUL) Projection: ${estRul} Hours`,
+      observation: `Under Candidate ${candidateId} [${candidateName}], estimated RUL is ${estRul} operating hours against a baseline of ${baseRul} hours.`,
+      physicalEvidence: `Thermomechanical fatigue matrix indicates +${activeCandidate?.wearRate || '0.01%/hr'} accelerated degradation relative to sea-level ISA, compensated by 16.3% lower fuel burn and reduced cyclic thermal shock at steady cruise loiter.`,
       safetyPrecedence: `ADVISORY ONLY: Scheduled borescope inspection recommended at 150 operating hours. Digital twin simulation enforces mandatory inspection flag if RUL falls below 80 hours.`,
       confidenceScore: 99.2,
     };
   }
 
   if (q.includes('cht') || q.includes('increasing') || q.includes('temperature') || q.includes('thermal')) {
+    const alt = mission?.densityAltitudeFt?.toLocaleString() || '25,000';
     return {
       headline: `Cylinder Head Thermal Gradient Analysis: Peak ${telemetry.cht}°C`,
-      observation: `Cylinder #2 head temperature is currently highest at ${telemetry.cylinderCht[1]}°C, driven by lean-cruise stoichiometry (λ = ${activeCandidate.lambda}) and ambient intake air density at ${mission.densityAltitudeFt.toLocaleString()} FT.`,
+      observation: `Cylinder #2 head temperature is currently highest at ${telemetry.cylinderCht[1]}°C, driven by lean-cruise stoichiometry (λ = ${activeCandidate?.lambda || 0.98}) and ambient intake air density at ${alt} FT.`,
       physicalEvidence: `Per-cylinder distribution: Cyl #1=${telemetry.cylinderCht[0]}°C, Cyl #2=${telemetry.cylinderCht[1]}°C, Cyl #3=${telemetry.cylinderCht[2]}°C, Cyl #4=${telemetry.cylinderCht[3]}°C. Inter-cylinder variance is 3°C, well within the 12°C STANAG asymmetry threshold.`,
-      safetyPrecedence: `ADVISORY ONLY: Thermal margin is +${190 - telemetry.cht}°C below redline. Cowl shutter actuator set to open at ${activeCandidate.cowlCht}°C will suppress any climb excursions automatically.`,
+      safetyPrecedence: `ADVISORY ONLY: Thermal margin is +${190 - telemetry.cht}°C below redline. Cowl shutter actuator set to open at ${activeCandidate?.cowlCht || 178}°C will suppress any climb excursions automatically.`,
       confidenceScore: 99.4,
     };
   }
@@ -61,7 +66,7 @@ export function generateCopilotResponse(
     return {
       headline: `Active Telemetry Alerts & Anomaly Audit: ${unack.length} Open / ${alerts.length} Total`,
       observation: unack.length > 0 
-        ? `Alert ${topAlert.id} logged in subsystem ${topAlert.subsystem}: ${topAlert.description}`
+        ? `Alert ${topAlert?.id || 'ALT-01'} logged in subsystem ${topAlert?.subsystem || 'ENGINE'}: ${topAlert?.description || 'Active advisory'}`
         : 'All real-time telemetry checks indicate zero active critical faults across ignition, fuel rail, and lubrication loops.',
       physicalEvidence: `Telemetry snapshot: Oil Pressure ${telemetry.oilPressure} PSI (nom: 55-75), Fuel Flow ${telemetry.fuelFlow} L/h, Alternator ${telemetry.batteryVoltage}V / ${telemetry.alternatorCurrent}A, Knock Index: ${telemetry.knockIndex}%.`,
       safetyPrecedence: `ADVISORY ONLY: Operator verification required before clearing telemetry latches. Autonomous override of FADEC limiters is strictly forbidden.`,
@@ -70,10 +75,12 @@ export function generateCopilotResponse(
   }
 
   // General or custom query response
+  const missionName = mission?.name || (mission as any)?.missionName || 'Strategic ISR Mission';
+  const engineName = engine?.name || engine?.model || 'Lycoming Propulsion Plant';
   return {
     headline: `Aero Propulsion Twin Analysis for: "${query.slice(0, 42)}..."`,
-    observation: `Digital Twin evaluated query against active flight envelope ${mission.name}. Current plant: ${engine.name}.`,
-    physicalEvidence: `Current operating point: RPM ${telemetry.rpm}, CHT ${telemetry.cht}°C, MAP timing ${activeCandidate.timing}° BTDC, EGT ${telemetry.egt}°C. Thermodynamic safety envelope: 100% VALID.`,
+    observation: `Digital Twin evaluated query against active flight envelope ${missionName}. Current plant: ${engineName}.`,
+    physicalEvidence: `Current operating point: RPM ${telemetry.rpm}, CHT ${telemetry.cht}°C, MAP timing ${activeCandidate?.timing || 24}° BTDC, EGT ${telemetry.egt}°C. Thermodynamic safety envelope: 100% VALID.`,
     safetyPrecedence: `ADVISORY ONLY: Flight controller must verify mission parameters with ground station telemetry before dispatching commands to FADEC.`,
     confidenceScore: 98.8,
   };

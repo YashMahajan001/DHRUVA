@@ -85,7 +85,7 @@ export const DashboardProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [engines, setEngines] = useState<EngineInstance[]>(Object.values(ENGINES_DATABASE));
   const [mission] = useState<Mission>(ACTIVE_MISSION);
 
-  const selectedEngine = engines.find(e => e.id === selectedEngineId) || engines[1];
+  const selectedEngine = engines.find(e => e.id === selectedEngineId) || engines[0] || ENGINES_DATABASE['eng-02'] || Object.values(ENGINES_DATABASE)[0];
 
   // Telemetry state
   const [telemetry, setTelemetry] = useState<LiveTelemetry>(() => getInitialLiveTelemetry('eng-02'));
@@ -153,8 +153,13 @@ export const DashboardProvider: React.FC<{ children: ReactNode }> = ({ children 
     setHistoricalData(TelemetryService.getTelemetryHistory(engId, timeRange));
     setActiveHotspotId(engId === 'eng-02' ? 2 : engId === 'eng-03' ? 1 : null);
 
-    const target = ENGINES_DATABASE[engId];
-    showToast(`Switched active telemetry feed to ${target.name} (${target.callsign}).`, 'info');
+    const target = ENGINES_DATABASE[engId] 
+      || Object.values(ENGINES_DATABASE).find(e => e.id.toLowerCase() === String(engId).toLowerCase() || e.id.replace(/[^a-z0-9]/g, '') === String(engId).toLowerCase().replace(/[^a-z0-9]/g, ''))
+      || ENGINES_DATABASE['eng-02']
+      || Object.values(ENGINES_DATABASE)[0];
+    if (target) {
+      showToast(`Switched active telemetry feed to ${target.name || target.model || 'Engine'} (${target.callsign || target.id}).`, 'info');
+    }
   }, [timeRange, showToast]);
 
   // Real-time live simulation ticker
@@ -292,7 +297,7 @@ export const DashboardProvider: React.FC<{ children: ReactNode }> = ({ children 
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
-    showToast(`Exported telemetry log package for ${selectedEngine.name}.`, 'success');
+    showToast(`Exported telemetry log package for ${selectedEngine?.name || 'Engine'}.`, 'success');
   }, [selectedEngine, telemetry, historicalData, showToast]);
 
   const openModal = useCallback((modal: 'agent-trace' | 'scenario-sim' | 'work-order' | 'telemetry-export') => {

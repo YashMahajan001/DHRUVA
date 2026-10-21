@@ -10,6 +10,7 @@ import {
   AeroTestReport,
   AeroCategory,
 } from '../services/aeroApi';
+import { INITIAL_AERO_CATALOG } from '../services/initialCatalogs';
 
 export interface AeroFlightParams {
   throttle: number;
@@ -86,12 +87,15 @@ const LOCAL_STORAGE_KEY = 'dhruva_selected_aero_engine';
 
 export const AeroProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // 1. Catalog State
-  const [catalog, setCatalog] = useState<AeroEngineCatalogEntry[]>([]);
+  const [catalog, setCatalog] = useState<AeroEngineCatalogEntry[]>(INITIAL_AERO_CATALOG);
   const [selectedEngineId, setSelectedEngineIdState] = useState<string>(() => {
-    return localStorage.getItem(LOCAL_STORAGE_KEY) || 'AERO-CFM-CFM56-7B';
+    return localStorage.getItem(LOCAL_STORAGE_KEY) || INITIAL_AERO_CATALOG[0]?.engine_id || 'AERO-CFM-CFM56-7B';
   });
-  const [currentEngine, setCurrentEngine] = useState<AeroEngineCatalogEntry | null>(null);
-  const [isLoadingCatalog, setIsLoadingCatalog] = useState<boolean>(true);
+  const [currentEngine, setCurrentEngine] = useState<AeroEngineCatalogEntry | null>(() => {
+    const saved = localStorage.getItem(LOCAL_STORAGE_KEY) || 'AERO-CFM-CFM56-7B';
+    return INITIAL_AERO_CATALOG.find((e) => e.engine_id === saved) || INITIAL_AERO_CATALOG[0] || null;
+  });
+  const [isLoadingCatalog, setIsLoadingCatalog] = useState<boolean>(false);
   const [catalogError, setCatalogError] = useState<string | null>(null);
 
   // 2. Flight & Simulation State
@@ -188,10 +192,9 @@ export const AeroProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     let mounted = true;
     async function loadCatalog() {
-      setIsLoadingCatalog(true);
       try {
         const data = await aeroApi.getCatalog();
-        if (mounted) {
+        if (mounted && data.length > 0) {
           setCatalog(data);
           const found = data.find((e) => e.engine_id === selectedEngineId) || data[0];
           if (found) {
@@ -203,8 +206,8 @@ export const AeroProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       } catch (err: any) {
         if (mounted) {
-          setCatalogError(err.message || 'Failed to connect to aero catalog');
-          setApiConnected(false);
+          console.warn('Backend aero catalog fetch note:', err);
+          setCatalogError(err.message || 'Connecting to aero catalog...');
         }
       } finally {
         if (mounted) setIsLoadingCatalog(false);

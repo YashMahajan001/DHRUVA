@@ -30,9 +30,12 @@ export const Section3FaultsAndTelemetry: React.FC = () => {
     showToast,
   } = useDashboard();
 
+  // Active view: 'faults' (prioritized list) or 'telemetry' (waveform chart)
+  const [activeTab, setActiveTab] = useState<'faults' | 'telemetry'>('faults');
   // Active channel view: 'cht' (default primary explaining fault), 'egt', 'rpm-oil', 'vibration', 'combined'
   const [selectedChannel, setSelectedChannel] = useState<'cht' | 'egt' | 'rpm-oil' | 'vibration'>('cht');
   const [hoveredPointIndex, setHoveredPointIndex] = useState<number | null>(null);
+  const [expandedFaultId, setExpandedFaultId] = useState<string | null>(selectedEngine.id === 'eng-02' ? 'FLT-9824-01' : null);
 
   // Active faults for selected engine
   const activeFaults = selectedEngine.id === 'eng-02' ? [
@@ -136,157 +139,190 @@ export const Section3FaultsAndTelemetry: React.FC = () => {
     })
     .join(' ')} Z`;
 
+  const realFaults = activeFaults.filter(f => f.severity !== 'NORMAL');
+
   return (
     <section id="section-3-faults-and-telemetry" className="w-full">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
-        
-        {/* ================================================================= */}
-        {/* LEFT COLUMN: ACTIVE FAULTS (5 Cols)                               */}
-        {/* ================================================================= */}
-        <div className="lg:col-span-5 flex flex-col gap-3">
-          <div className="rounded-xl border border-[#3b494b]/50 bg-[#161b29]/95 backdrop-blur-md p-4 shadow-xl">
-            {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-[#3b494b]/40">
-              <div className="flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-[#ffb4ab]" />
-                <span className="font-display text-sm font-bold tracking-wider text-[#dee2f5] uppercase">
-                  ACTIVE FAULTS
-                </span>
-                <span className="font-mono-telemetry text-xs px-2 py-0.5 rounded bg-[#ffb4ab]/15 text-[#ffb4ab] border border-[#ffb4ab]/30 font-bold">
-                  {activeFaults.length} DETECTED
-                </span>
-              </div>
-              <span className="font-mono-telemetry text-[11px] text-[#849495]">
-                UNIT: {selectedEngine.name}
-              </span>
-            </div>
+      <div className="rounded-xl border border-[#3b494b]/50 bg-[#161b29]/95 backdrop-blur-md p-4 shadow-xl flex flex-col gap-3.5">
+        {/* Header with Title and View Switcher Tabs */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#3b494b]/40">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-[#ffb4ab]" />
+            <span className="font-display text-sm font-bold tracking-wider text-[#dee2f5] uppercase">
+              Faults &amp; Diagnostics
+            </span>
+            <span className={`font-mono text-xs px-2 py-0.5 rounded font-bold border ${
+              realFaults.length > 0
+                ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+            }`}>
+              {realFaults.length > 0 ? `${realFaults.length} ACTIVE` : 'NOMINAL'}
+            </span>
+          </div>
 
-            {/* List of Faults - Each Clearly Separated */}
-            <div className="flex flex-col gap-3 mt-3">
-              {activeFaults.map(fault => {
+          <div className="flex items-center bg-[#090e1b] p-0.5 rounded-lg border border-[#3b494b]/50 font-mono text-xs">
+            <button
+              type="button"
+              onClick={() => setActiveTab('faults')}
+              className={`px-3 py-1 rounded transition-all cursor-pointer font-bold ${
+                activeTab === 'faults'
+                  ? 'bg-[#00f0ff] text-[#00363a] shadow-[0_0_8px_rgba(0,240,255,0.3)]'
+                  : 'text-[#849495] hover:text-[#dee2f5]'
+              }`}
+            >
+              Fault List ({realFaults.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('telemetry')}
+              className={`px-3 py-1 rounded transition-all cursor-pointer font-bold ${
+                activeTab === 'telemetry'
+                  ? 'bg-[#00f0ff] text-[#00363a] shadow-[0_0_8px_rgba(0,240,255,0.3)]'
+                  : 'text-[#849495] hover:text-[#dee2f5]'
+              }`}
+            >
+              Telemetry Graph
+            </button>
+          </div>
+        </div>
+
+        {/* TAB 1: PRIORITIZED ACTIVE FAULTS LIST */}
+        {activeTab === 'faults' && (
+          <div className="flex flex-col gap-3">
+            {realFaults.length === 0 ? (
+              <div className="p-6 rounded-lg bg-[#0e1320] border border-emerald-500/30 text-center flex flex-col items-center justify-center gap-2">
+                <CheckCircle2 className="w-8 h-8 text-emerald-400" />
+                <span className="font-mono text-xs font-bold text-[#dee2f5] tracking-wide">
+                  ALL PROPULSION NOMINAL
+                </span>
+                <p className="text-[11px] text-[#849495] max-w-sm">
+                  All subsystems on {selectedEngine?.name} are operating within calibrated thresholds. No active anomalies or fault codes detected.
+                </p>
+                <div id="card-FLT-9824-00" className="hidden" />
+              </div>
+            ) : (
+              realFaults.map(fault => {
                 const isWarning = fault.severity === 'WARNING';
                 const isCritical = fault.severity === 'CRITICAL';
-                const isWatch = fault.severity === 'WATCH';
+                const isExpanded = expandedFaultId === fault.id;
 
                 return (
                   <div
                     key={fault.id}
                     id={`card-${fault.id}`}
-                    className={`rounded-lg border p-3.5 bg-[#0e1320] flex flex-col gap-2.5 transition-all shadow-md hover:border-[#00f0ff]/50 ${
+                    className={`rounded-lg border p-3 bg-[#0e1320] flex flex-col gap-2 transition-all shadow-sm ${
                       isCritical
-                        ? 'border-[#ef4444]/60 bg-[#93000a]/10'
+                        ? 'border-red-500/50 bg-red-950/15'
                         : isWarning
-                          ? 'border-[#b4c5ff]/50 bg-[#303443]/20'
-                          : isWatch
-                            ? 'border-[#7bd0ff]/40 bg-[#161b29]'
-                            : 'border-[#00f0ff]/30'
+                          ? 'border-amber-500/40 bg-amber-950/10'
+                          : 'border-[#3b494b]/40'
                     }`}
                   >
-                    {/* Top Row: Fault ID, Component & Severity Badge */}
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex flex-col">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono-telemetry text-xs font-bold text-[#00f0ff]">
-                            {fault.id}
-                          </span>
-                          <span className="text-[#849495] text-xs">•</span>
-                          <span className="font-display text-xs font-bold text-[#dee2f5]">
-                            {fault.component}
-                          </span>
-                        </div>
-                        <span className="font-mono-telemetry text-[10px] text-[#849495]">
-                          Subsystem: {fault.subsystem}
+                    {/* Top Row: Short Name, Component & Severity Badge */}
+                    <div
+                      className="flex items-center justify-between gap-2 cursor-pointer select-none"
+                      onClick={() => setExpandedFaultId(isExpanded ? null : fault.id)}
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="font-mono text-xs font-bold text-[#00f0ff] shrink-0">
+                          {fault.id}
+                        </span>
+                        <span className="text-[#849495] text-xs shrink-0">•</span>
+                        <span className="font-display text-xs font-bold text-[#dee2f5] truncate">
+                          {fault.component}
                         </span>
                       </div>
 
-                      <span
-                        className={`font-mono-telemetry text-[10px] font-bold px-2 py-0.5 rounded uppercase border whitespace-nowrap ${
-                          isCritical
-                            ? 'bg-[#93000a] text-[#ffdad6] border-[#ef4444]'
-                            : isWarning
-                              ? 'bg-[#303443] text-[#b4c5ff] border-[#b4c5ff]/60'
-                              : 'bg-[#161b29] text-[#7df4ff] border-[#00f0ff]/40'
-                        }`}
-                      >
-                        {fault.severity}
-                      </span>
-                    </div>
-
-                    {/* Description */}
-                    <p className="font-mono-telemetry text-xs text-[#b9cacb]">
-                      {fault.description}
-                    </p>
-
-                    {/* Metadata Row: Probability, Status & Detection Time */}
-                    <div className="grid grid-cols-2 gap-2 pt-1 border-t border-[#3b494b]/30 font-mono-telemetry text-[10px]">
-                      <div>
-                        <span className="text-[#849495]">Prob: </span>
-                        <span className="text-[#00f0ff] font-bold">{fault.probability}%</span>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-[#849495]">Status: </span>
-                        <span className="text-[#b4c5ff] font-semibold">{fault.status}</span>
-                      </div>
-                      <div className="col-span-2 text-[9px] text-[#849495]">
-                        Detected: {fault.detectionTime}
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span
+                          className={`font-mono text-[9px] font-bold px-2 py-0.5 rounded uppercase border ${
+                            isCritical
+                              ? 'bg-red-500/20 text-red-300 border-red-500/40'
+                              : isWarning
+                                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                                : 'bg-[#161b29] text-[#7df4ff] border-[#00f0ff]/40'
+                          }`}
+                        >
+                          {fault.severity}
+                        </span>
+                        <span className="text-[10px] text-[#849495] hover:text-[#dee2f5]">
+                          {isExpanded ? '▲' : '▼'}
+                        </span>
                       </div>
                     </div>
 
-                    {/* Action Buttons: INSPECT, DIAGNOSE, VIEW EVIDENCE */}
-                    <div className="flex items-center gap-2 pt-1.5 border-t border-[#3b494b]/30">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setActiveHotspotId(fault.hotspotId);
-                          const el = document.getElementById('section-1-digital-twin');
-                          if (el) el.scrollIntoView({ behavior: 'smooth' });
-                          showToast(`Focused 3D Twin Viewport on ${fault.component} (Cylinder 2)`, 'info');
-                        }}
-                        className="flex-1 py-1 px-2 rounded bg-[#00f0ff]/15 hover:bg-[#00f0ff]/25 border border-[#00f0ff]/40 text-[#00f0ff] font-mono-telemetry text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1"
-                      >
-                        <Eye className="w-3 h-3" />
-                        <span>Inspect</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          openModal('agent-trace');
-                          showToast(`Triggered Autonomous AI Diagnostics trace for ${fault.id}`, 'info');
-                        }}
-                        className="flex-1 py-1 px-2 rounded bg-[#1a1f2d] hover:bg-[#252a38] border border-[#3b494b]/60 text-[#dee2f5] font-mono-telemetry text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1"
-                      >
-                        <Sparkles className="w-3 h-3 text-[#00f0ff]" />
-                        <span>Diagnose</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const el = document.getElementById('section-4-root-cause-analysis');
-                          if (el) el.scrollIntoView({ behavior: 'smooth' });
-                          showToast(`Navigated to Bayesian Root-Cause Evidence Chain for ${fault.id}`, 'info');
-                        }}
-                        className="flex-1 py-1 px-2 rounded bg-[#090e1b] hover:bg-[#161b29] border border-[#3b494b]/60 text-[#849495] hover:text-[#dee2f5] font-mono-telemetry text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1"
-                      >
-                        <FileText className="w-3 h-3" />
-                        <span>Evidence</span>
-                      </button>
+                    {/* Brief Status and Probability Line */}
+                    <div className="flex items-center justify-between text-[10px] font-mono text-[#849495] pt-1 border-t border-[#3b494b]/20">
+                      <span>Subsystem: <strong className="text-[#b9cacb]">{fault.subsystem}</strong></span>
+                      <span>Confidence: <strong className="text-[#00f0ff]">{fault.probability}%</strong></span>
                     </div>
+
+                    {/* Expandable Details */}
+                    {isExpanded && (
+                      <div className="flex flex-col gap-2 pt-2 border-t border-[#3b494b]/30">
+                        <p className="font-mono text-xs text-[#b9cacb] leading-relaxed">
+                          {fault.description}
+                        </p>
+                        <div className="text-[10px] font-mono text-[#849495]">
+                          Detected: {fault.detectionTime} · Status: <span className="text-amber-300 font-semibold">{fault.status}</span>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex items-center gap-2 pt-1.5">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveHotspotId(fault.hotspotId);
+                              const el = document.getElementById('section-1-digital-twin');
+                              if (el) el.scrollIntoView({ behavior: 'smooth' });
+                              showToast(`Focused 3D Twin Viewport on ${fault.component}`, 'info');
+                            }}
+                            className="flex-1 py-1 px-2 rounded bg-[#00f0ff]/15 hover:bg-[#00f0ff]/25 border border-[#00f0ff]/40 text-[#00f0ff] font-mono text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1 cursor-pointer"
+                          >
+                            <Eye className="w-3 h-3" />
+                            <span>Inspect 3D</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openModal('agent-trace');
+                              showToast(`Triggered AI Diagnostic trace for ${fault.id}`, 'info');
+                            }}
+                            className="flex-1 py-1 px-2 rounded bg-[#1a1f2d] hover:bg-[#252a38] border border-[#3b494b]/60 text-[#dee2f5] font-mono text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1 cursor-pointer"
+                          >
+                            <Sparkles className="w-3 h-3 text-[#00f0ff]" />
+                            <span>Diagnose</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveTab('telemetry');
+                            }}
+                            className="flex-1 py-1 px-2 rounded bg-[#090e1b] hover:bg-[#161b29] border border-[#3b494b]/60 text-[#849495] hover:text-[#dee2f5] font-mono text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1 cursor-pointer"
+                          >
+                            <Activity className="w-3 h-3 text-[#00f0ff]" />
+                            <span>Telemetry</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
-              })}
-            </div>
+              })
+            )}
           </div>
-        </div>
+        )}
 
-        {/* ================================================================= */}
-        {/* RIGHT COLUMN: TELEMETRY ANALYSIS (7 Cols)                        */}
-        {/* ================================================================= */}
-        <div className="lg:col-span-7 flex flex-col gap-3">
-          <div className="rounded-xl border border-[#3b494b]/50 bg-[#161b29]/95 backdrop-blur-md p-4 shadow-xl">
-            {/* Header with Title, Range Selector & Live Indicator */}
-            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#3b494b]/40">
+        {/* TAB 2: TELEMETRY ANALYSIS CORRELATOR */}
+        {activeTab === 'telemetry' && (
+          <div className="flex flex-col gap-3">
+            {/* Range Selector & Live Indicator */}
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-[#3b494b]/40">
               <div className="flex items-center gap-2.5">
                 <Activity className="w-4 h-4 text-[#00f0ff]" />
                 <span className="font-display text-sm font-bold tracking-wider text-[#dee2f5] uppercase">
@@ -554,13 +590,12 @@ export const Section3FaultsAndTelemetry: React.FC = () => {
                   Telemetry Diagnosis: Cylinder Head #2 Thermal Divergence
                 </span>
                 <span className="text-[#849495] text-[11px] leading-relaxed">
-                  Notice the sharp delta opening between Observed CHT (Coral) and Expected Digital Twin baseline (Cyan dashed) starting at T+03:15:00. Adjacent cylinders maintain normal 152°C, confirming a localized cooling restriction rather than a whole-engine fuel mixture imbalance.
+                  Sharp delta opening between Observed CHT (Coral) and Digital Twin baseline (Cyan dashed). Adjacent cylinders maintain normal 152°C, isolating a localized cooling restriction.
                 </span>
               </div>
             </div>
           </div>
-        </div>
-
+        )}
       </div>
     </section>
   );

@@ -9,6 +9,7 @@ import {
   AutoTuneParameters,
   TuningTestReport,
 } from '../services/autoApi';
+import { INITIAL_AUTO_CATALOG } from '../services/initialCatalogs';
 
 export interface SimulationParams {
   throttle: number;
@@ -85,12 +86,15 @@ const LOCAL_STORAGE_KEY = 'dhruva_selected_auto_engine';
 
 export const AutoProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // 1. Engine Catalog State
-  const [catalog, setCatalog] = useState<EngineCatalogEntry[]>([]);
+  const [catalog, setCatalog] = useState<EngineCatalogEntry[]>(INITIAL_AUTO_CATALOG);
   const [selectedEngineId, setSelectedEngineIdState] = useState<string>(() => {
-    return localStorage.getItem(LOCAL_STORAGE_KEY) || 'AUTO-EA888-2.0T';
+    return localStorage.getItem(LOCAL_STORAGE_KEY) || INITIAL_AUTO_CATALOG[0]?.engine_id || 'AUTO-EA888-2.0T';
   });
-  const [currentEngine, setCurrentEngine] = useState<EngineCatalogEntry | null>(null);
-  const [isLoadingCatalog, setIsLoadingCatalog] = useState<boolean>(true);
+  const [currentEngine, setCurrentEngine] = useState<EngineCatalogEntry | null>(() => {
+    const saved = localStorage.getItem(LOCAL_STORAGE_KEY) || 'AUTO-EA888-2.0T';
+    return INITIAL_AUTO_CATALOG.find((e) => e.engine_id === saved) || INITIAL_AUTO_CATALOG[0] || null;
+  });
+  const [isLoadingCatalog, setIsLoadingCatalog] = useState<boolean>(false);
   const [catalogError, setCatalogError] = useState<string | null>(null);
 
   // 2. Simulation State
@@ -162,38 +166,44 @@ export const AutoProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [currentEngine]);
 
-  // Load catalog on mount
+  // Load catalog on mount (single fetch, no re-fetching loop)
   useEffect(() => {
-    setIsLoadingCatalog(true);
+    let isMounted = true;
     autoApi
       .getCatalog()
       .then((entries) => {
+        if (!isMounted) return;
         const autoEntries = entries.filter((e) => e.engine_type === 'AUTOMOBILE');
-        setCatalog(autoEntries);
-        setIsLoadingCatalog(false);
-        setApiConnected(true);
-
-        const existing = autoEntries.find((e) => e.engine_id === selectedEngineId);
-        if (existing) {
-          setCurrentEngine(existing);
-        } else if (autoEntries.length > 0) {
-          setSelectedEngineId(autoEntries[0].engine_id);
-          setCurrentEngine(autoEntries[0]);
+        if (autoEntries.length > 0) {
+          setCatalog(autoEntries);
+          setCatalogError(null);
+          setApiConnected(true);
         }
       })
       .catch((err) => {
-        setCatalogError(err.message || 'Failed to connect to backend engine catalog');
-        setIsLoadingCatalog(false);
-        setApiConnected(false);
+        if (!isMounted) return;
+        console.warn('Backend auto catalog fetch note:', err);
+        // Retain initial catalog so user never sees a broken or stuck screen
+        setCatalogError(err.message || 'Connecting to backend engine catalog...');
+      })
+      .finally(() => {
+        if (isMounted) setIsLoadingCatalog(false);
       });
-  }, [selectedEngineId, setSelectedEngineId]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Sync currentEngine when selectedEngineId changes
   useEffect(() => {
     if (catalog.length > 0) {
-      const found = catalog.find((e) => e.engine_id === selectedEngineId);
+      const found = catalog.find((e) => e.engine_id === selectedEngineId) || catalog[0];
       if (found) {
         setCurrentEngine(found);
+        if (found.engine_id !== selectedEngineId) {
+          setSelectedEngineIdState(found.engine_id);
+        }
         // Preset candidate tune tailored to engine
         setCandidateTuneState({
           ...DEFAULT_TUNE,

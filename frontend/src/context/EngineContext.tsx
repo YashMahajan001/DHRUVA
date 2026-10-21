@@ -139,7 +139,15 @@ export const EngineProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setSelectedEngineIndex(indexOrId);
       }
     } else {
-      const idx = engines.findIndex((e) => e.id === indexOrId || e.name.toLowerCase().includes(indexOrId.toLowerCase()));
+      const lower = indexOrId.toLowerCase();
+      const clean = lower.replace(/[^a-z0-9]/g, '');
+      const idx = engines.findIndex((e) => 
+        e && (
+          e.id.toLowerCase() === lower || 
+          e.id.toLowerCase().replace(/[^a-z0-9]/g, '') === clean ||
+          (e.name && e.name.toLowerCase().includes(lower))
+        )
+      );
       if (idx !== -1) {
         setSelectedEngineIndex(idx);
       }
@@ -213,7 +221,7 @@ export const EngineProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setCopilotMessages([]);
   };
 
-  const activeEngine = engines[selectedEngineIndex] || engines[0];
+  const activeEngine = engines[selectedEngineIndex] || engines[0] || INITIAL_ENGINES[0];
 
   return (
     <EngineContext.Provider

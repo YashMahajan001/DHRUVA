@@ -113,10 +113,10 @@ class AgentService {
       id: 'msg-' + Date.now(),
       sender: 'COPILOT',
       timestamp: timeStr,
-      text: `Advisory analysis for "${query}" against active digital twin of ${eng.name}.`,
+      text: `Advisory analysis for "${query}" against active digital twin of ${eng?.name || eng?.id || 'engine'}.`,
       reasoningChain: {
-        observation: `Evaluating operational flight parameters against live CAN bus telemetry stream for ${eng.id}.`,
-        evidence: `Current: ${Math.round(eng.telemetry.rpm)} RPM, ${Math.round(eng.telemetry.cht)}°C CHT, ${Math.round(eng.telemetry.egt)}°C EGT, ${eng.telemetry.oilPressure} PSI Oil, ${eng.telemetry.vibration} mm/s Vib.`,
+        observation: `Evaluating operational flight parameters against live CAN bus telemetry stream for ${eng?.id || 'active unit'}.`,
+        evidence: `Current: ${Math.round(eng?.telemetry?.rpm || 2400)} RPM, ${Math.round(eng?.telemetry?.cht || 175)}°C CHT, ${Math.round(eng?.telemetry?.egt || 720)}°C EGT, ${eng?.telemetry?.oilPressure || 55} PSI Oil, ${eng?.telemetry?.vibration || 1.8} mm/s Vib.`,
         analysis: 'Physics-informed aero twin confirms current operating state is within standard loiter bounds for this engine module.',
         recommendation: 'Advisory: Maintain autonomous orbit. Inspect Fault Diagnostics or Mission Simulation screens for deeper drilldown.',
         envelope: 'FLIGHT ENVELOPE: NOMINAL & ADVISORY ACTIVE',

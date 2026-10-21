@@ -81,9 +81,6 @@ export const EngineSelection: React.FC = () => {
             <span className="font-display font-bold text-base text-[#dbfcff] tracking-wider uppercase block leading-tight">
               DHRUVA
             </span>
-            <span className="text-[10px] font-mono text-[#849495] tracking-widest uppercase">
-              Engine Simulation & Monitoring Platform
-            </span>
           </div>
         </div>
 
@@ -96,13 +93,10 @@ export const EngineSelection: React.FC = () => {
       {/* Main Choice Viewport */}
       <main className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1 flex flex-col justify-center">
         {/* Header Heading */}
-        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14 space-y-3">
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
           <h1 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#dbfcff] tracking-tight leading-tight">
             Choose Your Engine System
           </h1>
-          <p className="text-sm sm:text-base text-[#b9cacb] font-sans">
-            Select an engine category to enter its simulation, tuning, and monitoring dashboard.
-          </p>
         </div>
 
         {/* 3 Domain Cards */}
@@ -162,10 +156,6 @@ export const EngineSelection: React.FC = () => {
                   <h2 className="font-display font-bold text-2xl text-[#dee2f5] group-hover:text-[#dbfcff] transition-colors mb-2">
                     {domain.title}
                   </h2>
-
-                  <p className="text-xs sm:text-sm text-[#849495] font-sans">
-                    {domain.subtitle}
-                  </p>
                 </div>
 
                 {/* Bottom CTA Button */}

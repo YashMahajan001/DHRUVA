@@ -155,6 +155,7 @@ export interface FaultEvent {
 
 export interface Mission {
   id: string;
+  name?: string;
   assetId: string; // 'UAV-01'
   missionName: string; // 'HIGH ALTITUDE ISR'
   missionType: string; // 'Autonomous Reconnaissance'

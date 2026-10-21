@@ -40,13 +40,13 @@ export const TopControlStrip: React.FC = () => {
           </span>
           <div className="relative mt-0.5">
             <select
-              value={selectedMission.id}
+              value={selectedMission?.id || ''}
               onChange={(e) => selectMissionById(e.target.value)}
               className="bg-[#252a38] text-[#dee2f5] font-mono-telemetry text-xs px-3 py-1.5 rounded pr-8 appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#00f0ff] border border-[#3b494b]/40 hover:border-[#00f0ff]/50 transition-colors"
             >
-              {missions.map((m) => (
+              {missions?.map((m) => m && (
                 <option key={m.id} value={m.id} className="bg-[#161b29] text-[#dee2f5]">
-                  {m.name}
+                  {m.name || (m as any).missionName || m.id}
                 </option>
               ))}
             </select>

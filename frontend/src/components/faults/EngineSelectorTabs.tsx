@@ -9,28 +9,24 @@ export const EngineSelectorTabs: React.FC = () => {
   return (
     <div
       id="engine-unit-selector-tabs"
-      className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2.5"
+      className="grid grid-cols-2 lg:grid-cols-4 gap-2"
     >
       {(engines || []).map(eng => {
         const isSelected = eng.id === selectedEngineId;
 
         // Custom status badge style based on severity
-        let badgeStyle = 'bg-[#303443] text-[#00f0ff]';
-        let barColor = 'bg-[#00f0ff]';
-        let confColor = 'text-[#dee2f5]';
+        let badgeStyle = 'bg-slate-800 text-slate-300 border-slate-700';
+        let statusDot = 'bg-emerald-400';
 
         if (eng.status === 'WARNING') {
-          badgeStyle = 'bg-[#303443] text-[#b4c5ff] animate-pulse font-bold';
-          barColor = 'bg-[#b4c5ff]';
-          confColor = 'text-[#7df4ff]';
+          badgeStyle = 'bg-amber-500/15 text-amber-300 border-amber-500/30';
+          statusDot = 'bg-amber-400';
         } else if (eng.status === 'CRITICAL') {
-          badgeStyle = 'bg-[#93000a] text-[#ffdad6] animate-pulse font-bold';
-          barColor = 'bg-[#ef4444]';
-          confColor = 'text-[#ffb4ab]';
+          badgeStyle = 'bg-rose-500/20 text-rose-300 border-rose-500/30';
+          statusDot = 'bg-rose-400 animate-pulse';
         } else if (eng.status === 'WATCH') {
-          badgeStyle = 'bg-[#303443] text-[#7bd0ff] font-medium';
-          barColor = 'bg-[#7bd0ff]';
-          confColor = 'text-[#dee2f5]';
+          badgeStyle = 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30';
+          statusDot = 'bg-cyan-400';
         }
 
         return (
@@ -39,54 +35,36 @@ export const EngineSelectorTabs: React.FC = () => {
             id={`tab-${eng.id}`}
             type="button"
             onClick={() => selectEngine(eng.id)}
-            className={`text-left p-3.5 rounded-lg transition-all flex flex-col gap-1.5 cursor-pointer relative overflow-hidden ${
+            className={`text-left p-2.5 rounded-lg transition-all flex flex-col gap-1 cursor-pointer relative overflow-hidden border ${
               isSelected
-                ? 'bg-[#252a38] border border-[#00f0ff]/50 shadow-[0_0_16px_rgba(0,240,255,0.22)] ring-1 ring-[#00f0ff]/40'
-                : 'bg-[#161b29]/90 hover:bg-[#1a1f2d] border border-[#3b494b]/30 shadow-md'
+                ? 'bg-[#151d2f] border-[#00f0ff]/50 shadow-[0_0_12px_rgba(0,240,255,0.15)] ring-1 ring-[#00f0ff]/30'
+                : 'bg-[#0f1422]/90 hover:bg-[#141b2c] border-[#3b494b]/30'
             }`}
           >
             {/* Header: Engine Name and Status Pill */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="font-display text-base font-bold text-[#dee2f5] tracking-wide">
+              <div className="flex items-center gap-1.5">
+                <span className={`w-1.5 h-1.5 rounded-full ${statusDot}`} />
+                <span className="font-display text-sm font-bold text-slate-100">
                   {eng.name}
                 </span>
-                <span className="font-mono-telemetry text-[10px] text-[#849495] uppercase">
-                  {eng.model.split(' ')[0]}
+                <span className="font-mono text-[10px] text-slate-500">
+                  {eng.callsign}
                 </span>
               </div>
-              <span className={`font-mono-telemetry text-[9px] px-2 py-0.5 rounded tracking-wider ${badgeStyle}`}>
+              <span className={`font-mono text-[9px] px-1.5 py-0.2 rounded border ${badgeStyle}`}>
                 {eng.statusTag}
               </span>
             </div>
 
-            {/* Callsign and AI Confidence */}
-            <div className="flex items-center justify-between font-mono-telemetry text-xs text-[#b9cacb]">
-              <span>CALLSIGN: {eng.callsign}</span>
-              <span className={`font-semibold ${confColor}`}>
-                {eng.aiConfidence.toFixed(1)}% AI CONF
+            {/* Health & RUL Row */}
+            <div className="flex items-center justify-between font-mono text-[11px] text-slate-400 pt-1">
+              <span>
+                Health: <strong className={eng.healthPercent < 75 ? 'text-amber-400' : 'text-slate-200'}>{eng.healthPercent.toFixed(0)}%</strong>
               </span>
-            </div>
-
-            {/* Confidence Progress Bar */}
-            <div className="w-full bg-[#303443] h-1.5 rounded-full overflow-hidden mt-0.5">
-              <div
-                className={`h-full transition-all duration-500 ${barColor}`}
-                style={{ width: `${eng.aiConfidence}%` }}
-              ></div>
-            </div>
-
-            {/* Secondary telemetry info (Health %, RUL, Phase) */}
-            <div className="flex items-center justify-between pt-1 font-mono-telemetry text-[10px] text-[#849495] border-t border-[#3b494b]/20">
-              <span className="flex items-center gap-1 text-[#dee2f5]">
-                <Activity className="w-3 h-3 text-[#00f0ff]" />
-                Health: <strong className="text-[#dbfcff]">{eng.healthPercent.toFixed(1)}%</strong>
+              <span>
+                RUL: <strong className={eng.rulHours < 25 ? 'text-rose-400' : 'text-slate-200'}>{eng.rulHours}h</strong>
               </span>
-              <span className="flex items-center gap-1">
-                <Clock className="w-3 h-3 text-[#7df4ff]" />
-                RUL: <strong className={eng.rulHours < 20 ? 'text-[#ffb4ab]' : 'text-[#dee2f5]'}>{eng.rulHours}h</strong>
-              </span>
-              <span className="text-[#849495] uppercase">{eng.missionPhase}</span>
             </div>
           </button>
         );

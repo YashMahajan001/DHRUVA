@@ -91,13 +91,10 @@ export const TwinCutawayCard: React.FC = () => {
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
             <span className="font-mono-telemetry text-xs text-[#dee2f5] font-bold uppercase tracking-wider">
-              SYNTHETIC INFERENCE ENGINE ONLINE
+              {selectedEngine?.model || 'SYNTHETIC DIGITAL TWIN'}
             </span>
             <span className="w-2 h-2 rounded-full bg-[#00f0ff] animate-pulse shadow-[0_0_8px_#00f0ff]" />
           </div>
-          <p className="font-sans text-xs text-[#b9cacb] mt-0.5 max-w-xl leading-relaxed">
-            Continuously computing virtual thermodynamic cycles and boundary layer friction against real-time simulated telemetry for {selectedEngine.model}.
-          </p>
           <div className="flex items-center gap-3 mt-1.5 font-mono-telemetry text-[9px] text-[#849495]">
             <span className="flex items-center gap-1">
               <Layers className="w-3 h-3 text-[#00f0ff]" />

@@ -99,16 +99,10 @@ export const AutoDashboardView: React.FC = () => {
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-[#3b494b]/30">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="font-display text-2xl md:text-3xl font-bold tracking-tight text-[#dee2f5] uppercase">
-              Automotive Engine Dashboard
+            <h1 className="font-display text-2xl md:text-3xl font-bold tracking-tight text-[#dee2f5]">
+              Automobile Dashboard
             </h1>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#f59e0b]/15 text-[#f59e0b] border border-[#f59e0b]/40">
-              TELEMETRY & SPECS
-            </span>
           </div>
-          <p className="text-xs md:text-sm text-[#849495] mt-1 font-mono">
-            Powertrain physics & real-time telemetry.
-          </p>
         </div>
       </div>
 

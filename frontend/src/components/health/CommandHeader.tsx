@@ -43,10 +43,6 @@ export const CommandHeader: React.FC = () => {
           </span>
         </div>
 
-        <p className="font-body text-xs lg:text-sm text-[#b9cacb]">
-          RUL forecasting, degradation tracking &amp; autonomous work-order dispatch.
-        </p>
-
         {/* Engine and Mission Quick Selector Strip */}
         <div className="flex items-center gap-2 pt-2 flex-wrap">
           <span className="font-tactical text-[10px] text-[#849495] uppercase tracking-wider flex items-center gap-1">

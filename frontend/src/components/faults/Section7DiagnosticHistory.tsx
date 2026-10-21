@@ -154,39 +154,63 @@ export const Section7DiagnosticHistory: React.FC = () => {
     showToast('Exported diagnostic history to CSV.', 'success');
   };
 
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
     <section
       id="section-7-diagnostic-history"
-      className="w-full rounded-xl border border-[#3b494b]/50 bg-[#161b29]/95 backdrop-blur-md p-4 sm:p-5 lg:p-6 shadow-xl flex flex-col gap-4"
+      className="w-full rounded-xl border border-[#3b494b]/40 bg-[#0f1422]/90 backdrop-blur-md p-4 shadow-md flex flex-col gap-3"
     >
       {/* Panel Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#3b494b]/40">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-[#00f0ff]/10 border border-[#00f0ff]/30 flex items-center justify-center text-[#00f0ff]">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-[#3b494b]/30">
+        <div 
+          className="flex items-center gap-2.5 cursor-pointer select-none"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          <div className="w-7 h-7 rounded-lg bg-[#00f0ff]/10 border border-[#00f0ff]/30 flex items-center justify-center text-[#00f0ff]">
             <History className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="font-display font-bold text-sm sm:text-base tracking-wider text-[#dee2f5] uppercase">
-              Engine Diagnostic History
-            </h3>
-            <p className="font-mono-telemetry text-xs text-[#849495]">
-              Full-Mission Historical Telemetry Log &amp; Maintenance Audit Archive
+            <div className="flex items-center gap-2">
+              <h3 className="font-display font-bold text-sm tracking-wider text-slate-100 uppercase">
+                Diagnostic History &amp; Audit Log
+              </h3>
+              <span className="text-xs text-slate-500 font-mono">
+                ({filteredRecords.length} records)
+              </span>
+            </div>
+            <p className="font-mono text-[10px] text-slate-400">
+              Historical telemetry archive &amp; maintenance log
             </p>
           </div>
         </div>
 
-        {/* Export Button */}
-        <button
-          type="button"
-          onClick={exportCsv}
-          className="py-1.5 px-3 rounded-lg bg-[#090e1b] hover:bg-[#1a1f2d] border border-[#3b494b]/60 text-[#dee2f5] hover:text-[#00f0ff] font-mono-telemetry text-xs font-bold uppercase transition-all flex items-center gap-1.5 shadow-sm"
-        >
-          <FileSpreadsheet className="w-3.5 h-3.5 text-[#00f0ff]" />
-          <span>EXPORT AUDIT LOG (CSV)</span>
-        </button>
+        {/* Controls */}
+        <div className="flex items-center gap-2">
+          {isExpanded && (
+            <button
+              type="button"
+              onClick={exportCsv}
+              className="py-1 px-2.5 rounded bg-[#161b29] hover:bg-[#202738] border border-[#3b494b]/50 text-slate-200 hover:text-[#00f0ff] font-mono text-[11px] font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5 text-[#00f0ff]" />
+              <span>CSV Export</span>
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="py-1 px-2.5 rounded bg-[#161b29] hover:bg-[#202738] border border-[#3b494b]/50 text-slate-300 hover:text-white font-mono text-[11px] transition-colors cursor-pointer"
+          >
+            {isExpanded ? 'Hide History ▲' : 'Show History ▼'}
+          </button>
+        </div>
       </div>
 
-      {/* SEARCH & FILTER BAR (Strictly includes: Search, Filter, Date range, Severity filter) */}
+      {isExpanded && (
+        <>
+          {/* SEARCH & FILTER BAR */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5 font-mono-telemetry text-xs">
         {/* 1. Search Box (5 Cols) */}
         <div className="lg:col-span-5 relative flex items-center">
@@ -346,6 +370,8 @@ export const Section7DiagnosticHistory: React.FC = () => {
         <span>SHOWING {filteredRecords.length} OF {records.length} HISTORICAL RECORDS</span>
         <span>DATABASE COMPLIANCE: MIL-STD-1553B TELEMETRY BUS</span>
       </div>
+        </>
+      )}
     </section>
   );
 };

@@ -217,16 +217,13 @@ export const AeroTestHistoryView: React.FC = () => {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-2xl bg-[#0b1329]/80 backdrop-blur-xl border border-[#38bdf8]/30 shadow-xl">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl md:text-2xl font-black font-display tracking-tight text-[#f8fafc]">
-              PERSISTENT FLIGHT TEST & SIMULATION HISTORY
+            <h1 className="text-xl md:text-2xl font-bold font-display tracking-tight text-[#f8fafc]">
+              Test History
             </h1>
             <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#38bdf8]/15 text-[#38bdf8] border border-[#38bdf8]/40 font-mono font-bold">
               AUDIT LOG
             </span>
           </div>
-          <p className="text-xs font-mono text-[#94a3b8] mt-1">
-            Certified record of simulated flight regimes, injected faults, and diagnostic anomaly reports.
-          </p>
         </div>
 
         <button

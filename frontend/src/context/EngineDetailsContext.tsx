@@ -154,7 +154,16 @@ export const MissionDashboardProvider: React.FC<{ children: ReactNode }> = ({ ch
   }, []);
 
   const selectEngine = useCallback((id: string) => {
-    const match = engines.find(e => e.id === id);
+    if (!id) return;
+    const cleanId = id.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const match = engines.find(e => 
+      e.id === id || 
+      e.id.toLowerCase() === id.toLowerCase() ||
+      e.id.toLowerCase().replace(/[^a-z0-9]/g, '') === cleanId ||
+      (cleanId.includes('1') && e.id.toLowerCase().includes('1')) ||
+      (cleanId.includes('2') && e.id.toLowerCase().includes('2')) ||
+      (cleanId.includes('3') && e.id.toLowerCase().includes('3'))
+    );
     if (match) {
       setSelectedEngine(match);
       setNotificationMessage(`Switched active engine to: ${match.model} (${match.id})`);
@@ -307,7 +316,13 @@ export const MissionDashboardProvider: React.FC<{ children: ReactNode }> = ({ ch
     }
   }, [alerts, selectedEngine, selectedSubsystemId, subsystems, telemetry]);
 
-  const selectedSubsystem = subsystems[selectedSubsystemId] || subsystems.cylinder;
+  const safeSubsystems = (subsystems && typeof subsystems === 'object' && !Array.isArray(subsystems))
+    ? subsystems
+    : INITIAL_SUBSYSTEMS;
+  const selectedSubsystem = safeSubsystems[selectedSubsystemId] || safeSubsystems.cylinder || INITIAL_SUBSYSTEMS.cylinder;
+  const safeSelectedEngine = selectedEngine || engines[0] || INITIAL_ENGINES[0];
+  const safeSelectedMission = selectedMission || missions[0] || INITIAL_MISSIONS[0];
+
   const unreadAlertCount = alerts.filter(a => !a.acknowledged).length;
   const activeTargetLabel = isCalibrating
     ? 'CALIBRATION SWEEP IN PROGRESS...'
@@ -317,10 +332,10 @@ export const MissionDashboardProvider: React.FC<{ children: ReactNode }> = ({ ch
     <MissionDashboardContext.Provider
       value={{
         engines,
-        selectedEngine,
+        selectedEngine: safeSelectedEngine,
         selectEngine,
         missions,
-        selectedMission,
+        selectedMission: safeSelectedMission,
         selectMission,
         subsystems,
         selectedSubsystemId,

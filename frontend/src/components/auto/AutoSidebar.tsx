@@ -130,10 +130,7 @@ export const AutoSidebar: React.FC<AutoSidebarProps> = () => {
               </div>
               <div className="flex flex-col overflow-hidden">
                 <span className="font-display font-bold text-sm text-[#dee2f5] tracking-wider uppercase leading-tight">
-                  DHRUVA
-                </span>
-                <span className="font-mono text-[9px] text-[#f59e0b] font-semibold tracking-wider">
-                  AUTOMOTIVE TWIN
+                  DHRUVA AUTO
                 </span>
               </div>
             </div>
@@ -209,24 +206,19 @@ export const AutoSidebar: React.FC<AutoSidebarProps> = () => {
 
                   {/* Expanded mode text */}
                   {isExpanded && (
-                    <div className="flex flex-col items-start min-w-0 flex-1 overflow-hidden text-left">
-                      <div className="flex items-center justify-between w-full">
-                        <span className="font-sans text-xs font-semibold tracking-wide whitespace-nowrap truncate">
-                          {item.label}
-                        </span>
-                        <span
-                          className="px-1.5 py-0.2 rounded text-[8px] font-bold border shrink-0 ml-1.5"
-                          style={{
-                            backgroundColor: isActive ? '#090e1b' : `${item.badgeColor}15`,
-                            borderColor: isActive ? '#090e1b' : `${item.badgeColor}40`,
-                            color: isActive ? '#f59e0b' : item.badgeColor,
-                          }}
-                        >
-                          {item.badge}
-                        </span>
-                      </div>
-                      <span className={`text-[9.5px] truncate w-full ${isActive ? 'text-[#090e1b]/80' : 'text-[#849495]'}`}>
-                        {item.desc}
+                    <div className="flex items-center justify-between min-w-0 flex-1 overflow-hidden text-left">
+                      <span className="font-sans text-xs font-semibold tracking-wide whitespace-nowrap truncate">
+                        {item.label}
+                      </span>
+                      <span
+                        className="px-1.5 py-0.2 rounded text-[8px] font-bold border shrink-0 ml-1.5"
+                        style={{
+                          backgroundColor: isActive ? '#090e1b' : `${item.badgeColor}15`,
+                          borderColor: isActive ? '#090e1b' : `${item.badgeColor}40`,
+                          color: isActive ? '#f59e0b' : item.badgeColor,
+                        }}
+                      >
+                        {item.badge}
                       </span>
                     </div>
                   )}
@@ -290,15 +282,10 @@ export const AutoSidebar: React.FC<AutoSidebarProps> = () => {
               onClick={() => navigate('/select-engine')}
               className="flex items-center gap-2.5 w-full px-2.5 py-1.5 rounded-xl bg-[#121829] border border-[#f59e0b]/30 text-[#f59e0b] hover:bg-[#f59e0b] hover:text-[#090e1b] transition-all cursor-pointer group"
               title="Switch to Drone / Aircraft Propulsion Domains"
-              aria-label="Switch Engine Propulsion Domain"
+              aria-label="Switch Platform"
             >
               <Layers className="w-4 h-4 shrink-0" />
-              <div className="flex flex-col text-left overflow-hidden">
-                <span className="text-xs font-semibold leading-tight">Switch Platform</span>
-                <span className="text-[9px] text-[#849495] group-hover:text-[#090e1b] leading-tight">
-                  Drone · Aero · Auto
-                </span>
-              </div>
+              <span className="text-xs font-semibold leading-tight">Switch Platform</span>
             </button>
 
             {/* Powertrain Sync Status Banner */}

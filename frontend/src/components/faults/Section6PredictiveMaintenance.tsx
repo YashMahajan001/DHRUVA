@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDashboard } from '../../context/FaultDiagnosticsContext';
 import {
   Wrench,
@@ -15,6 +15,7 @@ import {
 
 export const Section6PredictiveMaintenance: React.FC = () => {
   const { selectedEngine, openModal, showToast } = useDashboard();
+  const [showExtendedTimeline, setShowExtendedTimeline] = useState(false);
 
   // Dynamic values based on selected engine
   const isEng2 = selectedEngine.id === 'eng-02';
@@ -107,7 +108,7 @@ export const Section6PredictiveMaintenance: React.FC = () => {
   return (
     <section
       id="section-6-predictive-maintenance"
-      className="w-full rounded-xl border border-[#3b494b]/50 bg-[#161b29]/95 backdrop-blur-md p-4 sm:p-5 lg:p-6 shadow-xl flex flex-col gap-5"
+      className="w-full rounded-xl border border-[#3b494b]/40 bg-[#161b29]/95 backdrop-blur-md p-4 shadow-xl flex flex-col gap-4"
     >
       {/* Panel Header */}
       <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#3b494b]/40">
@@ -117,10 +118,10 @@ export const Section6PredictiveMaintenance: React.FC = () => {
           </div>
           <div>
             <h3 className="font-display font-bold text-sm sm:text-base tracking-wider text-[#dee2f5] uppercase">
-              Predictive Maintenance & Asset Lifecycle
+              Predictive Maintenance
             </h3>
-            <p className="font-mono-telemetry text-xs text-[#849495]">
-              Weibull Component Degradation Model // Target: {selectedEngine.name} ({selectedEngine.callsign})
+            <p className="font-mono text-xs text-[#849495]">
+              Target: {selectedEngine?.name || 'ENGINE'} ({selectedEngine?.callsign || 'N/A'})
             </p>
           </div>
         </div>
@@ -133,7 +134,7 @@ export const Section6PredictiveMaintenance: React.FC = () => {
               openModal('work-order');
               showToast('Opened DEF-FORM-712 Work Order Dispatch Form.', 'info');
             }}
-            className="py-1.5 px-3 rounded-lg bg-[#00f0ff] hover:bg-[#7df4ff] text-[#00363a] font-mono-telemetry text-xs font-bold uppercase transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,240,255,0.25)]"
+            className="py-1.5 px-3 rounded-lg bg-[#00f0ff] hover:bg-[#7df4ff] text-[#00363a] font-mono text-xs font-bold uppercase transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(0,240,255,0.25)] cursor-pointer"
           >
             <FileText className="w-3.5 h-3.5" />
             <span>GENERATE WORK ORDER // DEF-712</span>
@@ -141,70 +142,60 @@ export const Section6PredictiveMaintenance: React.FC = () => {
         </div>
       </div>
 
-      {/* 1. KEY METRICS GRID (All 8 exact required fields) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 font-mono-telemetry">
-        {/* Metric 1: Remaining Useful Life */}
-        <div className="rounded-lg bg-[#0e1320] border border-[#3b494b]/50 p-3.5 flex flex-col justify-between gap-1">
-          <span className="text-[10px] text-[#849495] uppercase font-bold">REMAINING USEFUL LIFE (RUL)</span>
-          <span className="text-xl font-bold text-[#00f0ff]">{rulHours.toFixed(1)} Flight Hours</span>
-          <span className="text-[10px] text-[#7df4ff]">Extension via Derate: +28.0 FH</span>
+      {/* 1. COMPACT ALIGNED METRICS ROW */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 font-mono">
+        {/* RUL */}
+        <div className="rounded-lg bg-[#0e1320] border border-[#3b494b]/40 p-3 flex flex-col gap-1">
+          <span className="text-[10px] text-[#849495] uppercase font-bold">REMAINING USEFUL LIFE</span>
+          <span className="text-lg font-bold text-[#00f0ff]">{rulHours.toFixed(1)} Flight Hours</span>
+          <span className="text-[10px] text-[#7df4ff]">±3.2 FH Confidence (95% CI)</span>
         </div>
 
-        {/* Metric 2: Next Maintenance */}
-        <div className="rounded-lg bg-[#0e1320] border border-[#3b494b]/50 p-3.5 flex flex-col justify-between gap-1">
-          <span className="text-[10px] text-[#849495] uppercase font-bold">NEXT MAINTENANCE</span>
-          <span className="text-xs font-bold text-[#dee2f5]">{nextMaintenance}</span>
-          <span className="text-[10px] text-[#849495]">Turnaround Action Required</span>
-        </div>
-
-        {/* Metric 3: Maintenance Priority */}
-        <div className="rounded-lg bg-[#0e1320] border border-[#3b494b]/50 p-3.5 flex flex-col justify-between gap-1">
+        {/* Priority */}
+        <div className="rounded-lg bg-[#0e1320] border border-[#3b494b]/40 p-3 flex flex-col gap-1">
           <span className="text-[10px] text-[#849495] uppercase font-bold">MAINTENANCE PRIORITY</span>
-          <span className={`text-xs font-bold px-2 py-1 rounded border inline-block w-fit ${priorityColor}`}>
+          <span className={`text-xs font-bold px-2 py-0.5 rounded border inline-block w-fit mt-0.5 ${priorityColor}`}>
             {maintenancePriority}
           </span>
-          <span className="text-[10px] text-[#849495]">Dispatch Level</span>
+          <span className="text-[10px] text-[#849495]">Component: {affectedComponent.split(' ')[0]}</span>
         </div>
 
-        {/* Metric 4: Confidence */}
-        <div className="rounded-lg bg-[#0e1320] border border-[#3b494b]/50 p-3.5 flex flex-col justify-between gap-1">
-          <span className="text-[10px] text-[#849495] uppercase font-bold">CONFIDENCE</span>
-          <span className="text-base font-bold text-[#dee2f5]">{confidenceRating}</span>
-          <span className="text-[10px] text-[#849495]">Based on 4,200 fleet hours</span>
+        {/* Confidence & Uncertainty */}
+        <div className="rounded-lg bg-[#0e1320] border border-[#3b494b]/40 p-3 flex flex-col gap-1">
+          <span className="text-[10px] text-[#849495] uppercase font-bold">PREDICTION UNCERTAINTY</span>
+          <span className="text-sm font-bold text-[#dee2f5]">{confidenceRating}</span>
+          <span className="text-[10px] text-[#849495]">Calibrated on 4,200 fleet hrs</span>
         </div>
 
-        {/* Metric 5: Affected Component */}
-        <div className="rounded-lg bg-[#0e1320] border border-[#3b494b]/50 p-3.5 flex flex-col justify-between gap-1">
-          <span className="text-[10px] text-[#849495] uppercase font-bold">AFFECTED COMPONENT</span>
-          <span className="text-xs font-bold text-[#ffb4ab]">{affectedComponent}</span>
-          <span className="text-[10px] text-[#849495]">Part Ref: CYL2-SHR-04</span>
+        {/* Service Window */}
+        <div className="rounded-lg bg-[#0e1320] border border-[#3b494b]/40 p-3 flex flex-col gap-1">
+          <span className="text-[10px] text-[#849495] uppercase font-bold">RECOMMENDED WINDOW</span>
+          <span className="text-xs font-bold text-[#dee2f5] truncate">{nextMaintenance}</span>
+          <span className="text-[10px] text-[#849495] truncate">{serviceWindow}</span>
         </div>
+      </div>
 
-        {/* Metric 6: Last Service */}
-        <div className="rounded-lg bg-[#0e1320] border border-[#3b494b]/50 p-3.5 flex flex-col justify-between gap-1">
-          <span className="text-[10px] text-[#849495] uppercase font-bold">LAST SERVICE</span>
-          <span className="text-xs font-bold text-[#dee2f5]">{lastService}</span>
-          <span className="text-[10px] text-[#849495]">Base Station AF-North</span>
-        </div>
-
-        {/* Metric 7: Estimated Service Window */}
-        <div className="sm:col-span-2 rounded-lg bg-[#0e1320] border border-[#3b494b]/50 p-3.5 flex flex-col justify-between gap-1">
-          <span className="text-[10px] text-[#849495] uppercase font-bold">ESTIMATED SERVICE WINDOW</span>
-          <span className="text-xs font-bold text-[#dee2f5]">{serviceWindow}</span>
-          <span className="text-[10px] text-[#849495]">Technicians: 2 Certified Powerplant Specialists</span>
-        </div>
-
-        {/* Metric 8: Recommended Maintenance (Span full width) */}
-        <div className="sm:col-span-2 lg:col-span-4 rounded-lg bg-[#0e1320] border border-[#3b494b]/50 p-3.5 flex flex-col gap-1">
-          <span className="text-[10px] text-[#849495] uppercase font-bold">RECOMMENDED MAINTENANCE</span>
+      {/* 2. RELEVANT RECOMMENDATION BANNER */}
+      <div className="rounded-lg bg-[#0e1320] border border-[#3b494b]/40 p-3 flex items-start justify-between gap-3 font-mono text-xs">
+        <div className="flex flex-col gap-1">
+          <span className="text-[10px] text-[#10b981] uppercase font-bold">ACTIONABLE RECOMMENDATION</span>
           <p className="text-xs text-[#dee2f5] leading-relaxed">
             {recommendedMaintenance}
           </p>
         </div>
+
+        <button
+          type="button"
+          onClick={() => setShowExtendedTimeline(!showExtendedTimeline)}
+          className="shrink-0 text-xs text-[#00f0ff] hover:text-[#7df4ff] px-2.5 py-1 rounded bg-[#161b29] border border-[#3b494b]/50 transition-colors cursor-pointer"
+        >
+          {showExtendedTimeline ? '▲ Hide Milestones' : '▼ Timeline Milestones'}
+        </button>
       </div>
 
-      {/* 2. MAINTENANCE TIMELINE */}
-      <div className="flex flex-col gap-3 pt-3 border-t border-[#3b494b]/40">
+      {/* 3. COLLAPSIBLE EXTENDED TIMELINE */}
+      {showExtendedTimeline && (
+        <div className="flex flex-col gap-3 pt-2 border-t border-[#3b494b]/30">
         <div className="flex items-center justify-between text-xs font-mono-telemetry text-[#849495]">
           <span className="font-bold text-[#dee2f5] uppercase flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5 text-[#00f0ff]" />
@@ -250,6 +241,7 @@ export const Section6PredictiveMaintenance: React.FC = () => {
           ))}
         </div>
       </div>
+      )}
     </section>
   );
 };

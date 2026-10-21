@@ -108,8 +108,8 @@ export const MissionSummaryBar: React.FC = () => {
           </div>
           <div className="bg-[#090e1b]/80 p-2.5 rounded-lg border border-[#3b494b]/20">
             <span className="text-[#849495] uppercase block text-[9px] font-semibold">PLANT MODEL</span>
-            <span className="text-[#dee2f5] font-bold text-xs block mt-0.5 truncate">{(selectedEngine as any).name || selectedEngine.model}</span>
-            <span className="text-[#849495] text-[9px]">ID: {selectedEngine.id.toUpperCase()}</span>
+            <span className="text-[#dee2f5] font-bold text-xs block mt-0.5 truncate">{(selectedEngine as any)?.name || selectedEngine?.model || 'Propulsion Plant'}</span>
+            <span className="text-[#849495] text-[9px]">ID: {(selectedEngine?.id || 'ENG-01').toUpperCase()}</span>
           </div>
         </div>
       )}

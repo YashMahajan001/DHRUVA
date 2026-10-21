@@ -43,6 +43,7 @@ export const AeroDashboardView: React.FC = () => {
     resetSimulation,
     diagnostics,
     injectedFaults,
+    catalogError,
   } = useAero();
 
   const navigate = useNavigate();
@@ -102,8 +103,19 @@ export const AeroDashboardView: React.FC = () => {
 
   if (!currentEngine) {
     return (
-      <div className="p-8 text-center text-[#94a3b8] font-mono">
-        Loading Dhruva Aero Aircraft Propulsion Catalog...
+      <div className="p-8 max-w-4xl mx-auto text-center space-y-4">
+        <div className="p-6 rounded-2xl bg-[#0b1329]/80 border border-[#38bdf8]/30 shadow-xl space-y-3">
+          <div className="w-10 h-10 mx-auto rounded-full bg-[#38bdf8]/10 border border-[#38bdf8]/30 flex items-center justify-center">
+            <span className="w-3 h-3 rounded-full bg-[#38bdf8] animate-ping" />
+          </div>
+          <h2 className="text-lg font-bold font-display text-[#f8fafc]">Initializing Dhruva Aero Propulsion Catalog...</h2>
+          <p className="text-xs font-mono text-[#94a3b8]">Connecting to aircraft propulsion telemetry and flight physics pipeline.</p>
+          {catalogError && (
+            <div className="p-3 rounded-lg bg-[#ef4444]/15 border border-[#ef4444]/40 text-xs font-mono text-[#ef4444]">
+              {catalogError}
+            </div>
+          )}
+        </div>
       </div>
     );
   }

@@ -157,43 +157,39 @@ export const Section2EngineMetrics: React.FC = () => {
   ];
 
   return (
-    <section id="section-2-engine-metrics" className="w-full">
-      {/* 8 Evenly Sized Compact KPI Cards with High Legibility */}
-      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3">
-        {metrics.map(m => {
+    <section id="section-2-engine-metrics" className="w-full bg-[#161b29]/90 border border-[#3b494b]/40 rounded-xl p-3.5 shadow-md">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 sm:gap-4 divide-y sm:divide-y-0 sm:divide-x divide-[#3b494b]/30">
+        {metrics.map((m, idx) => {
           const Icon = m.icon;
           return (
             <div
               key={m.id}
               id={m.id}
-              className={`min-h-[108px] rounded-xl bg-[#161b29]/95 border p-3 flex flex-col justify-between transition-all hover:border-[#00f0ff]/50 shadow-md ${m.state.border}`}
+              className={`flex flex-col justify-between gap-1 ${idx > 0 ? 'sm:pl-3.5' : ''} ${idx >= 2 ? 'pt-2 sm:pt-0' : ''}`}
             >
-              {/* Top Row: Label & Status Badge */}
+              {/* Metric Label & Status Tag */}
               <div className="flex items-center justify-between gap-1">
-                <span className="font-mono text-[10px] text-slate-400 uppercase font-bold tracking-wider truncate">
+                <span className="font-mono text-[10px] text-[#849495] uppercase font-bold tracking-wider truncate">
                   {m.label}
                 </span>
-                <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded uppercase tracking-wider ${m.state.badge}`}>
+                <span className={`text-[8px] font-mono font-bold px-1.5 py-0.2 rounded uppercase tracking-wider ${m.state.badge}`}>
                   {m.state.label}
                 </span>
               </div>
 
-              {/* Middle Row: Primary Value & Icon */}
-              <div className="flex items-center justify-between gap-1 my-0.5">
-                <span className={`font-mono font-bold text-lg xl:text-xl tracking-tight ${m.state.text}`}>
+              {/* Value & Icon */}
+              <div className="flex items-baseline justify-between gap-1 my-0.5">
+                <span className={`font-mono font-bold text-lg lg:text-xl tracking-tight ${m.state.text}`}>
                   {m.value}
                 </span>
-                <div className={`p-1.5 rounded-lg ${m.state.bg} ${m.state.text}`}>
-                  <Icon className="w-3.5 h-3.5" />
-                </div>
+                <Icon className={`w-3.5 h-3.5 opacity-60 ${m.state.text}`} />
               </div>
 
-              {/* Bottom Row: Subtext & Micro Delta */}
-              <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-1.5 border-t border-[#3b494b]/30">
-                <span className="truncate text-slate-400 max-w-[90px]">{m.subtext}</span>
-                <span className={`font-bold flex items-center gap-0.5 ${m.isNegative ? 'text-amber-400' : 'text-[#00f0ff]'}`}>
-                  {m.isNegative ? <ArrowUpRight className="w-3 h-3 inline" /> : <ArrowDownRight className="w-3 h-3 inline" />}
-                  <span>{m.delta}</span>
+              {/* Inline Subtext / Delta */}
+              <div className="flex items-center justify-between text-[10px] font-mono text-[#849495]">
+                <span className="truncate max-w-[80px]">{m.subtext}</span>
+                <span className={`font-semibold flex items-center ${m.isNegative ? 'text-amber-400' : 'text-[#00f0ff]'}`}>
+                  {m.delta}
                 </span>
               </div>
             </div>

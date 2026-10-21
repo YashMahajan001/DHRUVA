@@ -13,7 +13,8 @@ export const ComponentInspector: React.FC = () => {
 
   // Dynamic telemetry value replacement based on active subsystem and live readings
   const getSubsystemDisplayParams = () => {
-    switch (selectedSubsystem.id) {
+    const subId = selectedSubsystem?.id || 'cylinder';
+    switch (subId) {
       case 'cylinder':
         return [
           {
@@ -169,11 +170,22 @@ export const ComponentInspector: React.FC = () => {
       <div className="bg-[#161b29]/95 p-5 rounded-xl shadow-xl flex flex-col gap-4 relative overflow-hidden border border-[#3b494b]/30">
         <div className="flex items-start justify-between gap-2">
           <div className="flex flex-col">
-            <span className="font-mono text-[9px] text-[#849495] tracking-wider uppercase font-semibold">
-              SUBSYSTEM TELEMETRY
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-[9px] text-[#849495] tracking-wider uppercase font-semibold">
+                SUBSYSTEM TELEMETRY
+              </span>
+              {selectedSubsystem?.isFallback ? (
+                <span className="font-mono text-[8px] px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 font-bold uppercase tracking-wider">
+                  BASELINE (FALLBACK)
+                </span>
+              ) : (
+                <span className="font-mono text-[8px] px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold uppercase tracking-wider">
+                  LIVE TELEMETRY
+                </span>
+              )}
+            </div>
             <h2 id="inspector-name" className="font-['Space_Grotesk'] text-lg text-[#dee2f5] font-bold mt-0.5">
-              {selectedSubsystem.name}
+              {selectedSubsystem?.name || 'CYLINDER & HEAD ASSEMBLY'}
             </h2>
           </div>
           <div

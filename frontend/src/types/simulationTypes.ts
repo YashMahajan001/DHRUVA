@@ -100,6 +100,7 @@ export interface Waypoint {
 export interface Mission {
   id: string;
   name: string;
+  missionName?: string;
   code: string;
   profileScenario: string;
   directive: MissionDirective;
