@@ -9,11 +9,13 @@ import {
   Car,
   Activity,
   Sparkles,
+  ChevronLeft,
   ChevronRight,
   ShieldCheck,
   AlertTriangle,
 } from 'lucide-react';
 import { useAuto } from '../../context/AutoContext';
+import { useSidebar } from '../../context/SidebarContext';
 
 interface AutoSidebarProps {
   isSimulating?: boolean;
@@ -23,6 +25,7 @@ interface AutoSidebarProps {
 export const AutoSidebar: React.FC<AutoSidebarProps> = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isExpanded, toggleSidebar } = useSidebar();
   const [hoveredTabId, setHoveredTabId] = useState<string | null>(null);
   const { currentEngine, telemetry, anomalies, apiConnected } = useAuto();
 
@@ -108,34 +111,72 @@ export const AutoSidebar: React.FC<AutoSidebarProps> = () => {
   return (
     <aside
       id="auto-sidebar"
-      className="hidden md:flex fixed left-3 top-3 bottom-3 w-16 bg-gradient-to-b from-[#090e1b] via-[#070b16] to-[#04070e] backdrop-blur-2xl border border-[#f59e0b]/25 rounded-2xl z-50 flex-col justify-between items-center py-3.5 shadow-[0_8px_32px_rgba(0,0,0,0.7)] transition-all select-none"
+      className={`hidden md:flex fixed left-3 top-3 bottom-3 ${
+        isExpanded ? 'w-64 px-3' : 'w-16 px-1.5'
+      } bg-gradient-to-b from-[#090e1b] via-[#070b16] to-[#04070e] backdrop-blur-2xl border border-[#f59e0b]/25 rounded-2xl z-50 flex-col justify-between py-3.5 shadow-[0_8px_32px_rgba(0,0,0,0.7)] transition-all duration-300 ease-in-out motion-reduce:transition-none select-none`}
     >
-      {/* 1. Top Section: Automotive Emblem & Domain Badge */}
-      <div className="flex flex-col items-center gap-3 w-full">
-        <div
-          onClick={() => navigate('/auto/dashboard')}
-          className="relative group cursor-pointer flex flex-col items-center gap-1.5"
-          title="DHRUVA Auto Engineering Platform"
-        >
-          {/* Hexagonal/Rounded Ambient Icon Container */}
-          <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-[#1b2338] to-[#0c1222] border border-[#f59e0b]/40 flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.25)] group-hover:border-[#f59e0b] group-hover:shadow-[0_0_25px_rgba(245,158,11,0.5)] group-hover:scale-105 transition-all duration-300">
-            {/* Ambient Corner Accents */}
-            <span className="absolute top-1 left-1 w-1.5 h-1.5 border-t border-l border-[#f59e0b]/70" />
-            <span className="absolute bottom-1 right-1 w-1.5 h-1.5 border-b border-r border-[#f59e0b]/70" />
-            <Car className="w-6 h-6 text-[#f59e0b] group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
+      {/* 1. Top Section: Automotive Emblem & Navigation */}
+      <div className="flex flex-col gap-3 w-full">
+        {/* Expanded Mode: Header Row with Brand & Dedicated Collapse Toggle */}
+        {isExpanded ? (
+          <div className="flex items-center justify-between w-full px-1.5 pb-2 border-b border-[#f59e0b]/20">
+            <div
+              onClick={() => navigate('/auto/dashboard')}
+              className="flex items-center gap-2.5 cursor-pointer group select-none"
+              title="DHRUVA Auto Engineering Platform"
+            >
+              <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-[#1b2338] to-[#0c1222] border border-[#f59e0b]/40 flex items-center justify-center shadow-[0_0_12px_rgba(245,158,11,0.25)] group-hover:border-[#f59e0b] transition-all shrink-0">
+                <Car className="w-4 h-4 text-[#f59e0b]" />
+              </div>
+              <div className="flex flex-col overflow-hidden">
+                <span className="font-display font-bold text-sm text-[#dee2f5] tracking-wider uppercase leading-tight">
+                  DHRUVA
+                </span>
+                <span className="font-mono text-[9px] text-[#f59e0b] font-semibold tracking-wider">
+                  AUTOMOTIVE TWIN
+                </span>
+              </div>
+            </div>
+
+            <button
+              onClick={toggleSidebar}
+              className="w-7 h-7 rounded-lg bg-[#121829] border border-[#3b494b]/40 text-[#8fa1a2] hover:text-[#f59e0b] hover:border-[#f59e0b]/50 flex items-center justify-center transition-all cursor-pointer shrink-0"
+              title="Collapse sidebar"
+              aria-label="Collapse sidebar"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
           </div>
+        ) : (
+          /* Collapsed Mode: Emblem + Dedicated Expand Toggle */
+          <div className="flex flex-col items-center gap-2 w-full">
+            <div
+              onClick={() => navigate('/auto/dashboard')}
+              className="relative group cursor-pointer flex flex-col items-center gap-1"
+              title="DHRUVA Auto Engineering Platform"
+            >
+              <div className="relative w-11 h-11 rounded-xl bg-gradient-to-br from-[#1b2338] to-[#0c1222] border border-[#f59e0b]/40 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.25)] group-hover:border-[#f59e0b] group-hover:scale-105 transition-all">
+                <Car className="w-5 h-5 text-[#f59e0b]" />
+              </div>
+              <span className="px-1 py-0.2 rounded text-[7.5px] font-mono font-bold tracking-wider bg-[#f59e0b]/15 text-[#f59e0b] border border-[#f59e0b]/30">
+                AUTO
+              </span>
+            </div>
 
-          {/* Domain Pill Badge */}
-          <span className="px-1.5 py-0.5 rounded text-[8px] font-mono font-black tracking-widest bg-[#f59e0b]/15 text-[#f59e0b] border border-[#f59e0b]/30 shadow-[0_0_8px_rgba(245,158,11,0.2)]">
-            AUTO
-          </span>
-        </div>
+            {/* Dedicated Expand Button */}
+            <button
+              onClick={toggleSidebar}
+              className="w-8 h-8 rounded-lg bg-[#121829] border border-[#f59e0b]/30 text-[#8fa1a2] hover:text-[#f59e0b] hover:border-[#f59e0b] flex items-center justify-center transition-all cursor-pointer"
+              title="Expand sidebar"
+              aria-label="Expand sidebar"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
 
-        {/* Subtle Horizontal Amber Divider */}
-        <div className="w-10 h-[1px] bg-gradient-to-r from-transparent via-[#f59e0b]/35 to-transparent my-1" />
-
-        {/* 2. Primary Automotive Navigation Rail */}
-        <nav className="flex flex-col gap-2.5 items-center w-full px-2">
+        {/* 2. Primary Automotive Navigation Items */}
+        <nav className="flex flex-col gap-1 w-full mt-1">
           {autoNavItems.map((item) => {
             const Icon = item.icon;
             const isActive = isLinkActive(item);
@@ -150,40 +191,63 @@ export const AutoSidebar: React.FC<AutoSidebarProps> = () => {
                 <button
                   id={`auto-nav-btn-${item.id}`}
                   onClick={() => navigate(item.targetPath)}
-                  className={`relative flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-200 cursor-pointer ${
+                  className={`relative flex items-center ${
+                    isExpanded ? 'justify-start px-3 py-2 gap-3 w-full' : 'justify-center w-11 h-11'
+                  } rounded-xl transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? 'bg-gradient-to-br from-[#f59e0b] to-[#d97706] text-[#090e1b] font-bold shadow-[0_0_22px_rgba(245,158,11,0.55)] scale-105'
-                      : 'bg-[#121829]/60 border border-[#3b494b]/30 text-[#8fa1a2] hover:bg-[#1a233a] hover:text-[#f59e0b] hover:border-[#f59e0b]/40 hover:scale-105 active:scale-95'
+                      ? 'bg-gradient-to-br from-[#f59e0b] to-[#d97706] text-[#090e1b] font-bold shadow-[0_0_18px_rgba(245,158,11,0.5)]'
+                      : 'bg-[#121829]/60 border border-[#3b494b]/30 text-[#8fa1a2] hover:bg-[#1a233a] hover:text-[#f59e0b] hover:border-[#f59e0b]/40'
                   }`}
                   aria-label={item.label}
                   aria-current={isActive ? 'page' : undefined}
                 >
                   <Icon
-                    className={`w-5 h-5 transition-transform duration-200 ${
+                    className={`w-5 h-5 shrink-0 transition-transform duration-200 ${
                       isActive ? 'stroke-[2.4]' : 'group-hover:scale-110'
                     }`}
                   />
 
-                  {/* Active Left Indicator Bar */}
-                  {isActive && (
-                    <span className="absolute -left-2 top-1/2 -translate-y-1/2 w-1.5 h-7 bg-[#f59e0b] rounded-r-full shadow-[0_0_12px_#f59e0b]" />
+                  {/* Expanded mode text */}
+                  {isExpanded && (
+                    <div className="flex flex-col items-start min-w-0 flex-1 overflow-hidden text-left">
+                      <div className="flex items-center justify-between w-full">
+                        <span className="font-sans text-xs font-semibold tracking-wide whitespace-nowrap truncate">
+                          {item.label}
+                        </span>
+                        <span
+                          className="px-1.5 py-0.2 rounded text-[8px] font-bold border shrink-0 ml-1.5"
+                          style={{
+                            backgroundColor: isActive ? '#090e1b' : `${item.badgeColor}15`,
+                            borderColor: isActive ? '#090e1b' : `${item.badgeColor}40`,
+                            color: isActive ? '#f59e0b' : item.badgeColor,
+                          }}
+                        >
+                          {item.badge}
+                        </span>
+                      </div>
+                      <span className={`text-[9.5px] truncate w-full ${isActive ? 'text-[#090e1b]/80' : 'text-[#849495]'}`}>
+                        {item.desc}
+                      </span>
+                    </div>
                   )}
 
-                  {/* Alert Ping Indicator for Analysis/Diagnostics */}
+                  {/* Active Left Indicator Bar */}
+                  {isActive && (
+                    <span className="absolute -left-1 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-[#f59e0b] rounded-r-full shadow-[0_0_10px_#f59e0b]" />
+                  )}
+
+                  {/* Alert Ping Indicator */}
                   {item.hasAlert && !isActive && (
-                    <span className="absolute top-1 right-1 flex h-2.5 w-2.5">
+                    <span className="absolute top-1 right-1 flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500 shadow-[0_0_8px_#f43f5e]" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500 shadow-[0_0_6px_#f43f5e]" />
                     </span>
                   )}
                 </button>
 
-                {/* Luxury Glassmorphic Tooltip Card */}
-                {hoveredTabId === item.id && (
-                  <div className="absolute left-[70px] top-1/2 -translate-y-1/2 bg-[#090e1b]/95 backdrop-blur-2xl text-[#dee2f5] border border-[#f59e0b]/40 px-3.5 py-2.5 rounded-xl text-xs font-mono z-50 shadow-[0_12px_35px_rgba(0,0,0,0.85)] pointer-events-none whitespace-nowrap min-w-[200px] animate-in fade-in zoom-in-95 duration-150">
-                    {/* Left Caret Arrow */}
-                    <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-[#090e1b] border-l border-b border-[#f59e0b]/40 rotate-45" />
-
+                {/* Collapsed Mode Hover Tooltip */}
+                {!isExpanded && hoveredTabId === item.id && (
+                  <div className="absolute left-14 top-1/2 -translate-y-1/2 bg-[#090e1b]/95 backdrop-blur-2xl text-[#dee2f5] border border-[#f59e0b]/40 px-3.5 py-2 rounded-xl text-xs font-mono z-50 shadow-[0_12px_35px_rgba(0,0,0,0.85)] pointer-events-none whitespace-nowrap min-w-[190px]">
                     <div className="flex items-center justify-between gap-2 mb-1">
                       <span className="text-[#f59e0b] font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b] shadow-[0_0_6px_#f59e0b]" />
@@ -215,58 +279,98 @@ export const AutoSidebar: React.FC<AutoSidebarProps> = () => {
         </nav>
       </div>
 
-      {/* 3. Bottom Controls: Engine Domain Switcher & Telemetry Telemetry Beacon */}
-      <div className="flex flex-col items-center gap-3 w-full px-2">
-        {/* Subtle Horizontal Amber Divider */}
-        <div className="w-10 h-[1px] bg-gradient-to-r from-transparent via-[#f59e0b]/35 to-transparent" />
+      {/* 3. Bottom Controls: Engine Platform Switcher & Telemetry Status */}
+      <div className="flex flex-col gap-2.5 w-full">
+        {isExpanded ? (
+          /* Expanded Mode: Full Platform Switcher & Active Powertrain Details */
+          <div className="flex flex-col gap-2 w-full pt-2 border-t border-[#f59e0b]/20">
+            {/* Switch Platform Button */}
+            <button
+              id="auto-btn-switch-system"
+              onClick={() => navigate('/select-engine')}
+              className="flex items-center gap-2.5 w-full px-2.5 py-1.5 rounded-xl bg-[#121829] border border-[#f59e0b]/30 text-[#f59e0b] hover:bg-[#f59e0b] hover:text-[#090e1b] transition-all cursor-pointer group"
+              title="Switch to Drone / Aircraft Propulsion Domains"
+              aria-label="Switch Engine Propulsion Domain"
+            >
+              <Layers className="w-4 h-4 shrink-0" />
+              <div className="flex flex-col text-left overflow-hidden">
+                <span className="text-xs font-semibold leading-tight">Switch Platform</span>
+                <span className="text-[9px] text-[#849495] group-hover:text-[#090e1b] leading-tight">
+                  Drone · Aero · Auto
+                </span>
+              </div>
+            </button>
 
-        {/* Engine Domain Switcher Button */}
-        <div className="relative group w-full flex justify-center">
-          <button
-            id="auto-btn-switch-system"
-            onClick={() => navigate('/select-engine')}
-            className="flex items-center justify-center w-11 h-11 rounded-xl bg-[#121829] border border-[#f59e0b]/30 text-[#f59e0b] hover:bg-[#f59e0b] hover:text-[#090e1b] hover:shadow-[0_0_18px_rgba(245,158,11,0.4)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
-            title="Switch to Drone / Aircraft Propulsion Domains"
-            aria-label="Switch Engine Propulsion Domain"
-          >
-            <Layers className="w-5 h-5 transition-transform group-hover:rotate-12" />
-          </button>
+            {/* Powertrain Sync Status Banner */}
+            <div className="flex items-center justify-between w-full px-2.5 py-1.5 rounded-xl bg-[#0e1322]/80 border border-[#3b494b]/30">
+              <div className="flex items-center gap-2">
+                <span
+                  className={`w-2 h-2 rounded-full shrink-0 ${
+                    !apiConnected
+                      ? 'bg-rose-500 shadow-[0_0_8px_#f43f5e]'
+                      : 'bg-[#10b981] animate-pulse shadow-[0_0_8px_#10b981]'
+                  }`}
+                />
+                <div className="flex flex-col">
+                  <span className="font-mono text-[10px] text-[#dee2f5] font-semibold leading-tight">
+                    {apiConnected ? 'TELEMETRY SYNCED' : 'OFFLINE / STANDBY'}
+                  </span>
+                  <span className="text-[9px] text-[#849495] leading-tight">
+                    {currentEngine?.name || 'Automotive Engine'}
+                  </span>
+                </div>
+              </div>
 
-          {/* Switch System Tooltip */}
-          <div className="absolute left-[68px] top-1/2 -translate-y-1/2 bg-[#090e1b]/95 backdrop-blur-2xl text-[#f59e0b] border border-[#f59e0b]/40 px-3 py-2 rounded-xl text-xs font-mono tracking-wider uppercase z-50 shadow-[0_12px_35px_rgba(0,0,0,0.85)] pointer-events-none whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity min-w-[170px]">
-            <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-[#090e1b] border-l border-b border-[#f59e0b]/40 rotate-45" />
-            <div className="font-bold text-[10px] flex items-center gap-1.5">
-              <Sparkles className="w-3 h-3 text-[#f59e0b]" />
-              PROPULSION DOMAINS
-            </div>
-            <div className="text-[9px] text-[#849495] mt-0.5 normal-case font-mono">
-              Switch to Drone or Aeroplane
+              <span className="font-mono text-[9px] font-bold text-[#f59e0b] px-1.5 py-0.5 rounded bg-[#f59e0b]/15 border border-[#f59e0b]/30">
+                {engineBadge}
+              </span>
             </div>
           </div>
-        </div>
+        ) : (
+          /* Collapsed Mode: Compact Icon Controls */
+          <div className="flex flex-col items-center gap-2.5 w-full">
+            {/* Switch Platform Icon Button */}
+            <div className="relative group w-full flex justify-center">
+              <button
+                id="auto-btn-switch-system"
+                onClick={() => navigate('/select-engine')}
+                className="flex items-center justify-center w-11 h-11 rounded-xl bg-[#121829] border border-[#f59e0b]/30 text-[#f59e0b] hover:bg-[#f59e0b] hover:text-[#090e1b] transition-all shadow-[0_0_10px_rgba(245,158,11,0.2)] cursor-pointer"
+                title="Switch to Drone / Aircraft Propulsion Domains"
+                aria-label="Switch Engine Propulsion Domain"
+              >
+                <Layers className="w-5 h-5" />
+              </button>
 
-        {/* Live Synchronized Telemetry Status Beacon */}
-        <div
-          className="flex flex-col items-center px-2 py-1.5 rounded-lg bg-[#0e1322]/80 border border-[#3b494b]/30 w-full"
-          title={apiConnected ? 'Real-time Telemetry Pipeline Active' : 'Offline / Standby'}
-        >
-          <div className="flex items-center gap-1.5">
-            <span
-              className={`w-2 h-2 rounded-full ${
-                !apiConnected
-                  ? 'bg-rose-500 shadow-[0_0_8px_#f43f5e]'
-                  : 'bg-[#10b981] animate-pulse shadow-[0_0_8px_#10b981]'
-              }`}
-            />
-            <span className="font-mono text-[8px] font-bold text-[#b9cacb] uppercase">
-              {apiConnected ? 'SYNC' : 'DISC'}
-            </span>
+              <div className="absolute left-14 top-1/2 -translate-y-1/2 bg-[#090e1b]/95 backdrop-blur-2xl text-[#f59e0b] border border-[#f59e0b]/40 px-3 py-1.5 rounded-lg text-xs font-mono tracking-wider uppercase z-50 shadow-2xl pointer-events-none whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                SWITCH PLATFORM
+              </div>
+            </div>
+
+            <div className="w-8 h-[1px] bg-[#f59e0b]/20" />
+
+            {/* Powertrain Status Beacon */}
+            <div
+              className="flex flex-col items-center px-1.5 py-1 rounded-lg bg-[#0e1322]/80 border border-[#3b494b]/30 w-full"
+              title={apiConnected ? 'Real-time Telemetry Pipeline Active' : 'Offline / Standby'}
+            >
+              <div className="flex items-center gap-1">
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    !apiConnected
+                      ? 'bg-rose-500 shadow-[0_0_6px_#f43f5e]'
+                      : 'bg-[#10b981] animate-pulse shadow-[0_0_6px_#10b981]'
+                  }`}
+                />
+                <span className="font-mono text-[8px] font-bold text-[#b9cacb] uppercase">
+                  {apiConnected ? 'SYNC' : 'DISC'}
+                </span>
+              </div>
+              <span className="font-mono text-[7.5px] font-bold text-[#f59e0b] mt-0.5 tracking-wider">
+                {engineBadge}
+              </span>
+            </div>
           </div>
-
-          <span className="font-mono text-[7.5px] font-black text-[#f59e0b] mt-0.5 tracking-wider">
-            {engineBadge}
-          </span>
-        </div>
+        )}
       </div>
     </aside>
   );

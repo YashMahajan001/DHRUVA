@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useEngine } from '../../context/EngineContext';
+import { useSidebar } from '../../context/SidebarContext';
 
 interface DroneHeaderProps {
   unreadAlertsCount?: number;
@@ -23,6 +24,7 @@ export const DroneHeader: React.FC<DroneHeaderProps> = ({
   unreadAlertsCount = 0,
   onOpenAlerts,
 }) => {
+  const { isExpanded } = useSidebar();
   const navigate = useNavigate();
   const location = useLocation();
   const { operatorId, clearanceLevel, logout, isAuthenticated } = useAuth();
@@ -70,7 +72,7 @@ export const DroneHeader: React.FC<DroneHeaderProps> = ({
     <>
       <header
         id="drone-header"
-        className="fixed top-3 left-3 md:left-[84px] right-3 h-14 bg-[#090e1b]/95 backdrop-blur-xl border border-[#00f0ff]/20 rounded-xl z-40 flex items-center justify-between px-3 sm:px-4 shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
+        className={`fixed top-3 left-3 ${isExpanded ? 'md:left-[276px]' : 'md:left-[84px]'} right-3 h-14 bg-[#090e1b]/95 backdrop-blur-xl border border-[#00f0ff]/20 rounded-xl z-40 flex items-center justify-between px-3 sm:px-4 shadow-[0_4px_24px_rgba(0,0,0,0.4)] transition-all duration-300 ease-in-out motion-reduce:transition-none`}
       >
         {/* Brand & Mobile Hamburger */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">

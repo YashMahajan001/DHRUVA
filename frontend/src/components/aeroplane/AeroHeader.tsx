@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAero } from '../../context/AeroContext';
+import { useSidebar } from '../../context/SidebarContext';
 import {
   Plane,
   ChevronDown,
@@ -16,6 +17,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 export const AeroHeader: React.FC = () => {
+  const { isExpanded } = useSidebar();
   const {
     catalog,
     selectedEngineId,
@@ -51,7 +53,7 @@ export const AeroHeader: React.FC = () => {
   const operatingStates = ['IDLE', 'TAKEOFF', 'CLIMB', 'CRUISE', 'DESCENT'];
 
   return (
-    <header className="fixed top-3 left-3 md:left-[84px] right-3 h-14 bg-[#080d1a]/95 backdrop-blur-xl border border-[#38bdf8]/20 rounded-xl z-40 px-3 sm:px-4 flex items-center justify-between text-[#dee2f5] shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+    <header className={`fixed top-3 left-3 ${isExpanded ? 'md:left-[276px]' : 'md:left-[84px]'} right-3 h-14 bg-[#080d1a]/95 backdrop-blur-xl border border-[#38bdf8]/20 rounded-xl z-40 px-3 sm:px-4 flex items-center justify-between text-[#dee2f5] shadow-[0_4px_24px_rgba(0,0,0,0.4)] transition-all duration-300 ease-in-out motion-reduce:transition-none`}>
       {/* 1. Left: Identity & Engine Selector Dropdown */}
       <div className="flex items-center gap-3 md:gap-5">
         <div className="flex items-center gap-2.5">
